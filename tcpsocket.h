@@ -18,13 +18,14 @@ public:
     void createMessages(quint8 messageId, quint16 firstParam, quint16 SecondParam);
 
 Q_SIGNALS:
-    void needToConnect();
+    void setButtonsEnabled(bool state);
     void setState(QString state);
     void sendMessageToLog(QString errorMessage);
 public Q_SLOTS:
     void connected();
     void readyRead();
     void disconnected();
+    void disconnect();
     void getErrorMessqage(QAbstractSocket::SocketError socketError );
     void send(QByteArray &array);
 private:

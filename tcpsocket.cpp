@@ -36,12 +36,13 @@ void TcpSocket::connected()
 {
     Q_EMIT setState("Подключено");
     Q_EMIT sendMessageToLog("Подключились");
+    Q_EMIT setButtonsEnabled(true);
 }
 
 void TcpSocket::readyRead()
 {
-    QByteArray ba=m_tcpSocket->readAll().toHex();
-    sendMessageToLog(QString(ba));
+    QByteArray gettingMessage=m_tcpSocket->readAll().toHex();
+    sendMessageToLog("Получили сообщение "+ QString(gettingMessage));
 }
 
 void TcpSocket::connectTo(QString &ip, QString &port)
@@ -81,13 +82,20 @@ void TcpSocket::createMessages(quint8 messageId, quint16 firstParam, quint16 Sec
     }
 
     }
-    Q_EMIT sendMessageToLog("Отправляемое сообщние " +message.toHex() + " его размер: " + QString::number(message.size()));
-//    send(message);
+    Q_EMIT sendMessageToLog("Отправляемое сообщeние " +message.toHex() + " его размер: " + QString::number(message.size()) + " байт");
+    send(message);
 }
 
 void TcpSocket::disconnected()
 {
+    Q_EMIT setButtonsEnabled(false);
+    Q_EMIT setState("Не подключено");
     Q_EMIT sendMessageToLog("отключено от сокета юзером");
+}
+
+void TcpSocket::disconnect()
+{
+    m_tcpSocket->disconnectFromHost();
 }
 
 void TcpSocket::getErrorMessqage(QAbstractSocket::SocketError socketError)
@@ -171,14 +179,16 @@ void TcpSocket::getErrorMessqage(QAbstractSocket::SocketError socketError)
 
 void TcpSocket::send(QByteArray &array)
 {
+    Q_EMIT sendMessageToLog("Пытаемся отправить");
     if (m_tcpSocket->state() == QAbstractSocket::ConnectedState)
     {
         m_tcpSocket->write(array);
         m_tcpSocket->flush();
+        Q_EMIT sendMessageToLog("Отправили");
     }
     else
     {
-        Q_EMIT needToConnect();
+        Q_EMIT sendMessageToLog("Сначала подключись к мохе");
     }
 
 }
@@ -189,7 +199,7 @@ QString TcpSocket::getStringSocketState(QAbstractSocket::SocketState state)
 {
     switch (state) {
     case QAbstractSocket::UnconnectedState:
-        return "Розетка не подключена.";
+        return "Моха не подключена.";
     case QAbstractSocket::HostLookupState:
         return "Сокет выполняет поиск хоста.";
     case QAbstractSocket::ConnectingState:
@@ -210,11 +220,12 @@ void TcpSocket::checkConnection()
 {
     if (m_tcpSocket->state()==QAbstractSocket::ConnectedState)
     {
-        Q_EMIT sendMessageToLog(QString("Подключено к мохе успешно. Ура"));
+        Q_EMIT setButtonsEnabled(true);
+        Q_EMIT sendMessageToLog(QString("Проверяем соединение: Подключено к мохе успешно. Ура"));
     }
     else
     {
         QString socketState=getStringSocketState(m_tcpSocket->state());
-        Q_EMIT sendMessageToLog("Не смогли подключится к мохе: " + socketState);
+        Q_EMIT sendMessageToLog("Проверяем соединение:  Не смогли подключится к мохе: " + socketState);
     }
 }

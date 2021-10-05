@@ -19,7 +19,9 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 private Q_SLOTS:
+    void setButtonState(bool state);
     void tryToConnect();
+    void sendZeroMessage();
     void sendFirstMessage();
     void sendSecondMessage();
     void sendThirdMessage();
@@ -60,6 +62,7 @@ private:
     QLineEdit *m_gainRXLineEdit;
 
     QHBoxLayout *m_messageSendButtonsLayout;
+    QPushButton *m_zeroMessageSendButton;
     QPushButton *m_firstMessageSendButton;
     QPushButton *m_secondMessageSendButton;
     QPushButton *m_thirdMessageSendButton;
@@ -67,7 +70,7 @@ private:
 
     QHBoxLayout *m_stateLayout;
     QLabel *m_state;
-    QLabel *m_ping;
+    QPushButton *m_logClearButton;
 
     QPlainTextEdit *m_log;
 

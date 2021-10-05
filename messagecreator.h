@@ -16,7 +16,7 @@ public:
     QByteArray createFourthCommand(quint8 gainTX, quint8 gainRX);
 
 private:
-    std::array<unsigned char, 5> messagesIds={0,1, 2, 3,4};
+    std::array<unsigned char, 5> messagesIds={0,1,2,3,4};
     quint16 calculateINT_Rx(quint16 Fvco);
     quint32 calculateFRACT_Rx(quint16 Fvco);
     quint8 calculateGAIN(quint8 gain);
