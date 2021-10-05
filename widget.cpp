@@ -6,7 +6,7 @@ Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , m_socket(new TcpSocket(this))
     , m_intValidator(new QIntValidator(0, 2147483647))
-    , m_gainValidator(new QIntValidator(0, 255))
+    , m_gainValidator(new QIntValidator(0, 100))
 {
     int minWorkPointValue=2695;
     for (int i=0; i<30; i++)

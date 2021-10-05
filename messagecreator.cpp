@@ -117,11 +117,12 @@ quint32 MessageCreator::calculateFRACT_Rx(quint16 Fvco)
 
 quint8 MessageCreator::calculateGAIN(quint8 gain)
 {
-    if (gain>(31))
+    if (gain>(63))
     {
-        gain=31;
+        gain=63;
     }
-    quint8 GAIN_X=gain*0.5;
+    quint8 GAIN_X=gain;
+//    quint8 GAIN_X=gain*0.5;
     return GAIN_X;
 }
 
