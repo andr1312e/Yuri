@@ -6,8 +6,6 @@ Read and Send commands
 
 All commands in doc
 
-Server cache saved in jpg folder
-
 Screenshots how to init moxa in MOXA Settings folder
 
 Screenshots of the program:
