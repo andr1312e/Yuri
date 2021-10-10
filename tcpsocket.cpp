@@ -34,7 +34,7 @@ void TcpSocket::createConnections()
 
 void TcpSocket::connected()
 {
-    Q_EMIT setState("Подключено");
+    Q_EMIT setState(QStringLiteral("Подключено"));
     Q_EMIT sendMessageToLog("Подключились");
     Q_EMIT setButtonsEnabled(true);
 }
@@ -47,6 +47,7 @@ void TcpSocket::readyRead()
 
 void TcpSocket::connectTo(QString &ip, QString &port)
 {
+        Q_EMIT setButtonsEnabled(true);
     m_tcpSocket->connectToHost(ip, port.toInt(),  QIODevice::ReadWrite);
     m_timer->start();
 }
@@ -73,6 +74,11 @@ void TcpSocket::createMessages(quint8 messageId, quint16 firstParam, quint16 Sec
     case 4:
     {
         message=m_messageCreator->createFourthCommand(firstParam, SecondParam);
+        break;
+    }
+    case 5:
+    {
+        message=m_messageCreator->createFiveCommand(firstParam);
         break;
     }
     default:

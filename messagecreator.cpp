@@ -95,6 +95,15 @@ QByteArray MessageCreator::createFourthCommand(quint8 gainTX, quint8 gainRX)
     return command;
 }
 
+QByteArray MessageCreator::createFiveCommand(quint16 AttenuatorDb)
+{
+    QByteArray command;
+    quint8 attenuator=calculateAtteniator(AttenuatorDb);
+    command.append(messagesIds.at(4));
+    command.append(attenuator);
+    return command;
+}
+
 quint16 MessageCreator::calculateINT_Rx(quint16 Fvco)
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
@@ -122,7 +131,7 @@ quint8 MessageCreator::calculateGAIN(quint8 gain)
         gain=63;
     }
     quint8 GAIN_X=gain;
-//    quint8 GAIN_X=gain*0.5;
+    //    quint8 GAIN_X=gain*0.5;
     return GAIN_X;
 }
 
@@ -135,5 +144,17 @@ bool MessageCreator::calculateDIV_rx(quint16 Fvco)
     else
     {
         return 0;
+    }
+}
+
+quint16 MessageCreator::calculateAtteniator(quint16 atteniatorDb)
+{
+    if (atteniatorTable.count(atteniatorDb))
+    {
+    return atteniatorTable[atteniatorDb];
+    }
+    else
+    {
+        qFatal("нет значения в таблице");
     }
 }

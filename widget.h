@@ -21,11 +21,14 @@ public:
 private Q_SLOTS:
     void setButtonState(bool state);
     void tryToConnect();
+    void changeSpeedFiled();
+    void changeDoplerFiled(const QString &value);
     void sendZeroMessage();
     void sendFirstMessage();
     void sendSecondMessage();
     void sendThirdMessage();
     void sendFourthMessage();
+    void sendFiveMessage();
 private:
     void createUI();
     void insertWidgetsIntoLayout();
@@ -46,6 +49,8 @@ private:
     QHBoxLayout *m_speedLayout;
     QLabel *m_DoplerFreqLabel;
     QLineEdit *m_DoplerFreqLineEdit;
+    QLabel *m_speedLabel;
+    QLineEdit *m_speedLineEdit;
 
     QHBoxLayout *m_rangeLineLayout;
     QLabel *m_rangeLabel;
@@ -61,12 +66,17 @@ private:
     QLabel *m_gainRXLabel;
     QLineEdit *m_gainRXLineEdit;
 
+    QHBoxLayout *m_attenuatorLineLayout;
+    QLabel *m_attenuatorLabel;
+    QComboBox *m_attenuatorComboBox;
+
     QHBoxLayout *m_messageSendButtonsLayout;
     QPushButton *m_zeroMessageSendButton;
     QPushButton *m_firstMessageSendButton;
     QPushButton *m_secondMessageSendButton;
     QPushButton *m_thirdMessageSendButton;
     QPushButton *m_forthMessageSendButton;
+    QPushButton *m_fiveMessageSendButton;
 
     QHBoxLayout *m_stateLayout;
     QLabel *m_state;
@@ -74,12 +84,13 @@ private:
 
     QPlainTextEdit *m_log;
 
-    QStringList workPointsValues;
-
 private:
+    QStringList workPointsValues, m_attenuatorValues;
     TcpSocket *m_socket;
     QIntValidator *m_intValidator;
     QIntValidator *m_gainValidator;
+
+    const quint32 c=299792458;
 
 private:
     bool allRequedFiledsHave(QStringList &listOfFields);

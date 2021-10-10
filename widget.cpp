@@ -4,6 +4,7 @@
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
+    , m_attenuatorValues({"0", "1", "2", "3", "4", "5", "6", "9", "12", "15", "18", "21", "24", "27", "30"})
     , m_socket(new TcpSocket(this))
     , m_intValidator(new QIntValidator(0, 2147483647))
     , m_gainValidator(new QIntValidator(0, 100))
@@ -75,6 +76,7 @@ void Widget::setButtonState(bool state)
     m_thirdMessageSendButton->setEnabled(state);
     m_forthMessageSendButton->setEnabled(state);
     m_disconnectButton->setEnabled(state);
+    m_attenuatorComboBox->setEnabled(state);
     m_connectButton->setDisabled(state);
 }
 
@@ -85,6 +87,22 @@ void Widget::tryToConnect()
     QString ipAdress=m_adressLineEdit->text();
     m_log->appendPlainText(time + " Попытка подключится... Адрес: " + ipAdress  + " Порт: " + port);
     m_socket->connectTo(ipAdress, port);
+}
+
+void Widget::changeSpeedFiled()
+{
+    int dopler=m_DoplerFreqLineEdit->text().toInt();
+    double speed=dopler*c/(2*m_fvcoComboBox->currentText().toInt());
+    quint32 speed2=speed+1;
+    m_speedLineEdit->setText(QString::number(speed2));
+}
+
+void Widget::changeDoplerFiled(const QString &value)
+{
+    int speed=value.toInt();
+    quint64 dopler1=speed*m_fvcoComboBox->currentText().toInt()*2;
+    int dopler=dopler1/c;
+    m_DoplerFreqLineEdit->setText(QString::number(dopler));
 }
 
 void Widget::sendZeroMessage()
@@ -203,6 +221,23 @@ void Widget::sendFourthMessage()
     }
 }
 
+void Widget::sendFiveMessage()
+{
+    QStringList params;
+    params<<m_attenuatorComboBox->currentText();
+    bool isOk;
+    quint16 AttenuatorValue=params.first().toUInt(&isOk);
+    if (isOk)
+    {
+        m_log->appendPlainText("Высылаем сообщение");
+        m_socket->createMessages(5, AttenuatorValue, 0);
+    }
+    else
+    {
+        m_log->appendPlainText(" не смогли перевесли в число " + m_attenuatorComboBox->currentText());
+    }
+}
+
 void Widget::createUI()
 {
     m_mainLayout=new QVBoxLayout();
@@ -212,12 +247,18 @@ void Widget::createUI()
     m_rangeLineLayout=new QHBoxLayout();
     m_workPointLineLayout=new QHBoxLayout();
     m_gainLineLayout=new QHBoxLayout();
+    m_attenuatorLineLayout=new QHBoxLayout();
+    m_messageSendButtonsLayout=new QHBoxLayout();
+    m_stateLayout=new QHBoxLayout();
+
 
     m_adressAndPortLabel=new QLabel("Введите адрес и порт подлючения");
     m_adressLineEdit=new QLineEdit();
     m_adressLineEdit->setInputMask(QStringLiteral("000.000.000.000;_"));
     m_portLineEdit=new QLineEdit();
     m_portLineEdit->setInputMask("00000;_");
+    m_adressLineEdit->setText("192.168.127.254");
+    m_portLineEdit->setText("4004");
 
     m_connectButton=new QPushButton("Подключится");
     m_disconnectButton=new QPushButton("Отключится");
@@ -233,6 +274,10 @@ void Widget::createUI()
     m_DoplerFreqLineEdit->setValidator(m_intValidator);
     m_DoplerFreqLineEdit->setText("0");
 
+    m_speedLabel=new QLabel("Скорость");
+    m_speedLineEdit=new QLineEdit();
+    m_speedLineEdit->setValidator(m_intValidator);
+
     m_rangeLabel=new QLabel("Дальность ответного сигнала: d");
     m_rangeLineEdit=new QLineEdit();
     m_rangeLineEdit->setValidator(m_intValidator);
@@ -245,25 +290,24 @@ void Widget::createUI()
     m_gainRXLineEdit=new QLineEdit();
     m_gainRXLineEdit->setValidator(m_gainValidator);
 
-    m_stateLayout=new QHBoxLayout();
-    m_state=new QLabel("Адрес: адрес мохи. Порт: Operation Serrings ЛК с нужным портом. Посмотреть http://192.168.127.254/ Лог:Пасс admin:moxa");
-    m_logClearButton=new QPushButton("Консоль отчистить");
+    m_attenuatorLabel=new QLabel("Установка ослабления: Attenuator_RX");
+    m_attenuatorComboBox=new QComboBox();
+    m_attenuatorComboBox->addItems(m_attenuatorValues);
 
-    m_messageSendButtonsLayout=new QHBoxLayout();
     m_zeroMessageSendButton=new QPushButton("Пинг");
     m_firstMessageSendButton=new QPushButton("установка частоты Rx");
     m_secondMessageSendButton=new QPushButton("установка частоты Tx");
     m_thirdMessageSendButton=new QPushButton("установка дальности ответного сигнала");
     m_forthMessageSendButton=new QPushButton("установка усиления Rx Tx");
+    m_fiveMessageSendButton=new QPushButton("Установка ослабления");
 
-
+    m_state=new QLabel("Адрес: адрес мохи. Порт: Operation Serrings ЛК с нужным портом. Посмотреть http://192.168.127.254/ Лог:Пасс admin:moxa");
+    m_logClearButton=new QPushButton("Консоль отчистить");
 
     m_log=new QPlainTextEdit();
     m_log->setReadOnly(true);
     m_log->appendPlainText("Не подлючено к ответчику");
 
-    m_adressLineEdit->setText("192.168.127.254");
-    m_portLineEdit->setText("4004");
     setButtonState(false);
     setWindowTitle("Настройка Юстировочного оборудования блок М14ХЛ2");
 }
@@ -279,6 +323,8 @@ void Widget::insertWidgetsIntoLayout()
 
     m_speedLayout->addWidget(m_DoplerFreqLabel);
     m_speedLayout->addWidget(m_DoplerFreqLineEdit);
+    m_speedLayout->addWidget(m_speedLabel);
+    m_speedLayout->addWidget(m_speedLineEdit);
 
     m_rangeLineLayout->addWidget(m_rangeLabel);
     m_rangeLineLayout->addWidget(m_rangeLineEdit);
@@ -291,11 +337,15 @@ void Widget::insertWidgetsIntoLayout()
     m_gainLineLayout->addWidget(m_gainRXLabel);
     m_gainLineLayout->addWidget(m_gainRXLineEdit);
 
+    m_attenuatorLineLayout->addWidget(m_attenuatorLabel);
+    m_attenuatorLineLayout->addWidget(m_attenuatorComboBox);
+
     m_messageSendButtonsLayout->addWidget(m_zeroMessageSendButton);
     m_messageSendButtonsLayout->addWidget(m_firstMessageSendButton);
     m_messageSendButtonsLayout->addWidget(m_secondMessageSendButton);
     m_messageSendButtonsLayout->addWidget(m_thirdMessageSendButton);
     m_messageSendButtonsLayout->addWidget(m_forthMessageSendButton);
+    m_messageSendButtonsLayout->addWidget(m_fiveMessageSendButton);
 
     m_mainLayout->addLayout(m_adressAndPortLayout);
     m_mainLayout->addLayout(m_buttonsLayout);
@@ -303,6 +353,7 @@ void Widget::insertWidgetsIntoLayout()
     m_mainLayout->addLayout(m_speedLayout);
     m_mainLayout->addLayout(m_rangeLineLayout);
     m_mainLayout->addLayout(m_gainLineLayout);
+    m_mainLayout->addLayout(m_attenuatorLineLayout);
     m_mainLayout->addLayout(m_messageSendButtonsLayout);
 
     m_mainLayout->addWidget(m_state);
@@ -323,9 +374,13 @@ void Widget::createConnections()
     connect(m_secondMessageSendButton, &QPushButton::clicked, this, &Widget::sendSecondMessage);
     connect(m_thirdMessageSendButton, &QPushButton::clicked, this, &Widget::sendThirdMessage);
     connect(m_forthMessageSendButton, &QPushButton::clicked, this, &Widget::sendFourthMessage);
+    connect(m_fiveMessageSendButton, &QPushButton::clicked, this, &Widget::sendFiveMessage);
     connect(m_socket, &TcpSocket::setButtonsEnabled, this, &Widget::setButtonState);
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
     connect(m_disconnectButton, &QPushButton::clicked, m_socket, &TcpSocket::disconnect);
+    connect(m_DoplerFreqLineEdit, &QLineEdit::textEdited, this, &Widget::changeSpeedFiled);
+    connect(m_speedLineEdit, &QLineEdit::textEdited, this, &Widget::changeDoplerFiled);
+    connect(m_fvcoComboBox, &QComboBox::editTextChanged, this, &Widget::changeSpeedFiled);
 }
 
 bool Widget::allRequedFiledsHave(QStringList &listOfFields)
