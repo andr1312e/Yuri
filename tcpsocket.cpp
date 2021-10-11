@@ -47,7 +47,6 @@ void TcpSocket::readyRead()
 
 void TcpSocket::connectTo(QString &ip, QString &port)
 {
-        Q_EMIT setButtonsEnabled(true);
     m_tcpSocket->connectToHost(ip, port.toInt(),  QIODevice::ReadWrite);
     m_timer->start();
 }

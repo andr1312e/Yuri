@@ -32,6 +32,7 @@ Widget::~Widget()
     delete m_rangeLineLayout;
     delete m_workPointLineLayout;
     delete m_gainLineLayout;
+    delete m_attenuatorLineLayout;
     delete m_messageSendButtonsLayout;
     delete m_stateLayout;
     delete m_mainLayout;
@@ -46,6 +47,9 @@ Widget::~Widget()
     delete m_DoplerFreqLabel;
     delete m_DoplerFreqLineEdit;
 
+    delete m_speedLabel;
+    delete m_speedLineEdit;
+
     delete m_rangeLabel;
     delete m_rangeLineEdit;
 
@@ -57,10 +61,14 @@ Widget::~Widget()
     delete m_gainRXLabel;
     delete m_gainRXLineEdit;
 
+    delete m_attenuatorLabel;
+    delete m_attenuatorComboBox;
+
     delete m_firstMessageSendButton;
     delete m_secondMessageSendButton;
     delete m_thirdMessageSendButton;
     delete m_forthMessageSendButton;
+    delete m_fiveMessageSendButton;
 
     delete m_state;
     delete m_logClearButton;
