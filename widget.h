@@ -29,6 +29,8 @@ private Q_SLOTS:
     void sendThirdMessage();
     void sendFourthMessage();
     void sendFiveMessage();
+    void sendSixMessage();
+    void sendSevenMessage();
 private:
     void createUI();
     void insertWidgetsIntoLayout();
@@ -70,6 +72,10 @@ private:
     QLabel *m_attenuatorLabel;
     QComboBox *m_attenuatorComboBox;
 
+    QHBoxLayout *m_noiseLineLayout;
+    QLabel *m_noiseLabel;
+    QComboBox *m_noiseComboBox;
+
     QHBoxLayout *m_messageSendButtonsLayout;
     QPushButton *m_zeroMessageSendButton;
     QPushButton *m_firstMessageSendButton;
@@ -77,6 +83,8 @@ private:
     QPushButton *m_thirdMessageSendButton;
     QPushButton *m_forthMessageSendButton;
     QPushButton *m_fiveMessageSendButton;
+    QPushButton *m_sixMessageSendButton;
+    QPushButton *m_sevenMessageSendButton;
 
     QHBoxLayout *m_stateLayout;
     QLabel *m_state;
@@ -85,7 +93,7 @@ private:
     QPlainTextEdit *m_log;
 
 private:
-    QStringList workPointsValues, m_attenuatorValues;
+    QStringList workPointsValues, m_attenuatorValues, m_noiseValues;
     TcpSocket *m_socket;
     QIntValidator *m_intValidator;
     QIntValidator *m_gainValidator;

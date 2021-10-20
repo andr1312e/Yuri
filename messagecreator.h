@@ -11,24 +11,26 @@ public:
     MessageCreator();
     ~MessageCreator();
     QByteArray createZeroCommand();
-    QByteArray createFirstCommand(quint16 Fvco);
-    QByteArray createSecondCommand(quint16 Fvco, quint16 doplerFreq);
-    QByteArray createThirdCommand(quint16 distance);
-    QByteArray createFourthCommand(quint8 gainTX, quint8 gainRX);
-    QByteArray createFiveCommand(quint16 AttenuatorDb);
+    QByteArray createFirstCommand(double Fvco);
+    QByteArray createSecondCommand(double Fvco, double doplerFreq);
+    QByteArray createThirdCommand(double distance);
+    QByteArray createFourthCommand(double gainTX, double gainRX);
+    QByteArray createFiveCommand(double AttenuatorDb);
+    QByteArray createSixCommand(double noiseValue);
+    QByteArray createSevenCommand();
 private:
-    std::array<unsigned char, 6> messagesIds={0,1,2,3,4, 5};
-    quint16 calculateINT_Rx(quint16 Fvco);
-    quint32 calculateFRACT_Rx(quint16 Fvco);
+    std::array<quint8, 8> messagesIds={0,1,2,3,4,5,6,7};
+    quint16 calculateINT_Rx(double Fvco);
+    quint32 calculateFRACT_Rx(double Fvco);
     quint8 calculateGAIN(quint8 gain);
-    bool calculateDIV_rx(quint16 Fvco);
-    quint16 calculateAtteniator(quint16 atteniatorDb);
+    bool calculateDIV_rx(double Fvco);
+    quint8 calculateAtteniator(quint16 atteniatorDb);
 
 private:
-    const quint8 Fref=40;
+    const double Fref=40000000.0;
     const quint32 c=299792458;
     const quint32 f=245000000;
-    std::map<quint16, quint16> atteniatorTable { {0, 15},
+    std::map<quint8, quint8> atteniatorTable { {0, 15},
                                                  {1, 14},
                                                  {2, 13},
                                                  {3, 12},

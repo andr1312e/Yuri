@@ -51,7 +51,7 @@ void TcpSocket::connectTo(QString &ip, QString &port)
     m_timer->start();
 }
 
-void TcpSocket::createMessages(quint8 messageId, quint16 firstParam, quint16 SecondParam)
+void TcpSocket::createMessages(quint8 messageId, double firstParam, double SecondParam)
 {
     QByteArray message;
     switch (messageId) {
@@ -80,6 +80,16 @@ void TcpSocket::createMessages(quint8 messageId, quint16 firstParam, quint16 Sec
         message=m_messageCreator->createFiveCommand(firstParam);
         break;
     }
+    case 6:
+    {
+        message=m_messageCreator->createSixCommand(firstParam);
+        break;
+    }
+    case 7:
+    {
+        message=m_messageCreator->createSevenCommand();
+        break;
+    }
     default:
     {
         message=m_messageCreator->createZeroCommand();
@@ -87,7 +97,7 @@ void TcpSocket::createMessages(quint8 messageId, quint16 firstParam, quint16 Sec
     }
 
     }
-    Q_EMIT sendMessageToLog("Отправляемое сообщeние " +message.toHex() + " его размер: " + QString::number(message.size()) + " байт");
+    Q_EMIT sendMessageToLog("Отправляемое сообщeние " +message.toHex() + " его размер: " + QString::number(message.size()) + " байт сформировано");
     send(message);
 }
 

@@ -15,7 +15,7 @@ public:
     explicit TcpSocket(QObject *parent);
     ~TcpSocket();
     void connectTo(QString &ip, QString &port);
-    void createMessages(quint8 messageId, quint16 firstParam, quint16 SecondParam);
+    void createMessages(quint8 messageId, double firstParam, double SecondParam);
 
 Q_SIGNALS:
     void setButtonsEnabled(bool state);

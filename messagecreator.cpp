@@ -22,12 +22,11 @@ QByteArray MessageCreator::createZeroCommand()
     return command;
 }
 
-QByteArray MessageCreator::createFirstCommand(quint16 Fvco)
+QByteArray MessageCreator::createFirstCommand(double Fvco)
 {
     quint8 id=messagesIds.at(1);
-    Fvco=Fvco-3;
-    quint16 INT_Rx=calculateINT_Rx(Fvco);
-    quint32 FRACT_Rx=calculateFRACT_Rx(Fvco);
+    qint16 INT_Rx=calculateINT_Rx(Fvco);//МГЦ
+    qint32 FRACT_Rx=calculateFRACT_Rx(Fvco);//МГЦ
     bool DivRx=calculateDIV_rx(Fvco);
 
     QByteArray lastThreeBytes;
@@ -45,13 +44,11 @@ QByteArray MessageCreator::createFirstCommand(quint16 Fvco)
     return command;
 }
 
-QByteArray MessageCreator::createSecondCommand(quint16 Fvco, quint16 doplerFreq)
+QByteArray MessageCreator::createSecondCommand(double Fvco, double doplerFreq)
 {
-
-    Fvco=Fvco-3;
-    quint16 ResultFreq=Fvco+doplerFreq;
-    quint16 INT_Tx=calculateINT_Rx(ResultFreq);
-    quint32 FRACT_Tx=calculateFRACT_Rx(ResultFreq);
+    double ResultFreq=Fvco+doplerFreq;
+    qint16 INT_Tx=calculateINT_Rx(ResultFreq);
+    qint32 FRACT_Tx=calculateFRACT_Rx(ResultFreq);
     bool DivTx=calculateDIV_rx(ResultFreq);
 
 
@@ -71,7 +68,7 @@ QByteArray MessageCreator::createSecondCommand(quint16 Fvco, quint16 doplerFreq)
     return command;
 }
 
-QByteArray MessageCreator::createThirdCommand(quint16 distance)
+QByteArray MessageCreator::createThirdCommand(double distance)
 {
 
     double secondVal=((double)f)/c;
@@ -84,7 +81,7 @@ QByteArray MessageCreator::createThirdCommand(quint16 distance)
     return command;
 }
 
-QByteArray MessageCreator::createFourthCommand(quint8 gainTX, quint8 gainRX)
+QByteArray MessageCreator::createFourthCommand(double gainTX, double gainRX)
 {
     QByteArray command;
     quint8 GAIN_TX=calculateGAIN(gainTX);
@@ -95,31 +92,49 @@ QByteArray MessageCreator::createFourthCommand(quint8 gainTX, quint8 gainRX)
     return command;
 }
 
-QByteArray MessageCreator::createFiveCommand(quint16 AttenuatorDb)
+QByteArray MessageCreator::createFiveCommand(double AttenuatorDb)
 {
     QByteArray command;
     quint8 attenuator=calculateAtteniator(AttenuatorDb);
-    command.append(messagesIds.at(4));
+    command.append(messagesIds.at(5));
     command.append(attenuator);
     return command;
 }
 
-quint16 MessageCreator::calculateINT_Rx(quint16 Fvco)
+QByteArray MessageCreator::createSixCommand(double noiseValue)
+{
+    QByteArray command;
+    command.append(messagesIds.at(6));
+    command.append(quint8(noiseValue));
+    return command;
+}
+
+QByteArray MessageCreator::createSevenCommand()
+{
+    QByteArray command;
+    command.append(messagesIds.at(7));
+    command.append(quint8(0));
+    return command;
+}
+
+quint16 MessageCreator::calculateINT_Rx(double Fvco)
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
-    quint16 INT_Rx=(2*Fvco);
-    INT_Rx=INT_Rx/pow(2,DIV_Rx);
-    INT_Rx=(quint16)INT_Rx/Fref;
+    double INT_RxDouble=Fvco-3000000.0;
+    INT_RxDouble=INT_RxDouble*2.0;
+    INT_RxDouble=INT_RxDouble/pow(2,DIV_Rx);
+    INT_RxDouble=(INT_RxDouble/Fref);
+    quint16 INT_Rx=(quint16)(INT_RxDouble);
     INT_Rx-=4;
     return INT_Rx;
 }
 
-quint32 MessageCreator::calculateFRACT_Rx(quint16 Fvco)
+quint32 MessageCreator::calculateFRACT_Rx(double Fvco)
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
     quint32 FRACT_Rx=(pow(2,20));
     double FirstValue=2.0*Fvco/(Fref*pow(2, DIV_Rx));
-    double SecondValue=(quint16)FirstValue;
+    double SecondValue=(qint32)FirstValue;
     FRACT_Rx=FRACT_Rx*(FirstValue-SecondValue);
     return FRACT_Rx;
 }
@@ -135,9 +150,9 @@ quint8 MessageCreator::calculateGAIN(quint8 gain)
     return GAIN_X;
 }
 
-bool MessageCreator::calculateDIV_rx(quint16 Fvco)
+bool MessageCreator::calculateDIV_rx(double Fvco)
 {
-    if (Fvco>2750)
+    if (Fvco>2750000000)
     {
         return 1;
     }
@@ -147,11 +162,11 @@ bool MessageCreator::calculateDIV_rx(quint16 Fvco)
     }
 }
 
-quint16 MessageCreator::calculateAtteniator(quint16 atteniatorDb)
+quint8 MessageCreator::calculateAtteniator(quint16 atteniatorDb)
 {
     if (atteniatorTable.count(atteniatorDb))
     {
-    return atteniatorTable[atteniatorDb];
+        return atteniatorTable[atteniatorDb];
     }
     else
     {
