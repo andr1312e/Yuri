@@ -4,7 +4,7 @@ TcpSocket::TcpSocket(QObject *parent)
     : QObject(parent)
     , m_tcpSocket(new QTcpSocket(this))
     , m_timer(new QTimer())
-    , m_messageCreator(new MessageCreator())
+    , m_messageSetter(new MessagesSetter())
 {
     initCheckingConnectionTimer();
     createConnections();
@@ -14,7 +14,7 @@ TcpSocket::~TcpSocket()
 {
     delete m_timer;
     delete m_tcpSocket;
-    delete m_messageCreator;
+    delete m_messageSetter;
 }
 
 void TcpSocket::initCheckingConnectionTimer()
@@ -41,8 +41,18 @@ void TcpSocket::connected()
 
 void TcpSocket::readyRead()
 {
-    QByteArray gettingMessage=m_tcpSocket->readAll().toHex();
-    sendMessageToLog("Получили сообщение "+ QString(gettingMessage));
+    QByteArray gettingMessage=m_tcpSocket->readAll();
+//    gettingMessage.remove(0, 1);
+//    gettingMessage.remove(gettingMessage.length()-2, 2);
+    if (gettingMessage.at(1)==7)
+    {
+        sendMessageToLog("Получили данные "+ m_messageGetter->getDataFromMessage(gettingMessage));
+    }
+    else
+    {
+      sendMessageToLog("Получили сообщение ("+ QString(gettingMessage)+") - OK");
+    }
+
 }
 
 void TcpSocket::connectTo(QString &ip, QString &port)
@@ -57,42 +67,42 @@ void TcpSocket::createMessages(quint8 messageId, double firstParam, double Secon
     switch (messageId) {
     case 1:
     {
-        message=m_messageCreator->createFirstCommand(firstParam);
+        message=m_messageSetter->createFirstCommand(firstParam);
         break;
     }
     case 2:
     {
-        message=m_messageCreator->createSecondCommand(firstParam, SecondParam);
+        message=m_messageSetter->createSecondCommand(firstParam, SecondParam);
         break;
     }
     case 3:
     {
-        message=m_messageCreator->createThirdCommand(firstParam);
+        message=m_messageSetter->createThirdCommand(firstParam);
         break;
     }
     case 4:
     {
-        message=m_messageCreator->createFourthCommand(firstParam, SecondParam);
+        message=m_messageSetter->createFourthCommand(firstParam, SecondParam);
         break;
     }
     case 5:
     {
-        message=m_messageCreator->createFiveCommand(firstParam);
+        message=m_messageSetter->createFiveCommand(firstParam);
         break;
     }
     case 6:
     {
-        message=m_messageCreator->createSixCommand(firstParam);
+        message=m_messageSetter->createSixCommand(firstParam);
         break;
     }
     case 7:
     {
-        message=m_messageCreator->createSevenCommand();
+        message=m_messageSetter->createSevenCommand(firstParam);
         break;
     }
     default:
     {
-        message=m_messageCreator->createZeroCommand();
+        message=m_messageSetter->createZeroCommand();
         break;
     }
 

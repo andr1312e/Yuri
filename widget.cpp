@@ -35,6 +35,7 @@ Widget::~Widget()
     delete m_gainLineLayout;
     delete m_attenuatorLineLayout;
     delete m_messageSendButtonsLayout;
+    delete m_messageGetButtonsLayout;
     delete m_stateLayout;
     delete m_noiseLineLayout;
     delete m_mainLayout;
@@ -75,7 +76,9 @@ Widget::~Widget()
     delete m_forthMessageSendButton;
     delete m_fiveMessageSendButton;
     delete m_sixMessageSendButton;
-    delete m_sevenMessageSendButton;
+    delete m_sevenMessageFirstSendButton;
+    delete m_sevenMessageFourSendButton;
+    delete m_sevenMessageFiveSendButton;
 
     delete m_state;
     delete m_logClearButton;
@@ -92,7 +95,9 @@ void Widget::setButtonState(bool state)
     m_forthMessageSendButton->setEnabled(state);
     m_fiveMessageSendButton->setEnabled(state);
     m_sixMessageSendButton->setEnabled(state);
-    m_sevenMessageSendButton->setEnabled(state);
+    m_sevenMessageFirstSendButton->setEnabled(state);
+    m_sevenMessageFourSendButton->setEnabled(state);
+    m_sevenMessageFiveSendButton->setEnabled(state);
     m_disconnectButton->setEnabled(state);
     m_attenuatorComboBox->setEnabled(state);
     m_noiseComboBox->setEnabled(state);
@@ -140,7 +145,7 @@ void Widget::sendFirstMessage()
         if (isOk)
         {
             double fvcoHertz=fvcoMegaHertz*1000000;
-            m_log->appendPlainText("Высылаем первое сообщение установка частоты RX fvco= " +QString::number(fvcoMegaHertz, 'f'));
+            m_log->appendPlainText("Высылаем первое сообщение: установка частоты RX fvco= " +QString::number(fvcoMegaHertz, 'f'));
             m_socket->createMessages(1, fvcoHertz, 0);
         }
         else
@@ -170,7 +175,7 @@ void Widget::sendSecondMessage()
             if (isOk2)
             {
 
-                m_log->appendPlainText("Высылаем второе сообщение установка частоты Tx fvco= " +QString::number(fvcoMegaHertz, 'f') + " МГЦ и доплер= "+ QString::number(dopler, 'f')+ " ГЦ");
+                m_log->appendPlainText("Высылаем второе сообщение: установка частоты Tx fvco= " +QString::number(fvcoMegaHertz, 'f') + " МГЦ и доплер= "+ QString::number(dopler, 'f')+ " ГЦ");
                 m_socket->createMessages(2, fvcoHertz, dopler);
             }
             else
@@ -202,7 +207,7 @@ void Widget::sendThirdMessage()
         double range=params.first().toDouble(&isOk);
         if (isOk)
         {
-            m_log->appendPlainText("Высылаем 3 сообщение установка дальности ответного сигнала. Дистанция" + QString::number(range, 'f') );
+            m_log->appendPlainText("Высылаем третье сообщение: установка дальности ответного сигнала. Дистанция" + QString::number(range, 'f') );
             m_socket->createMessages(3, range, 0);
         }
         else
@@ -228,7 +233,7 @@ void Widget::sendFourthMessage()
         double gainRX=params.first().toDouble(&isOk2);
         if (isOk1&&isOk2)
         {
-            m_log->appendPlainText("Высылаем 4 сообщение установка усиления");
+            m_log->appendPlainText("Высылаем четвертое сообщение: установка усиления");
             m_socket->createMessages(4, gainTX, gainRX);
         }
         else
@@ -250,7 +255,7 @@ void Widget::sendFiveMessage()
     double AttenuatorValue=params.first().toDouble(&isOk);
     if (isOk)
     {
-        m_log->appendPlainText("Высылаем сообщение");
+        m_log->appendPlainText("Высылаем пятое сообщение: установка ослабления");
         m_socket->createMessages(5, AttenuatorValue, 0);
     }
     else
@@ -262,15 +267,29 @@ void Widget::sendFiveMessage()
 void Widget::sendSixMessage()
 {
     int noiseValue=m_noiseComboBox->currentIndex();
-    m_log->appendPlainText("Высылаем сообщение");
+    m_log->appendPlainText("Высылаем шестое сообщение: установка шума");
     m_socket->createMessages(6, noiseValue, 0);
 }
 
-void Widget::sendSevenMessage()
+void Widget::sendSevenMessageFirstId()
 {
-    m_log->appendPlainText("Высылаем сообщение");
-    m_socket->createMessages(7, 0, 0);
+    m_log->appendPlainText("Высылаем сообщение c получением частоты RX");
+    m_socket->createMessages(7, 1, 0);
 }
+
+void Widget::sendSevenMessageFourId()
+{
+    m_log->appendPlainText("Высылаем сообщение c получением усиления");
+    m_socket->createMessages(7, 4, 0);
+}
+
+void Widget::sendSevenMessageFiveId()
+{
+    m_log->appendPlainText("Высылаем сообщение c получением ослабления");
+    m_socket->createMessages(7, 5, 0);
+}
+
+
 
 void Widget::createUI()
 {
@@ -283,6 +302,7 @@ void Widget::createUI()
     m_gainLineLayout=new QHBoxLayout();
     m_attenuatorLineLayout=new QHBoxLayout();
     m_messageSendButtonsLayout=new QHBoxLayout();
+    m_messageGetButtonsLayout=new QHBoxLayout();
     m_stateLayout=new QHBoxLayout();
     m_noiseLineLayout=new QHBoxLayout();
 
@@ -292,7 +312,7 @@ void Widget::createUI()
     m_adressLineEdit->setInputMask(QStringLiteral("000.000.000.000;_"));
     m_portLineEdit=new QLineEdit();
     m_portLineEdit->setInputMask("00000;_");
-    m_adressLineEdit->setText("192.168.111.254");
+    m_adressLineEdit->setText("192.168.127.254");
     m_portLineEdit->setText("4004");
 
     m_connectButton=new QPushButton("Подключится");
@@ -341,7 +361,9 @@ void Widget::createUI()
     m_forthMessageSendButton=new QPushButton("установка усиления Rx Tx");
     m_fiveMessageSendButton=new QPushButton("Установка ослабления");
     m_sixMessageSendButton=new QPushButton("Генератор шума");
-    m_sevenMessageSendButton=new QPushButton("Получаем сообщения");
+    m_sevenMessageFirstSendButton=new QPushButton("Получаем частоты Rx");
+    m_sevenMessageFourSendButton=new QPushButton("Получаем усиление TX и РХ");
+    m_sevenMessageFiveSendButton=new QPushButton("Получаем ослабление");
 
     m_state=new QLabel("Адрес: адрес мохи с 1 в конце или 192.168.111.1 на РЛС ТИ. Порт: через  ЛК Operation Settings. Посмотреть http://192.168.127.254/ снизу мохи адрес Лог:Пасс admin:moxa");
     m_logClearButton=new QPushButton("Консоль отчистить");
@@ -392,7 +414,10 @@ void Widget::insertWidgetsIntoLayout()
     m_messageSendButtonsLayout->addWidget(m_forthMessageSendButton);
     m_messageSendButtonsLayout->addWidget(m_fiveMessageSendButton);
     m_messageSendButtonsLayout->addWidget(m_sixMessageSendButton);
-    m_messageSendButtonsLayout->addWidget(m_sevenMessageSendButton);
+
+    m_messageGetButtonsLayout->addWidget(m_sevenMessageFirstSendButton);
+    m_messageGetButtonsLayout->addWidget(m_sevenMessageFourSendButton);
+    m_messageGetButtonsLayout->addWidget(m_sevenMessageFiveSendButton);
 
     m_mainLayout->addLayout(m_adressAndPortLayout);
     m_mainLayout->addLayout(m_buttonsLayout);
@@ -403,6 +428,7 @@ void Widget::insertWidgetsIntoLayout()
     m_mainLayout->addLayout(m_attenuatorLineLayout);
     m_mainLayout->addLayout(m_noiseLineLayout);
     m_mainLayout->addLayout(m_messageSendButtonsLayout);
+    m_mainLayout->addLayout(m_messageGetButtonsLayout);
 
     m_mainLayout->addWidget(m_state);
     m_mainLayout->addWidget(m_logClearButton);
@@ -417,14 +443,16 @@ void Widget::createConnections()
         QString time=QDateTime::currentDateTime().toString("hh:mm:ss");
         m_log->appendPlainText(time+ " "+  message);});
     connect(m_socket, &TcpSocket::setState, [=](const QString &state){m_state->setText(state);});
-    connect(m_zeroMessageSendButton, &QPushButton::clicked, this, &Widget::sendZeroMessage);
-    connect(m_firstMessageSendButton, &QPushButton::clicked, this, &Widget::sendFirstMessage);
-    connect(m_secondMessageSendButton, &QPushButton::clicked, this, &Widget::sendSecondMessage);
-    connect(m_thirdMessageSendButton, &QPushButton::clicked, this, &Widget::sendThirdMessage);
-    connect(m_forthMessageSendButton, &QPushButton::clicked, this, &Widget::sendFourthMessage);
-    connect(m_fiveMessageSendButton, &QPushButton::clicked, this, &Widget::sendFiveMessage);
-    connect(m_sixMessageSendButton, &QPushButton::clicked, this, &Widget::sendSixMessage);
-    connect(m_sevenMessageSendButton, &QPushButton::clicked, this, &Widget::sendSevenMessage);
+    connect(m_zeroMessageSendButton, &QPushButton::clicked, [&](){sendZeroMessage();});
+    connect(m_firstMessageSendButton, &QPushButton::clicked, [&](){sendFirstMessage();});
+    connect(m_secondMessageSendButton, &QPushButton::clicked, [&](){sendSecondMessage();});
+    connect(m_thirdMessageSendButton, &QPushButton::clicked, [&](){sendThirdMessage();});
+    connect(m_forthMessageSendButton, &QPushButton::clicked, [&](){sendFourthMessage();});
+    connect(m_fiveMessageSendButton, &QPushButton::clicked, [&](){sendFiveMessage();});
+    connect(m_sixMessageSendButton, &QPushButton::clicked, [&](){sendSixMessage();});
+    connect(m_sevenMessageFirstSendButton, &QPushButton::clicked, [&](){sendSevenMessageFirstId();});
+    connect(m_sevenMessageFourSendButton, &QPushButton::clicked, [&](){sendSevenMessageFourId();});
+    connect(m_sevenMessageFiveSendButton, &QPushButton::click, [&](){sendSevenMessageFiveId();});
 
     connect(m_socket, &TcpSocket::setButtonsEnabled, this, &Widget::setButtonState);
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
@@ -438,7 +466,7 @@ bool Widget::allRequedFiledsHave(QStringList &listOfFields)
 {
     for(QStringList::iterator it=listOfFields.begin(); it!=listOfFields.end(); ++it)
     {
-        if (*it=="")
+        if (it->isEmpty())
             return false;
     }
     return true;

@@ -6,7 +6,8 @@
 #include <QDataStream>
 #include <QTimer>
 
-#include "messagecreator.h"
+#include "messagesetter.h"
+#include "messagesgetter.h"
 
 class TcpSocket : public QObject
 {
@@ -37,7 +38,8 @@ private Q_SLOTS:
 private:
     QTcpSocket *m_tcpSocket;
     QTimer *m_timer;
-    MessageCreator *m_messageCreator;
+    MessagesSetter *m_messageSetter;
+    MessagesGetter *m_messageGetter;
 };
 
 #endif // TCPSOCKET_H

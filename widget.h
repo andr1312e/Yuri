@@ -23,6 +23,7 @@ private Q_SLOTS:
     void tryToConnect();
     void changeSpeedFiled();
     void changeDoplerFiled(const QString &value);
+private:
     void sendZeroMessage();
     void sendFirstMessage();
     void sendSecondMessage();
@@ -30,7 +31,9 @@ private Q_SLOTS:
     void sendFourthMessage();
     void sendFiveMessage();
     void sendSixMessage();
-    void sendSevenMessage();
+    void sendSevenMessageFirstId();
+    void sendSevenMessageFourId();
+    void sendSevenMessageFiveId();
 private:
     void createUI();
     void insertWidgetsIntoLayout();
@@ -84,7 +87,12 @@ private:
     QPushButton *m_forthMessageSendButton;
     QPushButton *m_fiveMessageSendButton;
     QPushButton *m_sixMessageSendButton;
-    QPushButton *m_sevenMessageSendButton;
+
+    QHBoxLayout *m_messageGetButtonsLayout;
+
+    QPushButton *m_sevenMessageFirstSendButton;
+    QPushButton *m_sevenMessageFourSendButton;
+    QPushButton *m_sevenMessageFiveSendButton;
 
     QHBoxLayout *m_stateLayout;
     QLabel *m_state;

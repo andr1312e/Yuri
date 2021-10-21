@@ -9,12 +9,15 @@ TARGET = "PROTOKOL_C_M14XJI2"
 
 SOURCES += \
     main.cpp \
-    messagecreator.cpp \
+    messagesetter.cpp \
+    messagesgetter.cpp \
     tcpsocket.cpp \
     widget.cpp
 
 HEADERS += \
-    messagecreator.h \
+    constantsandfunctions.h \
+    messagesetter.h \
+    messagesgetter.h \
     tcpsocket.h \
     widget.h
 
