@@ -15,7 +15,7 @@ public:
     const QString getGainTxGainRXFromFourthMessage(QByteArray &message);
     QString getAttenuatorRXFromFiveMessage(QByteArray &message);
 private:
-    const qint8 indexOfSendedMessage=2;
+    const int indexOfSendedMessage;
 };
 
 #endif // MESSAGESGETTER_H

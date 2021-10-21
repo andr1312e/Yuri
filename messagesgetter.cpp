@@ -6,6 +6,7 @@
 #include <QDebug>
 
 MessagesGetter::MessagesGetter()
+    :indexOfSendedMessage(2)
 {
 
 }
@@ -17,13 +18,13 @@ MessagesGetter::~MessagesGetter()
 
 QString MessagesGetter::getDataFromMessage(QByteArray &message)
 {
-
-    quint8 sendedMessageId=message.at(indexOfSendedMessage);
+    qDebug()<< message.toHex();
+    quint8 sendedMessageId=message.at(2);
     switch (sendedMessageId) {
     case 1:
         return getFvcoFromFirstMessage(message);
     case 4:
-        return getAttenuatorRXFromFiveMessage(message);
+        return getGainTxGainRXFromFourthMessage(message);
     case 5:
         return getAttenuatorRXFromFiveMessage(message);
     default:
@@ -57,7 +58,7 @@ QString MessagesGetter::getFvcoFromFirstMessage(QByteArray &message)
 
 const QString MessagesGetter::getGainTxGainRXFromFourthMessage(QByteArray &message)
 {
-    if (message.size()>4)
+    if (message.size()==5)
     {
         quint8 GAIN_TX=message.at(3);
         quint8 GAIN_RX=message.at(4);
@@ -69,7 +70,7 @@ const QString MessagesGetter::getGainTxGainRXFromFourthMessage(QByteArray &messa
 
 QString MessagesGetter::getAttenuatorRXFromFiveMessage(QByteArray &message)
 {
-    if (message.size()>3)
+    if (message.size()==4)
     {
         quint8 Attenuator_RX=quint8(message.at(3));
         quint8 realValue=atteniatorTable.key(Attenuator_RX);

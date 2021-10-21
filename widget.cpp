@@ -452,7 +452,7 @@ void Widget::createConnections()
     connect(m_sixMessageSendButton, &QPushButton::clicked, [&](){sendSixMessage();});
     connect(m_sevenMessageFirstSendButton, &QPushButton::clicked, [&](){sendSevenMessageFirstId();});
     connect(m_sevenMessageFourSendButton, &QPushButton::clicked, [&](){sendSevenMessageFourId();});
-    connect(m_sevenMessageFiveSendButton, &QPushButton::click, [&](){sendSevenMessageFiveId();});
+    connect(m_sevenMessageFiveSendButton, &QPushButton::clicked, [&](){sendSevenMessageFiveId();});
 
     connect(m_socket, &TcpSocket::setButtonsEnabled, this, &Widget::setButtonState);
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
