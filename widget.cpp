@@ -1,15 +1,17 @@
 #include "widget.h"
 
-#include <QDateTime>
+
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
+    , m_file(new QFile(QDir::currentPath()+"/история запросов.txt"))
     , m_attenuatorValues({"0", "1", "2", "3", "4", "5", "6", "9", "12", "15", "18", "21", "24", "27", "30"})
     , m_noiseValues({"шумогенератор ВЫКЛЮЧЕН, ответчик ВЫКЛЮЧЕН", "шумогенератор ВЫКЛЮЧЕН, ответчик ВКЛЮЧЕН", "шумогенератор ВКЛЮЧЕН, ответчик ВЫКЛЮЧЕН"})
     , m_socket(new TcpSocket(this))
     , m_intValidator(new QIntValidator(0, 2147483647))
     , m_gainValidator(new QIntValidator(0, 100))
 {
+    m_file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
     long long minWorkPointValue=2695;
     for (int i=0; i<30; i++)
     {
@@ -23,6 +25,9 @@ Widget::Widget(QWidget *parent)
 
 Widget::~Widget()
 {
+    m_file->close();
+
+    delete m_file;
     delete m_socket;
     delete m_intValidator;
     delete m_gainValidator;
@@ -145,7 +150,7 @@ void Widget::sendFirstMessage()
         if (isOk)
         {
             double fvcoHertz=fvcoMegaHertz*1000000;
-            m_log->appendPlainText("Высылаем первое сообщение: установка частоты RX fvco= " +QString::number(fvcoMegaHertz, 'f'));
+            m_log->appendPlainText("Высылаем первое сообщение: установка частоты RX fvco= " +QString::number(fvcoMegaHertz, 'f')+ "МГЦ");
             m_socket->createMessages(1, fvcoHertz, 0);
         }
         else
@@ -255,6 +260,7 @@ void Widget::sendFiveMessage()
     double AttenuatorValue=params.first().toDouble(&isOk);
     if (isOk)
     {
+
         m_log->appendPlainText("Высылаем пятое сообщение: установка ослабления");
         m_socket->createMessages(5, AttenuatorValue, 0);
     }
@@ -372,7 +378,7 @@ void Widget::createUI()
     m_log->setReadOnly(true);
     m_log->appendPlainText("Не подлючено к ответчику");
 
-        setButtonState(false);
+    setButtonState(false);
     setWindowTitle("Настройка Юстировочного оборудования блок М14ХЛ2 Плата СЮИТ.687263.035");
 }
 
@@ -443,7 +449,7 @@ void Widget::createConnections()
         QString time=QDateTime::currentDateTime().toString("hh:mm:ss");
         m_log->appendPlainText(time+ " "+  message);});
     connect(m_socket, &TcpSocket::setState, [=](const QString &state){m_state->setText(state);});
-    connect(m_zeroMessageSendButton, &QPushButton::clicked, [&](){sendZeroMessage();});
+    connect(m_zeroMessageSendButton, &QPushButton::clicked, [&](){sendZeroMessage(); });
     connect(m_firstMessageSendButton, &QPushButton::clicked, [&](){sendFirstMessage();});
     connect(m_secondMessageSendButton, &QPushButton::clicked, [&](){sendSecondMessage();});
     connect(m_thirdMessageSendButton, &QPushButton::clicked, [&](){sendThirdMessage();});
@@ -454,6 +460,7 @@ void Widget::createConnections()
     connect(m_sevenMessageFourSendButton, &QPushButton::clicked, [&](){sendSevenMessageFourId();});
     connect(m_sevenMessageFiveSendButton, &QPushButton::clicked, [&](){sendSevenMessageFiveId();});
 
+    connect(m_socket, &TcpSocket::updateFile, [&](){updateHistory();});
     connect(m_socket, &TcpSocket::setButtonsEnabled, this, &Widget::setButtonState);
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
     connect(m_disconnectButton, &QPushButton::clicked, m_socket, &TcpSocket::disconnect);
@@ -471,4 +478,23 @@ bool Widget::allRequedFiledsHave(QStringList &listOfFields)
     }
     return true;
 }
+
+void Widget::updateHistory()
+{
+    QString time="\n"+QDateTime::currentDateTime().toString("hh:mm:ss");
+    int space=5;
+    QString fvco=m_fvcoComboBox->currentText().leftJustified(space, ' ');
+    QString dopler =m_DoplerFreqLineEdit->text().leftJustified(space, ' ');
+    QString speed = m_speedLineEdit->text().leftJustified(space, ' ');
+    QString range= m_rangeLineEdit->text().leftJustified(space, ' ');
+    QString gaintTx = m_gainTXLineEdit->text().leftJustified(space, ' ');
+    QString gaintRx = m_gainRXLineEdit->text().leftJustified(space, ' ');
+    QString attenuator =m_attenuatorComboBox->currentText();
+    QString noise=m_noiseComboBox->currentText();
+    QString message=time + "|Fvco(МПЦ)= "+fvco+" |Доплер(ГЦ)= "+dopler+ " |Скорость(М/С)= "+speed+ " |Дистанция(М)= "+range+ " |gainTx= "+gaintTx+ " |gainRx= "+gaintRx+ " |Ослабление= "+attenuator + " |"+ noise;
+    m_file->write(message.toUtf8());
+    m_file->flush();
+}
+
+
 

@@ -21,6 +21,7 @@ public:
 Q_SIGNALS:
     void setButtonsEnabled(bool state);
     void setState(QString state);
+    void updateFile();
     void sendMessageToLog(QString errorMessage);
 public Q_SLOTS:
     void connected();

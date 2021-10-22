@@ -58,10 +58,11 @@ QString MessagesGetter::getFvcoFromFirstMessage(QByteArray &message)
 
 const QString MessagesGetter::getGainTxGainRXFromFourthMessage(QByteArray &message)
 {
+
     if (message.size()==5)
     {
-        quint8 GAIN_TX=message.at(3);
-        quint8 GAIN_RX=message.at(4);
+        quint8 GAIN_RX=message.at(3);
+        quint8 GAIN_TX=message.at(4);
         const QString result= QString("Усиление TX= %1 децибел Усиление RX= %2 децибел").arg(GAIN_TX).arg(GAIN_RX);
         return result;
     }

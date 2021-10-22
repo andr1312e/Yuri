@@ -107,6 +107,7 @@ void TcpSocket::createMessages(quint8 messageId, double firstParam, double Secon
     }
 
     }
+    Q_EMIT updateFile();
     Q_EMIT sendMessageToLog("Отправляемое сообщeние " +message.toHex() + " его размер: " + QString::number(message.size()) + " байт сформировано");
     send(message);
 }

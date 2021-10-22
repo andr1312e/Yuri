@@ -10,6 +10,9 @@
 #include <QWidget>
 #include <QComboBox>
 #include <QStringList>
+#include <QDateTime>
+#include <QDir>
+#include <QFile>
 
 class Widget : public QWidget
 {
@@ -101,6 +104,7 @@ private:
     QPlainTextEdit *m_log;
 
 private:
+    QFile *m_file;
     QStringList workPointsValues, m_attenuatorValues, m_noiseValues;
     TcpSocket *m_socket;
     QIntValidator *m_intValidator;
@@ -111,5 +115,6 @@ private:
 private:
     bool allRequedFiledsHave(QStringList &listOfFields);
     bool allDataIsValid();
+    void updateHistory();
 };
 #endif // WIDGET_H
