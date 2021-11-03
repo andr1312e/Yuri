@@ -18,6 +18,7 @@ SOURCES += \
     ui/connectionwidget.cpp \
     ui/firmwarewidget.cpp \
     ui/infowidget.cpp \
+    ui/newfirmwarewidget.cpp \
     ui/statewidget.cpp \
     ui/widgets/firmwaresourceviewer.cpp \
     ui/widgets/sourcecodewidget.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     ui/connectionwidget.h \
     ui/firmwarewidget.h \
     ui/infowidget.h \
+    ui/newfirmwarewidget.h \
     ui/statewidget.h \
     ui/widgets/firmwaresourceviewer.h \
     ui/widgets/sourcecodewidget.h \
