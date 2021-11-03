@@ -1,31 +1,21 @@
 #include "tcpsocket.h"
 
+#include <QThread>
+
 TcpSocket::TcpSocket(QObject *parent)
     : QObject(parent)
     , m_tcpSocket(new QTcpSocket(this))
-    , m_timer(new QTimer())
-    , m_messageSetter(new MessagesSetter())
 {
-    initCheckingConnectionTimer();
     createConnections();
 }
 
 TcpSocket::~TcpSocket()
 {
-    delete m_timer;
     delete m_tcpSocket;
-    delete m_messageSetter;
-}
-
-void TcpSocket::initCheckingConnectionTimer()
-{
-    m_timer->setSingleShot(true);
-    m_timer->setInterval(10000);
 }
 
 void TcpSocket::createConnections()
 {
-    connect(m_timer, &QTimer::timeout, this, &TcpSocket::checkConnection);
     connect(m_tcpSocket, &QTcpSocket::connected, this, &TcpSocket::connected);
     connect(m_tcpSocket, &QTcpSocket::readyRead, this, &TcpSocket::readyRead);
     connect(m_tcpSocket, &QTcpSocket::disconnected, this, &TcpSocket::disconnected);
@@ -34,89 +24,78 @@ void TcpSocket::createConnections()
 
 void TcpSocket::connected()
 {
-    Q_EMIT setState(QStringLiteral("Подключено"));
-    Q_EMIT sendMessageToLog("Подключились");
-    Q_EMIT setButtonsEnabled(true);
+    Q_EMIT ConsoleLog("Подключились");
+    Q_EMIT SetButtonsEnabled(true);
 }
 
 void TcpSocket::readyRead()
-{
-    QByteArray gettingMessage=m_tcpSocket->readAll();
-//    gettingMessage.remove(0, 1);
-//    gettingMessage.remove(gettingMessage.length()-2, 2);
-    if (gettingMessage.at(1)==7)
-    {
-        sendMessageToLog("Получили данные "+ m_messageGetter->getDataFromMessage(gettingMessage));
+{ 
+    switch (m_state) {
+    case WriteFirmWare:
+        gettingMessageArray=m_tcpSocket->readAll();
+        //        m_tcpSocket->flush();
+        //        qDebug()<< gettingMessageArray.toHex();
+        if (gettingMessageArray.length()==1)
+        {
+            Q_EMIT UpdateHardwareState(gettingMessageArray.front());
+        }
+        else
+        {
+             Q_EMIT FirmwareConsoleLog("Получили сообщение: "+ QString(gettingMessageArray.toHex()));
+        }
+        gettingMessageArray.clear();
+        break;
+    case SetAndReadData:
+        Q_EMIT FirmwareConsoleLog(gettingMessageArray.toHex());
+        gettingMessageArray=m_tcpSocket->readAll();
+        m_tcpSocket->flush();
+        if (gettingMessageArray.length()<5)
+        {
+            Q_EMIT StateConsoleLog("Получили сообщение ("+ QString(gettingMessageArray.toHex())+") - OK");
+        }
+        else
+        {
+            Q_EMIT StateConsoleLog("Получили сообщение c состоянием: "+ QString(gettingMessageArray.toHex()));
+            Q_EMIT GetMessageWithState(gettingMessageArray);
+        }
+        gettingMessageArray.clear();
+        break;
+    case ReadFirmWare:
+        gettingMessageArray.append(m_tcpSocket->readAll());
+        if (gettingMessageArray.length()<16)
+        {
+            Q_EMIT FirmwareConsoleLog("Данные из в буфера: "+ QString(gettingMessageArray.toHex()));
+        }
+        else
+        {
+            if (!IsEndOfFirmware(gettingMessageArray))
+            {
+                Q_EMIT SendFirmwareSourcePartFromDevice(gettingMessageArray);
+                Q_EMIT GetPartOfFirmWareAgain();
+                gettingMessageArray.clear();
+            }
+        }
+        break;
     }
-    else
-    {
-      sendMessageToLog("Получили сообщение ("+ QString(gettingMessage)+") - OK");
-    }
+
 
 }
 
-void TcpSocket::connectTo(QString &ip, QString &port)
+void TcpSocket::connectTo(const QString &adress,const QString &port)
 {
-    m_tcpSocket->connectToHost(ip, port.toInt(),  QIODevice::ReadWrite);
-    m_timer->start();
+    m_tcpSocket->connectToHost(adress, port.toInt(),  QIODevice::ReadWrite);
 }
 
-void TcpSocket::createMessages(quint8 messageId, double firstParam, double SecondParam)
+void TcpSocket::SetSocketState(quint8 state)
 {
-    QByteArray message;
-    switch (messageId) {
-    case 1:
-    {
-        message=m_messageSetter->createFirstCommand(firstParam);
-        break;
-    }
-    case 2:
-    {
-        message=m_messageSetter->createSecondCommand(firstParam, SecondParam);
-        break;
-    }
-    case 3:
-    {
-        message=m_messageSetter->createThirdCommand(firstParam);
-        break;
-    }
-    case 4:
-    {
-        message=m_messageSetter->createFourthCommand(firstParam, SecondParam);
-        break;
-    }
-    case 5:
-    {
-        message=m_messageSetter->createFiveCommand(firstParam);
-        break;
-    }
-    case 6:
-    {
-        message=m_messageSetter->createSixCommand(firstParam);
-        break;
-    }
-    case 7:
-    {
-        message=m_messageSetter->createSevenCommand(firstParam);
-        break;
-    }
-    default:
-    {
-        message=m_messageSetter->createZeroCommand();
-        break;
-    }
-
-    }
-    Q_EMIT updateFile();
-    Q_EMIT sendMessageToLog("Отправляемое сообщeние " +message.toHex() + " его размер: " + QString::number(message.size()) + " байт сформировано");
-    send(message);
+    m_state=static_cast<SocketActionState>(state);
 }
 
 void TcpSocket::disconnected()
 {
-    Q_EMIT setButtonsEnabled(false);
-    Q_EMIT setState("Не подключено");
-    Q_EMIT sendMessageToLog("отключено от сокета юзером");
+    Q_EMIT SetButtonsEnabled(false);
+    Q_EMIT ConsoleLog("Не подключено");
+    Q_EMIT ConsoleLog("Отключено от сокета юзером");
 }
 
 void TcpSocket::disconnect()
@@ -126,97 +105,146 @@ void TcpSocket::disconnect()
 
 void TcpSocket::getErrorMessqage(QAbstractSocket::SocketError socketError)
 {
-    switch (socketError) {
-    case QAbstractSocket::ConnectionRefusedError:
-        Q_EMIT sendMessageToLog(("Истекло время ожидания"));
-        break;
-    case QAbstractSocket::RemoteHostClosedError:
-        Q_EMIT sendMessageToLog(("Удаленный хост закрыл соединение"));
-        break;
-    case QAbstractSocket::SocketAccessError:
-        Q_EMIT sendMessageToLog(("Адрес хоста не найден"));
-        break;
-    case QAbstractSocket::SocketResourceError:
-        Q_EMIT sendMessageToLog(("Приложению не хватало необходимых прав"));
-        break;
-    case QAbstractSocket::SocketTimeoutError:
-        Q_EMIT sendMessageToLog(("Слишком много сокетов"));
-        break;
-    case QAbstractSocket::DatagramTooLargeError:
-        Q_EMIT sendMessageToLog(("Размер дейтаграммы превышал предел операционной системы"));
-        break;
-    case QAbstractSocket::NetworkError:
-        Q_EMIT sendMessageToLog(("Произошла ошибка сети (например, сетевой кабель был случайно отключен)"));
-        break;
-    case QAbstractSocket::AddressInUseError:
-        Q_EMIT sendMessageToLog(("Слишком много сокетов"));
-        break;
-    case QAbstractSocket::SocketAddressNotAvailableError:
-        Q_EMIT sendMessageToLog(("Адрес, уже используется в каком то соединении"));
-        break;
-    case QAbstractSocket::UnsupportedSocketOperationError:
-        Q_EMIT sendMessageToLog(("Адрес не принадлежит хосту"));
-        break;
-    case QAbstractSocket::UnfinishedSocketOperationError:
-        Q_EMIT sendMessageToLog(("Запрошенная операция сокета не поддерживается локальной операционной системой"));
-        break;
-    case QAbstractSocket::ProxyAuthenticationRequiredError:
-        Q_EMIT sendMessageToLog(("Подтверждение связи SSL / TLS не удалось, поэтому соединение было закрыто "));
-        break;
-    case QAbstractSocket::SslHandshakeFailedError:
-        Q_EMIT sendMessageToLog(("Последняя попытка операции еще не завершена"));
-        break;
-    case QAbstractSocket::ProxyConnectionRefusedError:
-        Q_EMIT sendMessageToLog(("Не удалось связаться с прокси-сервером, потому что соединение с этим сервером было отказано"));
-        break;
-    case QAbstractSocket::ProxyConnectionClosedError:
-        Q_EMIT sendMessageToLog(("Соединение с прокси-сервером было неожиданно закрыто"));
-        break;
-    case QAbstractSocket::ProxyConnectionTimeoutError:
-        Q_EMIT sendMessageToLog(("Время ожидания подключения к прокси-серверу истекло или прокси-сервер перестал отвечать на этапе проверки подлинности."));
-        break;
-    case QAbstractSocket::ProxyNotFoundError:
-        Q_EMIT sendMessageToLog(("Адрес прокси, заданный с помощью setProxy () (или прокси приложения), не найден."));
-        break;
-    case QAbstractSocket::ProxyProtocolError:
-        Q_EMIT sendMessageToLog(("Согласование соединения с прокси-сервером не удалось, потому что ответ прокси-сервера не был понят."));
-        break;
-    case QAbstractSocket::OperationError:
-        Q_EMIT sendMessageToLog(("Была предпринята попытка выполнения операции, когда сокет находился в недопустимом состоянии."));
-        break;
-    case QAbstractSocket::SslInternalError:
-        Q_EMIT sendMessageToLog(("Используемая библиотека SSL сообщила о внутренней ошибке."));
-        break;
-    case QAbstractSocket::SslInvalidUserDataError:
-        Q_EMIT sendMessageToLog(("Были предоставлены неверные данные (сертификат, ключ, шифр и т. Д.), И их использование привело к ошибке в библиотеке SSL."));
-        break;
-    case QAbstractSocket::TemporaryError:
-        Q_EMIT sendMessageToLog(("Произошла временная ошибка (например, операция будет заблокирована, а сокет не блокируется)."));
-        break;
-    case QAbstractSocket::UnknownSocketError:
-        Q_EMIT sendMessageToLog(("Произошла неопознанная ошибка."));
-        break;
-    case QAbstractSocket::HostNotFoundError:
-        Q_EMIT sendMessageToLog(("Хост не найден"));
-        break;
+    //    switch (socketError) {
+    //    case QAbstractSocket::ConnectionRefusedError:
+    //        Q_EMIT ConsoleLog(("Истекло время ожидания"));
+    //        break;
+    //    case QAbstractSocket::RemoteHostClosedError:
+    //        Q_EMIT ConsoleLog(("Удаленный хост закрыл соединение"));
+    //        break;
+    //    case QAbstractSocket::SocketAccessError:
+    //        Q_EMIT ConsoleLog(("Адрес хоста не найден"));
+    //        break;
+    //    case QAbstractSocket::SocketResourceError:
+    //        Q_EMIT ConsoleLog(("Приложению не хватало необходимых прав"));
+    //        break;
+    //    case QAbstractSocket::SocketTimeoutError:
+    //        Q_EMIT ConsoleLog(("Слишком много сокетов"));
+    //        break;
+    //    case QAbstractSocket::DatagramTooLargeError:
+    //        Q_EMIT ConsoleLog(("Размер дейтаграммы превышал предел операционной системы"));
+    //        break;
+    //    case QAbstractSocket::NetworkError:
+    //        Q_EMIT ConsoleLog(("Произошла ошибка сети (например, сетевой кабель был случайно отключен)"));
+    //        break;
+    //    case QAbstractSocket::AddressInUseError:
+    //        Q_EMIT ConsoleLog(("Слишком много сокетов"));
+    //        break;
+    //    case QAbstractSocket::SocketAddressNotAvailableError:
+    //        Q_EMIT ConsoleLog(("Адрес, уже используется в каком то соединении"));
+    //        break;
+    //    case QAbstractSocket::UnsupportedSocketOperationError:
+    //        Q_EMIT ConsoleLog(("Адрес не принадлежит хосту"));
+    //        break;
+    //    case QAbstractSocket::UnfinishedSocketOperationError:
+    //        Q_EMIT ConsoleLog(("Запрошенная операция сокета не поддерживается локальной операционной системой"));
+    //        break;
+    //    case QAbstractSocket::ProxyAuthenticationRequiredError:
+    //        Q_EMIT ConsoleLog(("Подтверждение связи SSL / TLS не удалось, поэтому соединение было закрыто "));
+    //        break;
+    //    case QAbstractSocket::SslHandshakeFailedError:
+    //        Q_EMIT ConsoleLog(("Последняя попытка операции еще не завершена"));
+    //        break;
+    //    case QAbstractSocket::ProxyConnectionRefusedError:
+    //        Q_EMIT ConsoleLog(("Не удалось связаться с прокси-сервером, потому что соединение с этим сервером было отказано"));
+    //        break;
+    //    case QAbstractSocket::ProxyConnectionClosedError:
+    //        Q_EMIT ConsoleLog(("Соединение с прокси-сервером было неожиданно закрыто"));
+    //        break;
+    //    case QAbstractSocket::ProxyConnectionTimeoutError:
+    //        Q_EMIT ConsoleLog(("Время ожидания подключения к прокси-серверу истекло или прокси-сервер перестал отвечать на этапе проверки подлинности."));
+    //        break;
+    //    case QAbstractSocket::ProxyNotFoundError:
+    //        Q_EMIT ConsoleLog(("Адрес прокси, заданный с помощью setProxy () (или прокси приложения), не найден."));
+    //        break;
+    //    case QAbstractSocket::ProxyProtocolError:
+    //        Q_EMIT ConsoleLog(("Согласование соединения с прокси-сервером не удалось, потому что ответ прокси-сервера не был понят."));
+    //        break;
+    //    case QAbstractSocket::OperationError:
+    //        Q_EMIT ConsoleLog(("Была предпринята попытка выполнения операции, когда сокет находился в недопустимом состоянии."));
+    //        break;
+    //    case QAbstractSocket::SslInternalError:
+    //        Q_EMIT ConsoleLog(("Используемая библиотека SSL сообщила о внутренней ошибке."));
+    //        break;
+    //    case QAbstractSocket::SslInvalidUserDataError:
+    //        Q_EMIT ConsoleLog(("Были предоставлены неверные данные (сертификат, ключ, шифр и т. Д.), И их использование привело к ошибке в библиотеке SSL."));
+    //        break;
+    //    case QAbstractSocket::TemporaryError:
+    //        Q_EMIT ConsoleLog(("Произошла временная ошибка (например, операция будет заблокирована, а сокет не блокируется)."));
+    //        break;
+    //    case QAbstractSocket::UnknownSocketError:
+    //        Q_EMIT ConsoleLog(("Произошла неопознанная ошибка."));
+    //        break;
+    //    case QAbstractSocket::HostNotFoundError:
+    //        Q_EMIT ConsoleLog(("Хост не найден"));
+    //        break;
 
-    }
+    //    }
 }
 
-void TcpSocket::send(QByteArray &array)
+void TcpSocket::send(const QByteArray &array)
 {
-    Q_EMIT sendMessageToLog("Пытаемся отправить");
-    if (m_tcpSocket->state() == QAbstractSocket::ConnectedState)
-    {
-        m_tcpSocket->write(array);
-        m_tcpSocket->flush();
-        Q_EMIT sendMessageToLog("Отправили");
-    }
-    else
-    {
-        Q_EMIT sendMessageToLog("Сначала подключись к мохе");
-    }
 
+    //    switch (m_state) {
+    //    case SetAndReadData:
+    //        Q_EMIT StateConsoleLog("Пытаемся отправить: "+ array.toHex(' '));
+    //        break;
+    //    case ReadFirmWare:
+    //    case WriteFirmWare:
+    //    Q_EMIT FirmwareConsoleLog("Пытаемся отправить: "+ array.toHex(' '));
+    //        break;
+    //    }
+    //    if (m_tcpSocket->state() == QAbstractSocket::ConnectedState)
+    //    {
+    //    QDataStream out(&array, QIODevice::WriteOnly);
+    //    m_tcpSocket->de->sendBytes(b);
+    //    m_tcpSocket->write(array, array.length());
+    m_tcpSocket->write(array);
+    m_tcpSocket->flush();
+    //        switch (m_state) {
+    //        case SetAndReadData:
+    //            Q_EMIT StateConsoleLog("Отправили");
+    //            break;
+    //        case ReadFirmWare:
+    //        case WriteFirmWare:
+    //    Q_EMIT FirmwareConsoleLog("Отправили");
+    //    m_tcpSocket->waitForReadyRead(5);
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //            break;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Q_EMIT ConsoleLog("Сначала подключись к мохе");
+    //    }
+    //     m_tcpSocket->flush();
+}
+
+void TcpSocket::SendGetPCBState(const QByteArray *state)
+{
+    m_tcpSocket->write(*state);
+    Flush();
+//    m_tcpSocket->waitForReadyRead(1);
+}
+
+void TcpSocket::SendGetPCBStateReadFromBuffer(const QByteArray *state)
+{
+    m_tcpSocket->write(*state);
+    Flush();
+//    m_tcpSocket->waitForReadyRead(3);
+}
+
+void TcpSocket::SendPartOfFirmware(QByteArray &part)
+{
+    m_tcpSocket->write(part);
+}
+
+void TcpSocket::Flush()
+{
+    m_tcpSocket->flush();
+    while(m_tcpSocket->waitForBytesWritten(2))
+    {
+    }
 }
 
 
@@ -242,16 +270,78 @@ QString TcpSocket::getStringSocketState(QAbstractSocket::SocketState state)
     }
 }
 
-void TcpSocket::checkConnection()
+bool TcpSocket::IsEndOfFirmware(QByteArray &firmwarePart)
 {
-    if (m_tcpSocket->state()==QAbstractSocket::ConnectedState)
+    QByteArray arr=firmwarePart.toHex();
+    if (m_stopByteArray==arr)
     {
-        Q_EMIT setButtonsEnabled(true);
-        Q_EMIT sendMessageToLog(QString("Проверяем соединение: Подключено к мохе успешно. Ура"));
+        ++m_stopLines;
+        if (m_stopLines>m_maxNumOfLinesToStop)
+        {
+            return true;
+        }
     }
     else
     {
-        QString socketState=getStringSocketState(m_tcpSocket->state());
-        Q_EMIT sendMessageToLog("Проверяем соединение:  Не смогли подключится к мохе: " + socketState);
+        m_stopLines=0;
     }
+    return false;
+
 }
+
+
+//gettingMessageArray.append(m_tcpSocket->readAll());
+//QDataStream in(&gettingMessageArray, QIODevice::ReadOnly);
+//in.setVersion(QDataStream::Qt_5_3);
+//in.setByteOrder(QDataStream::LittleEndian);
+//in.setFloatingPointPrecision(QDataStream::SinglePrecision);
+
+//if (gettingMessageArray.length()<2)
+//{
+//    message+=gettingMessage;
+//}
+//else
+//{
+//    qDebug()<< "HEX lenght" << message.length();
+//    m_tcpSocket->flush();
+//    switch (m_state) {
+//    case WriteFirmWare:
+//        qDebug()<< " hexs" << message.toHex();
+//        if (message.length()==3 && message.at(0)==0 && message.at(2)==0)
+//        {
+//            qDebug()<< "UpdateHardwareState hex" << message.toHex();
+//            Q_EMIT UpdateHardwareState(message.at(1));
+//        }
+//        else
+//        {
+//            Q_EMIT FirmwareConsoleLog(message.toHex());
+//        }
+//        break;
+//    case SetAndReadData:
+//        if (message.length()<5)
+//        {
+//            Q_EMIT StateConsoleLog("Получили сообщение ("+ QString(message.toHex())+") - OK");
+//        }
+//        else
+//        {
+//            Q_EMIT StateConsoleLog("Получили сообщение c состоянием: ("+ QString(message.toHex())+") - OK");
+//            Q_EMIT GetMessageWithState(message);
+//        }
+//        break;
+//    case ReadFirmWare:
+//        if (message.length()<5)
+//        {
+//            Q_EMIT FirmwareConsoleLog("Данные из в буфера ("+ QString(message.toHex())+") - OK");
+//        }
+//        else
+//        {
+//            if (!IsEndOfFirmware(message))
+//            {
+//                Q_EMIT SendFirmwareSourcePartFromDevice(message);
+//                Q_EMIT GetPartOfFirmWareAgain();
+//            }
+//        }
+//        break;
+//    }
+//    message.clear();
+//}

@@ -1,14 +1,14 @@
-#ifndef MESSAGESETTER_H
-#define MESSAGESETTER_H
+#ifndef MESSAGECREATORS_STATEMESSAGESENDER_H
+#define MESSAGECREATORS_STATEMESSAGESENDER_H
 #include <QByteArray>
 #include <cmath>
 #include <constantsandfunctions.h>
 
-class MessagesSetter
+class StateMessageSender
 {
 public:
-    MessagesSetter();
-    ~MessagesSetter();
+    StateMessageSender();
+    ~StateMessageSender();
     QByteArray createZeroCommand();
     QByteArray createFirstCommand(double Fvco);
     QByteArray createSecondCommand(double Fvco, double doplerFreq);
@@ -16,7 +16,7 @@ public:
     QByteArray createFourthCommand(double gainTX, double gainRX);
     QByteArray createFiveCommand(double AttenuatorDb);
     QByteArray createSixCommand(double noiseValue);
-    QByteArray createSevenCommand(double param);
+    QByteArray createSevenCommand(quint8 param);
 private:
     quint16 calculateINT_Rx(double Fvco);
     quint32 calculateFRACT_Rx(double Fvco);
@@ -24,4 +24,4 @@ private:
     quint8 calculateAtteniator(quint16 atteniatorDb);
 };
 
-#endif // MESSAGESETTER_H
+#endif // MESSAGECREATORS_STATEMESSAGESENDER_H

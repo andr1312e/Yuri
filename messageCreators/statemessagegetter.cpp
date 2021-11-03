@@ -1,25 +1,25 @@
-#include "messagesgetter.h"
+#include "statemessagegetter.h"
 
 #include <QByteArray>
 #include <QDataStream>
 #include <QtEndian>
 #include <QDebug>
 
-MessagesGetter::MessagesGetter()
-    :indexOfSendedMessage(2)
+StateMessageGetter::StateMessageGetter()
+    :m_indexOfGettingMessageId(2)
 {
 
 }
 
-MessagesGetter::~MessagesGetter()
+StateMessageGetter::~StateMessageGetter()
 {
 
 }
 
-QString MessagesGetter::getDataFromMessage(QByteArray &message)
+const QString StateMessageGetter::getDataFromMessage(QByteArray &message)
 {
-    qDebug()<< message.toHex();
-    quint8 sendedMessageId=message.at(2);
+//    qDebug()<< "GET"<<message.toHex();
+    quint8 sendedMessageId=message.at(m_indexOfGettingMessageId);
     switch (sendedMessageId) {
     case 1:
         return getFvcoFromFirstMessage(message);
@@ -32,9 +32,9 @@ QString MessagesGetter::getDataFromMessage(QByteArray &message)
     }
 }
 
-QString MessagesGetter::getFvcoFromFirstMessage(QByteArray &message)
+const QString StateMessageGetter::getFvcoFromFirstMessage(QByteArray &message)
 {
-    if(message.size()>8)
+    if(message.size()==10)
     {
         bool DIV_RX=message.at(8);
         QByteArray arrayINTRX(2, ' ');
@@ -56,22 +56,22 @@ QString MessagesGetter::getFvcoFromFirstMessage(QByteArray &message)
     return QString::fromLatin1("");
 }
 
-const QString MessagesGetter::getGainTxGainRXFromFourthMessage(QByteArray &message)
+const QString StateMessageGetter::getGainTxGainRXFromFourthMessage(QByteArray &message)
 {
 
-    if (message.size()==5)
+    if (message.size()==6)
     {
-        quint8 GAIN_RX=message.at(3);
-        quint8 GAIN_TX=message.at(4);
+        quint8 GAIN_TX=message.at(3)*2.0;
+        quint8 GAIN_RX=message.at(4)*2.0;
         const QString result= QString("Усиление TX= %1 децибел Усиление RX= %2 децибел").arg(GAIN_TX).arg(GAIN_RX);
         return result;
     }
     return QString::fromLatin1("");
 }
 
-QString MessagesGetter::getAttenuatorRXFromFiveMessage(QByteArray &message)
+const QString StateMessageGetter::getAttenuatorRXFromFiveMessage(QByteArray &message)
 {
-    if (message.size()==4)
+    if (message.size()==5)
     {
         quint8 Attenuator_RX=quint8(message.at(3));
         quint8 realValue=atteniatorTable.key(Attenuator_RX);

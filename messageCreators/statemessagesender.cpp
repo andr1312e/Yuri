@@ -1,20 +1,20 @@
-#include "messagesetter.h"
-
+#include "statemessagesender.h"
+#include <QDebug>
 #include <QIODevice>
 #include <qdatastream.h>
 
 
-MessagesSetter::MessagesSetter()
+StateMessageSender::StateMessageSender()
 {
 
 }
 
-MessagesSetter::~MessagesSetter()
+StateMessageSender::~StateMessageSender()
 {
 
 }
 
-QByteArray MessagesSetter::createZeroCommand()
+QByteArray StateMessageSender::createZeroCommand()
 {
     QByteArray command={};
     command.append(messagesIds.at(0));
@@ -22,29 +22,31 @@ QByteArray MessagesSetter::createZeroCommand()
     return command;
 }
 
-QByteArray MessagesSetter::createFirstCommand(double Fvco)
+QByteArray StateMessageSender::createFirstCommand(double Fvco)
 {
     quint8 id=messagesIds.at(1);
     qint16 INT_Rx=calculateINT_Rx(Fvco);//МГЦ
     qint32 FRACT_Rx=calculateFRACT_Rx(Fvco);//МГЦ
     bool DivRx=calculateDIV_rx(Fvco);
 
-    QByteArray lastThreeBytes;
-    QDataStream threeBytesStream(&lastThreeBytes, QIODevice::WriteOnly);
-    threeBytesStream << FRACT_Rx;
 
-    QByteArray command={};
+    quint8 FRACT_RxFirst=(FRACT_Rx >> (8*0)) & 0xff;
+    quint8 FRACT_RxSecond=(FRACT_Rx >> (8*1)) & 0xff;
+    quint8 FRACT_RxThird=(FRACT_Rx >> (8*2)) & 0xff;
+
+    QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);
     streamMain << id;
     streamMain << INT_Rx;
-    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-3);
-    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-2);
-    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-1);
+    streamMain << FRACT_RxThird;
+    streamMain << FRACT_RxSecond;
+    streamMain << FRACT_RxFirst;
     streamMain << DivRx;
+//    qDebug()<< command.toHex();
     return command;
 }
 
-QByteArray MessagesSetter::createSecondCommand(double Fvco, double doplerFreq)
+QByteArray StateMessageSender::createSecondCommand(double Fvco, double doplerFreq)
 {
     double ResultFreq=Fvco+doplerFreq;
     qint16 INT_Tx=calculateINT_Rx(ResultFreq);
@@ -60,18 +62,18 @@ QByteArray MessagesSetter::createSecondCommand(double Fvco, double doplerFreq)
     QDataStream streamMain(&command, QIODevice::WriteOnly);
     streamMain << messagesIds.at(2);
     streamMain << INT_Tx;
-    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-3);
-    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-2);
-    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-1);
+    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-3);
+    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-2);
+    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-1);
     streamMain <<DivTx;
 
     return command;
 }
 
-QByteArray MessagesSetter::createThirdCommand(double distance)
+QByteArray StateMessageSender::createThirdCommand(double distance)
 {
     double secondVal=f/c;
-    quint16 DISTANCE=distance*secondVal+1;
+    quint16 DISTANCE=distance*secondVal+1.0;
 
     QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);
@@ -80,7 +82,7 @@ QByteArray MessagesSetter::createThirdCommand(double distance)
     return command;
 }
 
-QByteArray MessagesSetter::createFourthCommand(double gainTX, double gainRX)
+QByteArray StateMessageSender::createFourthCommand(double gainTX, double gainRX)
 {
     quint8 GAIN_TX=calculateGAIN(gainTX);
     quint8 GAIN_RX=calculateGAIN(gainRX);
@@ -92,7 +94,7 @@ QByteArray MessagesSetter::createFourthCommand(double gainTX, double gainRX)
     return command;
 }
 
-QByteArray MessagesSetter::createFiveCommand(double AttenuatorDb)
+QByteArray StateMessageSender::createFiveCommand(double AttenuatorDb)
 {
     quint8 attenuator=calculateAtteniator(AttenuatorDb);
 
@@ -102,7 +104,7 @@ QByteArray MessagesSetter::createFiveCommand(double AttenuatorDb)
     return command;
 }
 
-QByteArray MessagesSetter::createSixCommand(double noiseValue)
+QByteArray StateMessageSender::createSixCommand(double noiseValue)
 {
     QByteArray command;
     command.append(messagesIds.at(6));
@@ -110,7 +112,7 @@ QByteArray MessagesSetter::createSixCommand(double noiseValue)
     return command;
 }
 
-QByteArray MessagesSetter::createSevenCommand(double param)
+QByteArray StateMessageSender::createSevenCommand(quint8 param)
 {
     QByteArray command;
     command.append(messagesIds.at(7));
@@ -118,7 +120,7 @@ QByteArray MessagesSetter::createSevenCommand(double param)
     return command;
 }
 
-quint16 MessagesSetter::calculateINT_Rx(double Fvco)
+quint16 StateMessageSender::calculateINT_Rx(double Fvco)
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
     double INT_RxDouble=Fvco-3000000.0;
@@ -130,7 +132,7 @@ quint16 MessagesSetter::calculateINT_Rx(double Fvco)
     return INT_Rx;
 }
 
-quint32 MessagesSetter::calculateFRACT_Rx(double Fvco)
+quint32 StateMessageSender::calculateFRACT_Rx(double Fvco)
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
     quint32 FRACT_Rx=(pow(2,20));
@@ -142,18 +144,17 @@ quint32 MessagesSetter::calculateFRACT_Rx(double Fvco)
     return FRACT_Rx;
 }
 
-quint8 MessagesSetter::calculateGAIN(quint8 gain)
+quint8 StateMessageSender::calculateGAIN(quint8 gain)
 {
     if (gain>(63))
     {
         gain=63;
     }
-    quint8 GAIN_X=gain;
-    //    quint8 GAIN_X=gain*0.5;
+    quint8 GAIN_X=gain/2.0;
     return GAIN_X;
 }
 
-quint8 MessagesSetter::calculateAtteniator(quint16 atteniatorDb)
+quint8 StateMessageSender::calculateAtteniator(quint16 atteniatorDb)
 {
     if (atteniatorTable.count(atteniatorDb))
     {

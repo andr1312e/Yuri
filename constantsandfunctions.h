@@ -5,8 +5,8 @@
 #include <QVector>
 
 const double Fref=40000000.0;
-const quint32 c=299792458;
-const quint32 f=245000000;
+const double c=299792458.0;
+const double f=245000000.0;
 const QMap<quint8, quint8> atteniatorTable { {0, 15},
                                              {1, 14},
                                              {2, 13},
