@@ -108,28 +108,24 @@ void FirmwarePresenter::SendMessageToQueue(quint8 command, quint32 adress, quint
 
 void FirmwarePresenter::PrepareCommandsToFlash(QLinkedList<QByteArray> &pagesOfFirmware)
 {
-    Q_EMIT ToConsoleLog(QStringLiteral("Делаем комманды"));
+    Q_EMIT ToConsoleLog(QStringLiteral("Делаем команды"));
     quint32 currentAdress=0;
     for(QLinkedList<QByteArray>::iterator it=pagesOfFirmware.begin(); it!=pagesOfFirmware.end(); ++it)
     {
         m_writinFirmwareCommandsList->append(*m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
         if(it->count()==m_maxMessageSize)
         {
-            Q_EMIT ToConsoleLog(QStringLiteral("Делаем полную страницу"));
             FillFullPageIntoBuffer(&*it);
         }
         else
         {
-            Q_EMIT ToConsoleLog(QStringLiteral("Делаем не полную страницу страницу"));
             FillLastPageIntoBuffer(&*it);
         }
         m_writinFirmwareCommandsList->append(m_firmwareMessageMaker->WriteBufferToFlashCommand(currentAdress, it->length()));
         currentAdress+=m_maxMessageSize;
     }
-    Q_EMIT ToConsoleLog(QStringLiteral("Делаем итератооры"));
     m_writingFirmwareCommandsListIterator=m_writinFirmwareCommandsList->begin();
-    //    GetFirmwarePagesIntoList(pagesOfFirmware);
-    Q_EMIT ToConsoleLog(QStringLiteral("Берем сайз"));
+    Q_EMIT ToConsoleLog(QStringLiteral("Вычислям размер страниц в прошивке"));
     m_totalCountOfPages=pagesOfFirmware.count();
     Q_EMIT ToSetMaximumCountOfPages(m_totalCountOfPages);
     Q_EMIT ToConsoleLog("Страниц в прошивке: "+ QString::number(m_totalCountOfPages));
@@ -178,8 +174,10 @@ void FirmwarePresenter::FillLastPageIntoBuffer(QByteArray *partOfFirmware)
 
 void FirmwarePresenter::WhenFlash(QByteArray *firmwareFromFile)
 {
+     m_currentPage=0;
+     m_currentAdress=0;
+    m_firmwareFromFile=firmwareFromFile;
     m_timer->stop();
-
     Q_EMIT ToWidgetsEnable(false);
     m_dataHandler->SendMessageDevice(*m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
     m_writinFirmwareCommandsList->clear();
@@ -191,19 +189,30 @@ void FirmwarePresenter::WhenFlash(QByteArray *firmwareFromFile)
     m_pagesOfFirmware=GenerateFirmwarePages(firmwareFromFile);
     Q_EMIT ToConsoleLog(QStringLiteral("Сгенерировали страницы"));
     PrepareCommandsToFlash(m_pagesOfFirmware);
-    Q_EMIT ToConsoleLog(QString::fromLatin1("Первая страница" + m_pagesOfFirmware.front().toHex()));
+    Q_EMIT ToConsoleLog("Первая страница " + m_pagesOfFirmware.front().toHex());
     Q_EMIT ToConsoleLog(QStringLiteral("Формирование странц готово"));
-
-//    qelapsedTimer.start();
     m_erasingTimer->start();
 
 }
 
 void FirmwarePresenter::WhenStartReadingFirmWareFromDevice()
 {
+    m_currentPage=0;
     m_currentAdress=0;
     m_dataHandler->SetHandlerState(HandlerState::ReadFirmware);
     WhenReadFirmwareAgain();
+}
+
+void FirmwarePresenter::WhenFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevice)
+{
+    if ((*m_firmwareFromFile)==(*firmwareFromDevice))
+    {
+        Q_EMIT ToConsoleLog("Верификация файла прошла успешно, прошивки совпадают");
+    }
+    else
+    {
+        Q_EMIT ToConsoleLog("Верификация файла прошла не успешно");
+    }
 }
 
 void FirmwarePresenter::WhenTimerTimeout()
@@ -216,15 +225,10 @@ void FirmwarePresenter::WhenTimerTimeout()
     }
 }
 
-void FirmwarePresenter::WhenPageUpdated(QByteArray &firmwarePartSource)
-{
-    m_firmwareOnDevice.push_back(firmwarePartSource);
-//    QByteArray hex=firmwarePartSource.toHex();
-}
-
 void FirmwarePresenter::WhenReadFirmwareAgain()
 {
-    m_dataHandler->SendMessageDevice(*m_firmwareMessageMaker->m_readRegisterStatusCommand);
+    qDebug()<< m_currentPage;
+    m_currentPage++;
     m_dataHandler->SendMessageDevice(*m_firmwareMessageMaker->ReadToBufferCommand(m_currentAdress, m_maxMessageSize-1));
     SleepMiliseconds(1);
     m_dataHandler->SendMessageDevice(*m_firmwareMessageMaker->m_readFromBufferCommand);
@@ -233,34 +237,37 @@ void FirmwarePresenter::WhenReadFirmwareAgain()
 
 void FirmwarePresenter::WhenWritingTimerTimeOut()
 {
-    Q_EMIT ToConsoleLog("WritingTimerTimeOut метод вызывается "+ QString::number(m_currentPage));
     if(m_currentPage==m_totalCountOfPages)//list
     {
         m_writingFirmwareTimer->stop();
         m_erasingTimer->stop();
-//        Q_EMIT OnConsoleLog(QString::number(qelapsedTimer.elapsed()));
         Q_EMIT ToWidgetsEnable(true);
         m_timer->start();
     }
     else
     {
+        if (m_currentPage<m_totalCountOfPages-1)
         {
+            for (int i=0; i<18; ++i)
             {
-                Q_EMIT ToConsoleLog(QStringLiteral("Шлем постранично"));
-                for (int i=0; i<18; ++i)
-                {
-//                    Q_EMIT ConsoleLog("Команда  i=" + QString::number(i)+" " + *m_writingFirmwareCommandsListIterator->toHex());
-                    m_dataHandler->WriteMessageToBuffer(*m_writingFirmwareCommandsListIterator);
-                    ++m_writingFirmwareCommandsListIterator;
-                }
-                Q_EMIT ToConsoleLog("Выслана страница"+ QString::number(m_currentPage));
-                m_dataHandler->FlushBuffer();
-                ++m_currentPage;
-                Q_EMIT ToPageUpdated(m_currentPage);
-
-                SleepMiliseconds(32);
+                m_dataHandler->WriteMessageToBuffer(*m_writingFirmwareCommandsListIterator);
+                ++m_writingFirmwareCommandsListIterator;
             }
+            m_dataHandler->FlushBuffer();
+            SleepMiliseconds(32);
         }
+        else
+        {
+            while( m_writingFirmwareCommandsListIterator!=m_writinFirmwareCommandsList->end())
+            {
+                m_dataHandler->WriteMessageToBuffer(*m_writingFirmwareCommandsListIterator);
+                ++m_writingFirmwareCommandsListIterator;
+            }
+            m_dataHandler->FlushBuffer();
+        }
+        Q_EMIT ToConsoleLog("Выслана страница "+ QString::number(m_currentPage));
+        ++m_currentPage;
+        Q_EMIT ToProgressBarUpdate(m_currentPage);
     }
 }
 
@@ -269,7 +276,7 @@ void FirmwarePresenter::WhenErasingTimerTimeOut()
     Q_EMIT ToConsoleLog(QStringLiteral("Проверяем состояние регистров после форматирования:"));
     if (m_isPcbBisy)
     {
-         m_isPcbBisy=false;
+//        m_isPcbBisy=false;
         Q_EMIT ToConsoleLog(QStringLiteral("Занят"));
         Q_EMIT ToConsoleLog(QStringLiteral("Высылаем еще раз проверку состояния"));
         m_dataHandler->SendMessageDevice(*m_firmwareMessageMaker->m_readRegisterStatusCommand);
@@ -286,7 +293,6 @@ void FirmwarePresenter::WhenErasingTimerTimeOut()
 void FirmwarePresenter::WhenTakedHardwareState(quint8 state)
 {
     Q_EMIT ToConsoleLog("Состояние= "+ QString::number(state));
-
     if(state==0)
     {
         m_isPcbBisy=false;
@@ -306,6 +312,7 @@ void FirmwarePresenter::DisconnectOldHandler()
     disconnect(m_dataHandler, &DataHandler::ToReadFirmwareAgain, this, &FirmwarePresenter::WhenReadFirmwareAgain);
     disconnect(m_dataHandler, &DataHandler::ToButtonsEnabledChanging, this, &FirmwarePresenter::ToSetButtonsEnabled);
     disconnect(m_dataHandler, &DataHandler::ToRegisterStateChanging, this, &FirmwarePresenter::WhenTakedHardwareState);
+    disconnect(m_dataHandler, &DataHandler::ToFirmWareFormDeviceLoaded, this, &FirmwarePresenter::WhenFirmwareFromDeviceLoaded);
 }
 
 void FirmwarePresenter::ConnectHander(DataHandler *dataHandler)
@@ -316,6 +323,7 @@ void FirmwarePresenter::ConnectHander(DataHandler *dataHandler)
     connect(m_dataHandler, &DataHandler::ToReadFirmwareAgain, this, &FirmwarePresenter::WhenReadFirmwareAgain);
     connect(m_dataHandler, &DataHandler::ToButtonsEnabledChanging, this, &FirmwarePresenter::ToSetButtonsEnabled);
     connect(m_dataHandler, &DataHandler::ToRegisterStateChanging, this, &FirmwarePresenter::WhenTakedHardwareState);
+    connect(m_dataHandler, &DataHandler::ToFirmWareFormDeviceLoaded, this, &FirmwarePresenter::WhenFirmwareFromDeviceLoaded);
 }
 
 void FirmwarePresenter::GetDataFromWidget(const QString &id, const QString &adress, const QString &lenght)

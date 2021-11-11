@@ -54,7 +54,7 @@ void FirmwareReaderWidget::CreateConnections()
     connect(m_readFirmwareButton, &QPushButton::clicked, this, &FirmwareReaderWidget::StartReadingFirmWareFromDevice);
 }
 
-void FirmwareReaderWidget::PageUpdated(int currentAdress)
+void FirmwareReaderWidget::WhenProgressBarUpdated(int currentAdress)
 {
     int pageNumber=currentAdress/16;
     m_pageNumberValue->setText(QString::number(pageNumber));

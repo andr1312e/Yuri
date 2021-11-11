@@ -134,11 +134,11 @@ void FirmWareWidget::ConnectObjects()
     connect(m_sendCommandButton, &QPushButton::clicked, this, &FirmWareWidget::OnUserCommandButtonClicked);
     connect(m_firmwareReaderWidget, &FirmwareReaderWidget::StartReadingFirmWareFromDevice, m_firmwarePresenter, &FirmwarePresenter::WhenStartReadingFirmWareFromDevice);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToConsoleLog,  this, &FirmWareWidget::WhenConsoleLog);
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToPageUpdated, m_firmwareReaderWidget, &FirmwareReaderWidget::PageUpdated);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarUpdate, m_firmwareReaderWidget, &FirmwareReaderWidget::WhenProgressBarUpdated);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToSetButtonsEnabled, this, &FirmWareWidget::SetButtonsEnabled);
     connect(m_restarPushButton, &QPushButton::clicked, [&](){m_firmwarePresenter->SendMessageToQueue(0, 0, 0);});
     connect(m_firmwarePresenter, &FirmwarePresenter::ToSetMaximumCountOfPages, this, &FirmWareWidget::SetMaximumProgressBar);
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToPageUpdated, m_progressBar, &QProgressBar::setValue);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarUpdate, m_progressBar, &QProgressBar::setValue);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToWidgetsEnable, this, &FirmWareWidget::SetWidgetsEnable);
 }
 

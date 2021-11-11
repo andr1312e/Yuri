@@ -21,15 +21,15 @@ private:
 private Q_SLOTS:
     void WhenReadyRead();
     void WhenErrorOccurred(QSerialPort::SerialPortError error);
-public Q_SLOTS:
-    void WhenDisconnectByUserFromHost();
 
 public:
     void ConnectToHost(const QString &comPortName);
 public:
+    virtual void ClearBuffer() override;
     virtual void SetConnectionState(quint8 state) override;
     virtual void WriteMessageToBuffer(const QByteArray &array) override;
     virtual void FlushBuffer() override;
+    virtual void DisconnectByUser() override;
 private:
     QSerialPort *m_connectionPort;
 };

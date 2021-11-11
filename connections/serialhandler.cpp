@@ -98,14 +98,6 @@ void SerialHandler::WhenErrorOccurred(QSerialPort::SerialPortError error)
     }
 }
 
-void SerialHandler::WhenDisconnectByUserFromHost()
-{
-    m_connectionPort->close();
-    Q_EMIT ToButtonsEnabledChanging(false);
-    Q_EMIT ToConsoleLog(QStringLiteral("Не подключено"));
-    Q_EMIT ToConsoleLog(QStringLiteral("Отключено от сокета юзером"));
-}
-
 void SerialHandler::ConnectToHost(const QString &comPortName)
 {
     m_connectionPort->setPortName(comPortName);
@@ -114,6 +106,12 @@ void SerialHandler::ConnectToHost(const QString &comPortName)
         Q_EMIT ToConsoleLog(QStringLiteral("Подключились"));
         Q_EMIT ToButtonsEnabledChanging(true);
     }
+}
+
+void SerialHandler::ClearBuffer()
+{
+    DataHandler::ClearBuffer();
+    m_connectionPort->flush();
 }
 
 void SerialHandler::SetConnectionState(quint8 state)
@@ -129,4 +127,10 @@ void SerialHandler::WriteMessageToBuffer(const QByteArray &array)
 void SerialHandler::FlushBuffer()
 {
     m_connectionPort->flush();
+}
+
+void SerialHandler::DisconnectByUser()
+{
+    m_connectionPort->close();
+    Q_EMIT ToConsoleLog(QStringLiteral("Отключено от сокета юзером"));
 }

@@ -38,19 +38,19 @@ Q_SIGNALS:
     void ToSetButtonsEnabled(int state);
     void ToConsoleLog(QString errorMessage);
     void ToSetMaximumCountOfPages(int pageNum);
-    void ToPageUpdated(int pageNum);
+    void ToProgressBarUpdate(int pageNum);
     void ToWidgetsEnable(bool state);
 
 
 public Q_SLOTS:
     void WhenFlash(QByteArray *firmwareFromFile);
     void WhenStartReadingFirmWareFromDevice();
+    void WhenFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevice);
 private Q_SLOTS:
     void WhenTimerTimeout();
     void WhenReadFirmwareAgain();
     void WhenWritingTimerTimeOut();
     void WhenErasingTimerTimeOut();
-    void WhenPageUpdated(QByteArray &firmware);
     void WhenTakedHardwareState(quint8 state);
 
 public:
@@ -58,7 +58,6 @@ public:
     void ConnectHander(DataHandler *dataHandler);
     void GetDataFromWidget(const QString &id, const QString& adress, const QString &lenght);
     void SendMessageToQueue(quint8 command, quint32 adress, quint8 lenght);
-    void SetFirmwareSourceFromFile(QByteArray *firmwareFromFile);
 
 private:
     void PrepareCommandsToFlash(QLinkedList<QByteArray> &pagesOfFirmware);
@@ -100,15 +99,13 @@ private:
     QList<QByteArray>::iterator m_writingFirmwareCommandsListIterator;
     QList<QByteArray>::iterator m_endOfWritingFimrwareCommandsList;
 #endif
-    QByteArray  *m_firmwareFromFile;
+    QByteArray *m_firmwareFromFile;
+    QByteArray *m_firmwareFromDevice;
     quint32 m_firmwareSize;
 
     QQueue<QByteArray> *m_commandsQueue;
 
     bool m_isPcbBisy;
-
-    QByteArray m_firmwareOnDevice;
-
 };
 
 #endif // PRESENTER_FIRMWAREPRESENTER_H

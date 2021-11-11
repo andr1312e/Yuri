@@ -61,14 +61,14 @@ void MainWindow::ConnectObjects()
     connect(m_connectionWidget, &ConnectionWidget::ToConsoleLog, m_firmwareWidget, &FirmWareWidget::WhenConsoleLog);
     connect(m_connectionWidget, &ConnectionWidget::ToConnectEthernetMoxa, this, &MainWindow::WhenConnectToInternetMoxa );
     connect(m_connectionWidget, &ConnectionWidget::ToConnectUsbMoxa, this, &MainWindow::WhenConnectToUsbMoxa);
-    connect(m_connectionWidget, &ConnectionWidget::ToDisconnectFromMoxa,this, &MainWindow::WhenDisconnectFromInternetMoxa);
+    connect(m_connectionWidget, &ConnectionWidget::ToDisconnectFromMoxa,this, &MainWindow::WhenDisconnectFromMoxa);
 }
 
 void MainWindow::WhenConnectToInternetMoxa(const QString &adress, const QString &port)
 {
     m_stateWidget->WhenConsoleLog("Попытка подключится... Адрес: " + adress  + " Порт: " + port);
     RegisterHadnler(m_tcpHandler);
-    m_tcpHandler->ConnectToHost(adress, port);
+    m_tcpHandler->ConnectToMoxa(adress, port);
 
 }
 
@@ -79,36 +79,40 @@ void MainWindow::WhenConnectToUsbMoxa(const QString &comPortName)
     m_serialHandler->ConnectToHost(comPortName);
 }
 
-void MainWindow::WhenDisconnectFromInternetMoxa()
+void MainWindow::WhenDisconnectFromMoxa()
 {
     m_tcpHandler->WhenDisconnectByUserFromHost();
-    m_stateWidget->WhenConsoleLog(QStringLiteral("Отключились от интернетной мохи..."));
+    m_stateWidget->WhenConsoleLog(QStringLiteral("Отключились от мохи..."));
     m_connectionWidget->SetButtonsEnabled(false);
     m_statusBar->showMessage(QStringLiteral("Не подключено"));
+    DisconnectOldHander();
 }
 
 void MainWindow::RegisterHadnler(DataHandler *dataHandler)
 {
     DisconnectOldHander();
     ConnectHander(dataHandler);
-    m_currentConnectionInterface=dataHandler;
 }
 
 void MainWindow::DisconnectOldHander()
 {
     if (m_currentConnectionInterface!=Q_NULLPTR)
     {
+        m_currentConnectionInterface->DisconnectByUser();
         disconnect(m_currentConnectionInterface, &DataHandler::ToButtonsEnabledChanging, m_connectionWidget, &ConnectionWidget::SetButtonsEnabled);
         m_stateWidget->DisconnectOldHander();
         m_firmwareWidget->DisconnectOldHander();
+        m_currentConnectionInterface=Q_NULLPTR;
     }
 }
 
 void MainWindow::ConnectHander(DataHandler *dataHandler)
 {
-    connect(m_currentConnectionInterface, &DataHandler::ToButtonsEnabledChanging, m_connectionWidget, &ConnectionWidget::SetButtonsEnabled);
+    dataHandler->ClearBuffer();
+    connect(dataHandler, &DataHandler::ToButtonsEnabledChanging, m_connectionWidget, &ConnectionWidget::SetButtonsEnabled);
     m_stateWidget->ConnectHander(dataHandler);
     m_firmwareWidget->ConnectHander(dataHandler);
+    m_currentConnectionInterface=dataHandler;
 }
 
 

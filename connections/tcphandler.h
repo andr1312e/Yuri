@@ -25,12 +25,14 @@ private Q_SLOTS:
 public Q_SLOTS:
     void WhenDisconnectByUserFromHost();
 public:
-    void ConnectToHost(const QString &adress, const QString &port);
+    void ConnectToMoxa(const QString &adress, const QString &port);
 
 public:
+    virtual void ClearBuffer() override;
     virtual void SetConnectionState(quint8 state) override;
     virtual void WriteMessageToBuffer(const QByteArray &part) override;
     virtual void FlushBuffer() override;
+    virtual void DisconnectByUser() override;
 private:
     QString getStringSocketState(QAbstractSocket::SocketState state);
 private:

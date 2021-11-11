@@ -21,7 +21,7 @@ private:
 Q_SIGNALS:
     void StartReadingFirmWareFromDevice();
 public Q_SLOTS:
-    void PageUpdated(int currentAdress);
+    void WhenProgressBarUpdated(int currentAdress);
 private:
     QVBoxLayout *m_mainLayout;
     QPushButton *m_readFirmwareButton;

@@ -3,8 +3,6 @@
 
 TcpHandler::TcpHandler(QObject *parent)
     : DataHandler(parent)
-
-
 {
     CreateHander();
     ConnectObjects();
@@ -60,7 +58,7 @@ void TcpHandler::WhenErrorOccurred(QAbstractSocket::SocketError socketError)
 {
     switch (socketError) {
     case QAbstractSocket::ConnectionRefusedError:
-        Q_EMIT ToConsoleLog(("Истекло время ожидания"));
+        Q_EMIT ToConsoleLog(QStringLiteral("Истекло время ожидания"));
         break;
     case QAbstractSocket::RemoteHostClosedError:
         Q_EMIT ToConsoleLog(("Удаленный хост закрыл соединение"));
@@ -102,7 +100,7 @@ void TcpHandler::WhenErrorOccurred(QAbstractSocket::SocketError socketError)
         Q_EMIT ToConsoleLog(("Не удалось связаться с прокси-сервером, потому что соединение с этим сервером было отказано"));
         break;
     case QAbstractSocket::ProxyConnectionClosedError:
-        Q_EMIT ToConsoleLog(("Соединение с прокси-сервером было неожиданно закрыто"));
+        Q_EMIT ToConsoleLog(QStringLiteral("Соединение с прокси-сервером было неожиданно закрыто"));
         break;
     case QAbstractSocket::ProxyConnectionTimeoutError:
         Q_EMIT ToConsoleLog(("Время ожидания подключения к прокси-серверу истекло или прокси-сервер перестал отвечать на этапе проверки подлинности."));
@@ -136,13 +134,19 @@ void TcpHandler::WhenErrorOccurred(QAbstractSocket::SocketError socketError)
 
 void TcpHandler::WhenSocketConnected()
 {
-    Q_EMIT ToConsoleLog("Подключились");
+    Q_EMIT ToConsoleLog(QStringLiteral("Подключились"));
     Q_EMIT ToButtonsEnabledChanging(true);
 }
 
-void TcpHandler::ConnectToHost(const QString &adress,const QString &port)
+void TcpHandler::ConnectToMoxa(const QString &adress,const QString &port)
 {
     m_connectionPort->connectToHost(adress, port.toInt(),  QIODevice::ReadWrite);
+}
+
+void TcpHandler::ClearBuffer()
+{
+    DataHandler::ClearBuffer();
+    m_connectionPort->flush();
 }
 
 void TcpHandler::SetConnectionState(quint8 state)
@@ -153,8 +157,7 @@ void TcpHandler::SetConnectionState(quint8 state)
 void TcpHandler::WhenDisconnectedFromHost()
 {
     Q_EMIT ToButtonsEnabledChanging(false);
-    Q_EMIT ToConsoleLog("Не подключено");
-    Q_EMIT ToConsoleLog("Отключено от сокета юзером");
+    Q_EMIT ToConsoleLog(QStringLiteral("Отключено от сокета"));
 }
 
 void TcpHandler::WhenDisconnectByUserFromHost()
@@ -172,22 +175,28 @@ void TcpHandler::FlushBuffer()
     m_connectionPort->flush();
 }
 
+void TcpHandler::DisconnectByUser()
+{
+    m_connectionPort->disconnect();
+    Q_EMIT ToConsoleLog(QStringLiteral("Отключено от сокета юзером"));
+}
+
 QString TcpHandler::getStringSocketState(QAbstractSocket::SocketState state)
 {
     switch (state) {
     case QAbstractSocket::UnconnectedState:
-        return "Моха не подключена.";
+        return QStringLiteral("Моха не подключена.");
     case QAbstractSocket::HostLookupState:
-        return "Сокет выполняет поиск хоста.";
+        return QStringLiteral("Сокет выполняет поиск хоста.");
     case QAbstractSocket::ConnectingState:
-        return "Сокет до сих пор устанавливае соединение.";
+        return QStringLiteral("Сокет до сих пор устанавливае соединение.");
     case QAbstractSocket::ConnectedState:
-        return "Установлено соединение";
+        return QStringLiteral("Установлено соединение");
     case QAbstractSocket::BoundState:
-        return "Сокет уже привязан к адресу и порту.";
+        return QStringLiteral("Сокет уже привязан к адресу и порту.");
     case QAbstractSocket::ListeningState:
-        return "Сокет вот-вот закроется";
+        return QStringLiteral("Сокет вот-вот закроется");
     case QAbstractSocket::ClosingState:
-        return "Только для внутреннего использования.";
+        return QStringLiteral("Только для внутреннего использования.");
     }
 }
