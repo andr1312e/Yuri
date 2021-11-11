@@ -1,0 +1,293 @@
+﻿  Moc'ing presenter\firmwarepresenter.h...
+   Warning: Failed to resolve include "E:/M14HL2 Moxa/M14HL2-Moxa-NPort-54501/Debug/moc_predefs.h" for moc file E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\presenter\firmwarepresenter.h
+  connectionwidget.cpp
+  firmwarecommansmaker.cpp
+  firmwareflasherwidget.cpp
+  firmwarepresenter.cpp
+  firmwarereaderwidget.cpp
+  firmwaresourceviewer.cpp
+  firmwarewidget.cpp
+  infowidget.cpp
+  main.cpp
+  mainwindow.cpp
+  serialport.cpp
+  sourcecodewidget.cpp
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\connections\serialport.cpp(91,23): warning C4995: 'ParityError': name was marked as #pragma deprecated
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\connections\serialport.cpp(94,23): warning C4995: 'FramingError': name was marked as #pragma deprecated
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\connections\serialport.cpp(97,23): warning C4995: 'BreakConditionError': name was marked as #pragma deprecated
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\ui\widgets\sourcecodewidget.cpp(132,13): warning C4189: 'blocksCount': local variable is initialized but not referenced
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\messageCreators\firmwarecommansmaker.cpp(68): warning C4715: 'FirmwareMessageMaker::WriteDataToBufferCommand': not all control paths return a value
+  statemessagegetter.cpp
+  statemessagesender.cpp
+  statepresenter.cpp
+  statewidget.cpp
+  tcpsocket.cpp
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\ui\connectionwidget.cpp(145): warning C4715: 'ConnectionWidget::IsComPortFree': not all control paths return a value
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\messageCreators\statemessagesender.cpp(175): warning C4715: 'StateMessageSender::calculateAtteniator': not all control paths return a value
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\connections\tcpsocket.cpp(229): warning C4715: 'TcpSocket::getStringSocketState': not all control paths return a value
+  moc_firmwarepresenter.cpp
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qglobal.h(660): warning C26451: Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qglobal.h(660): warning C26451: Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qglobal.h(660): warning C26451: Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qglobal.h(660): warning C26451: Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qsysinfo.h(226): warning C26812: The enum type 'QSysInfo::MacVersion' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(110): warning C26812: The enum type 'Qt::KeyboardModifier' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(169): warning C26812: The enum type 'Qt::MouseButton' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(177): warning C26812: The enum type 'Qt::Orientation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(204): warning C26812: The enum type 'Qt::SplitBehaviorFlags' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(240): warning C26812: The enum type 'Qt::AlignmentFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(324): warning C26812: The enum type 'Qt::WindowType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(335): warning C26812: The enum type 'Qt::WindowState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(355): warning C26812: The enum type 'Qt::ScreenOrientation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(596): warning C26812: The enum type 'Qt::ImageConversionFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1255): warning C26812: The enum type 'Qt::DockWidgetArea' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1273): warning C26812: The enum type 'Qt::ToolBarArea' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1334): warning C26812: The enum type 'Qt::Edge' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1439): warning C26812: The enum type 'Qt::InputMethodQuery' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1474): warning C26812: The enum type 'Qt::InputMethodHint' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1525): warning C26812: The enum type 'Qt::DropAction' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1582): warning C26812: The enum type 'Qt::ItemFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1600): warning C26812: The enum type 'Qt::MatchFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1625): warning C26812: The enum type 'Qt::TextInteractionFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1677): warning C26812: The enum type 'Qt::TouchPointState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1709): warning C26812: The enum type 'Qt::GestureFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1764): warning C26812: The enum type 'Qt::MouseEventFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1785): warning C26812: The enum type 'Qt::ScrollBarPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1786): warning C26812: The enum type 'Qt::FocusPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1787): warning C26812: The enum type 'Qt::ContextMenuPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1788): warning C26812: The enum type 'Qt::ArrowType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1789): warning C26812: The enum type 'Qt::ToolButtonStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1790): warning C26812: The enum type 'Qt::PenStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1791): warning C26812: The enum type 'Qt::PenCapStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1792): warning C26812: The enum type 'Qt::PenJoinStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1793): warning C26812: The enum type 'Qt::BrushStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1794): warning C26812: The enum type 'Qt::FillRule' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1795): warning C26812: The enum type 'Qt::MaskMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1796): warning C26812: The enum type 'Qt::BGMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1797): warning C26812: The enum type 'Qt::ClipOperation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1798): warning C26812: The enum type 'Qt::SizeMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1799): warning C26812: The enum type 'Qt::Axis' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1800): warning C26812: The enum type 'Qt::Corner' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1802): warning C26812: The enum type 'Qt::LayoutDirection' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1803): warning C26812: The enum type 'Qt::SizeHint' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1807): warning C26812: The enum type 'Qt::TextFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1816): warning C26812: The enum type 'Qt::TextFormat' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1817): warning C26812: The enum type 'Qt::TextElideMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1818): warning C26812: The enum type 'Qt::DateFormat' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1819): warning C26812: The enum type 'Qt::TimeSpec' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1820): warning C26812: The enum type 'Qt::DayOfWeek' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1821): warning C26812: The enum type 'Qt::CursorShape' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1822): warning C26812: The enum type 'Qt::GlobalColor' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1823): warning C26812: The enum type 'Qt::AspectRatioMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1824): warning C26812: The enum type 'Qt::TransformationMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1826): warning C26812: The enum type 'Qt::Key' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1827): warning C26812: The enum type 'Qt::ShortcutContext' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1830): warning C26812: The enum type 'Qt::ItemSelectionMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1831): warning C26812: The enum type 'Qt::ItemSelectionOperation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1833): warning C26812: The enum type 'Qt::CheckState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1834): warning C26812: The enum type 'Qt::ItemDataRole' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1835): warning C26812: The enum type 'Qt::SortOrder' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1836): warning C26812: The enum type 'Qt::CaseSensitivity' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1842): warning C26812: The enum type 'Qt::WindowModality' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1843): warning C26812: The enum type 'Qt::WidgetAttribute' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1844): warning C26812: The enum type 'Qt::ApplicationAttribute' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1847): warning C26812: The enum type 'Qt::FocusReason' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1851): warning C26812: The enum type 'Qt::EnterKeyType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1856): warning C26812: The enum type 'Qt::ConnectionType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1857): warning C26812: The enum type 'Qt::ApplicationState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1859): warning C26812: The enum type 'Qt::GestureState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1860): warning C26812: The enum type 'Qt::GestureType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1861): warning C26812: The enum type 'Qt::NativeGestureType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1863): warning C26812: The enum type 'Qt::CursorMoveStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1864): warning C26812: The enum type 'Qt::TimerType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1865): warning C26812: The enum type 'Qt::ScrollPhase' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1866): warning C26812: The enum type 'Qt::MouseEventSource' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1868): warning C26812: The enum type 'Qt::ChecksumType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qnamespace.h(1870): warning C26812: The enum type 'Qt::TabFocusBehavior' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qchar.h(101): warning C26812: The enum type 'QChar::SpecialCharacter' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qchar.h(451): warning C26812: The enum type 'QChar::Category' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qchar.h(452): warning C26812: The enum type 'QChar::Direction' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qchar.h(453): warning C26812: The enum type 'QChar::JoiningType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qchar.h(460): warning C26812: The enum type 'QChar::Joining' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qchar.h(474): warning C26812: The enum type 'QChar::Decomposition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qchar.h(482): warning C26812: The enum type 'QChar::Script' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qchar.h(484): warning C26812: The enum type 'QChar::UnicodeVersion' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qarraydata.h(126): warning C26812: The enum type 'QArrayData::AllocationOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qbytearray.h(492): warning C26812: The enum type 'QByteArray::Base64Option' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qstring.h(1595): warning C26812: The enum type 'QString::SectionFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qstring.h(2095): warning C26812: The enum type 'QtPrivate::ArgBase::Tag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qmetatype.h(734): warning C26812: The enum type 'QMetaType::ExtensionFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qmetatype.h(786): warning C26812: The enum type 'QMetaType::TypeFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qmetatype.h(1101): warning C26812: The enum type 'QtMetaTypePrivate::IteratorCapability' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qcolor.h(71): warning C26812: The enum type 'QColor::Spec' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qcolor.h(265): warning C26495: Variable 'QColor::CT::argb' is uninitialized. Always initialize a member variable (type.6).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qiodevice.h(185): warning C26812: The enum type 'QIODevice::OpenModeFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qdatastream.h(227): warning C26812: The enum type 'QDataStream::Status' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qdatastream.h(372): warning C26812: The enum type 'QDataStream::ByteOrder' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qmatrix.h(60): warning C26495: Variable 'QMatrix::_dy' is uninitialized. Always initialize a member variable (type.6).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qmatrix.h(70): warning C26495: Variable 'QMatrix::_dy' is uninitialized. Always initialize a member variable (type.6).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtransform.h(219): warning C26812: The enum type 'QTransform::TransformationType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpixelformat.h(98): warning C26812: The enum type 'QPixelFormat::Field' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpixelformat.h(178): warning C26812: The enum type 'QPixelFormat::ColorModel' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpixelformat.h(209): warning C26812: The enum type 'QPixelFormat::AlphaUsage' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpixelformat.h(210): warning C26812: The enum type 'QPixelFormat::AlphaPosition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpixelformat.h(211): warning C26812: The enum type 'QPixelFormat::AlphaPremultiplied' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpixelformat.h(212): warning C26812: The enum type 'QPixelFormat::TypeInterpretation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpixelformat.h(213): warning C26812: The enum type 'QPixelFormat::ByteOrder' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpixelformat.h(215): warning C26812: The enum type 'QPixelFormat::YUVLayout' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qimage.h(139): warning C26812: The enum type 'QImage::Format' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qsharedpointer_impl.h(146): warning C26495: Variable 'QtSharedPointer::ExternalRefCountData::destroyer' is uninitialized. Always initialize a member variable (type.6).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qbrush.h(188): warning C26812: The enum type 'QGradient::Type' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qbrush.h(195): warning C26812: The enum type 'QGradient::Spread' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qbrush.h(203): warning C26812: The enum type 'QGradient::CoordinateMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qbrush.h(382): warning C26812: The enum type 'QGradient::Preset' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpalette.h(89): warning C26812: The enum type 'QPalette::ColorGroup' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpalette.h(104): warning C26812: The enum type 'QPalette::ColorRole' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfont.h(71): warning C26812: The enum type 'QFont::StyleHint' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfont.h(91): warning C26812: The enum type 'QFont::StyleStrategy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfont.h(99): warning C26812: The enum type 'QFont::HintingPreference' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfont.h(113): warning C26812: The enum type 'QFont::Weight' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfont.h(120): warning C26812: The enum type 'QFont::Style' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfont.h(134): warning C26812: The enum type 'QFont::Stretch' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfont.h(143): warning C26812: The enum type 'QFont::Capitalization' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfont.h(149): warning C26812: The enum type 'QFont::SpacingType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfont.h(173): warning C26812: The enum type 'QFont::ResolveProperties' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qsizepolicy.h(91): warning C26812: The enum type 'QSizePolicy::Policy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qsizepolicy.h(116): warning C26812: The enum type 'QSizePolicy::ControlType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qkeysequence.h(149): warning C26812: The enum type 'QKeySequence::StandardKey' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qwidget.h(750): warning C26812: The enum type 'QWidget::RenderFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qframe.h(83): warning C26812: The enum type 'QFrame::Shape' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qframe.h(89): warning C26812: The enum type 'QFrame::Shadow' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qmap.h(93): warning C26812: The enum type 'QMapNodeBase::Color' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextoption.h(66): warning C26812: The enum type 'QTextOption::TabType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextoption.h(105): warning C26812: The enum type 'QTextOption::WrapMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextoption.h(149): warning C26812: The enum type 'QTextOption::Flag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(89): warning C26812: The enum type 'QTextLength::Type' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(150): warning C26812: The enum type 'QTextFormat::FormatType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(294): warning C26812: The enum type 'QTextFormat::Property' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(304): warning C26812: The enum type 'QTextFormat::ObjectTypes' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(413): warning C26812: The enum type 'QTextFormat::PageBreakFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(496): warning C26812: The enum type 'QTextCharFormat::UnderlineStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(552): warning C26812: The enum type 'QTextCharFormat::VerticalAlignment' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(755): warning C26812: The enum type 'QTextListFormat::Style' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(859): warning C26812: The enum type 'QTextFrameFormat::Position' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextformat.h(873): warning C26812: The enum type 'QTextFrameFormat::BorderStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qlineedit.h(91): warning C26812: The enum type 'QLineEdit::ActionPosition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qlineedit.h(114): warning C26812: The enum type 'QLineEdit::EchoMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qicon.h(79): warning C26812: The enum type 'QIcon::Mode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qlayout.h(80): warning C26812: The enum type 'QLayout::SizeConstraint' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qlocale.h(949): warning C26812: The enum type 'QLocale::Language' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qlocale.h(950): warning C26812: The enum type 'QLocale::Country' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qlocale.h(951): warning C26812: The enum type 'QLocale::Script' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qlocale.h(959): warning C26812: The enum type 'QLocale::MeasurementSystem' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qlocale.h(1194): warning C26812: The enum type 'QLocale::NumberOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qregularexpression.h(178): warning C26812: The enum type 'QRegularExpression::PatternOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qregularexpression.h(179): warning C26812: The enum type 'QRegularExpression::MatchOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qregularexpression.h(292): warning C26812: The enum type 'QRegularExpression::MatchType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qvalidator.h(72): warning C26812: The enum type 'QValidator::State' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qvalidator.h(144): warning C26812: The enum type 'QDoubleValidator::Notation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qabstractspinbox.h(81): warning C26812: The enum type 'QAbstractSpinBox::ButtonSymbols' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qabstractspinbox.h(87): warning C26812: The enum type 'QAbstractSpinBox::CorrectionMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qabstractspinbox.h(135): warning C26812: The enum type 'QAbstractSpinBox::StepType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qabstractspinbox.h(182): warning C26812: The enum type 'QAbstractSpinBox::StepEnabledFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qslider.h(69): warning C26812: The enum type 'QSlider::TickPosition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(132): warning C26812: The enum type 'QStyle::StateFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(206): warning C26812: The enum type 'QStyle::PrimitiveElement' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(277): warning C26812: The enum type 'QStyle::ControlElement' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(371): warning C26812: The enum type 'QStyle::SubElement' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(391): warning C26812: The enum type 'QStyle::ComplexControl' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(448): warning C26812: The enum type 'QStyle::SubControl' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(593): warning C26812: The enum type 'QStyle::PixelMetric' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(625): warning C26812: The enum type 'QStyle::ContentsType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(634): warning C26812: The enum type 'QStyle::RequestSoftwareInputPanel' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(764): warning C26812: The enum type 'QStyle::StyleHint' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyle.h(851): warning C26812: The enum type 'QStyle::StandardPixmap' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qtabbar.h(80): warning C26812: The enum type 'QTabBar::Shape' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qtabwidget.h(111): warning C26812: The enum type 'QTabWidget::TabPosition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qtabwidget.h(122): warning C26812: The enum type 'QTabWidget::TabShape' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qabstractitemmodel.h(258): warning C26812: The enum type 'QAbstractItemModel::LayoutChangeHint' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(152): warning C26812: The enum type 'QStyleOptionFrame::FrameFeature' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(232): warning C26812: The enum type 'QStyleOptionHeader::SectionPosition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(261): warning C26812: The enum type 'QStyleOptionButton::ButtonFeature' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(293): warning C26812: The enum type 'QStyleOptionTab::TabPosition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(307): warning C26812: The enum type 'QStyleOptionTab::CornerWidget' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(332): warning C26812: The enum type 'QStyleOptionToolBar::ToolBarPosition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(338): warning C26812: The enum type 'QStyleOptionToolBar::ToolBarFeature' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(391): warning C26812: The enum type 'QStyleOptionMenuItem::MenuItemType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(463): warning C26812: The enum type 'QStyleOptionViewItem::Position' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(469): warning C26812: The enum type 'QStyleOptionViewItem::ViewItemFeature' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(494): warning C26812: The enum type 'QStyleOptionToolBox::TabPosition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(514): warning C26812: The enum type 'QRubberBand::Shape' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qstyleoption.h(612): warning C26812: The enum type 'QStyleOptionToolButton::ToolButtonFeature' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qcombobox.h(132): warning C26812: The enum type 'QComboBox::InsertPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qcombobox.h(146): warning C26812: The enum type 'QComboBox::SizeAdjustPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qvariant.h(742): warning C26498: The function 'qMetaTypeId<QPair<QVariant,QVariant> >' is constexpr, mark variable 'vid' constexpr if compile-time evaluation is desired (con.5).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qmetatype.h(1884): warning C26812: The enum type 'QtPrivate::MetaTypeDefinedHelper<QtMetaTypePrivate::QSequentialIterableImpl,1>::DefinedType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qmetatype.h(1847): warning C26812: The enum type 'QtPrivate::MetaTypeDefinedHelper<QPair<QVariant,QVariant>,1>::DefinedType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qobjectdefs_impl.h(423): warning C26819: Unannotated fallthrough between switch labels (es.78).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qmetatype.h(1142): warning C26812: The enum type 'QtMetaTypePrivate::QSequentialIterableImpl::Position' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qmetatype.h(2413): warning C26498: The function 'qMetaTypeId<QtMetaTypePrivate::QPairVariantInterfaceImpl>' is constexpr, mark variable 'toId' constexpr if compile-time evaluation is desired (con.5).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qmetatype.h(2430): warning C26498: The function 'qMetaTypeId<QtMetaTypePrivate::QSequentialIterableImpl>' is constexpr, mark variable 'toId' constexpr if compile-time evaluation is desired (con.5).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qtextstream.h(202): warning C26812: The enum type 'QTextStream::NumberFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qdebug.h(73): warning C26812: The enum type 'QtMsgType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qdebug.h(92): warning C26812: The enum type 'QDebug::Stream::FormatFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qprogressbar.h(69): warning C26812: The enum type 'QProgressBar::Direction' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qfiledevice.h(150): warning C26812: The enum type 'QFileDevice::Permission' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qdir.h(238): warning C26812: The enum type 'QDir::Filter' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qdir.h(239): warning C26812: The enum type 'QDir::SortFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qurl.h(376): warning C26812: The enum type 'QUrl::ComponentFormattingOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qurl.h(380): warning C26812: The enum type 'QUrl::UrlFormattingOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qfiledialog.h(82): warning C26812: The enum type 'QFileDialog::ViewMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qfiledialog.h(85): warning C26812: The enum type 'QFileDialog::FileMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qfiledialog.h(87): warning C26812: The enum type 'QFileDialog::AcceptMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qfiledialog.h(103): warning C26812: The enum type 'QFileDialog::Option' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qstandardpaths.h(79): warning C26812: The enum type 'QStandardPaths::StandardLocation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qstandardpaths.h(111): warning C26812: The enum type 'QStandardPaths::LocateOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qdeadlinetimer.h(68): warning C26812: The enum type 'QDeadlineTimer::ForeverConstant' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qabstractscrollarea.h(72): warning C26812: The enum type 'QAbstractScrollArea::SizeAdjustPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextdocument.h(237): warning C26812: The enum type 'QTextDocument::ResourceType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextdocument.h(327): warning C26812: The enum type 'QTextDocument::FindFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qtextedit.h(98): warning C26812: The enum type 'QTextEdit::LineWrapMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qtextedit.h(342): warning C26812: The enum type 'QTextEdit::AutoFormattingFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qcoreevent.h(295): warning C26812: The enum type 'QEvent::Type' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qvector2d.h(60): warning C26495: Variable 'QVector2D::v' is uninitialized. Always initialize a member variable (type.6).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtouchdevice.h(59): warning C26812: The enum type 'QTouchDevice::DeviceType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtouchdevice.h(70): warning C26812: The enum type 'QTouchDevice::CapabilityFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qevent.h(278): warning C26812: The enum type 'QTabletEvent::TabletDevice' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qevent.h(280): warning C26812: The enum type 'QTabletEvent::PointerType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qevent.h(496): warning C26812: The enum type 'QPlatformSurfaceEvent::SurfaceEventType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qevent.h(567): warning C26812: The enum type 'QContextMenuEvent::Reason' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qevent.h(589): warning C26812: The enum type 'QInputMethodEvent::AttributeType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qevent.h(1040): warning C26812: The enum type 'QTouchEvent::TouchPoint::InfoFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfontdatabase.h(106): warning C26812: The enum type 'QFontDatabase::WritingSystem' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qfontdatabase.h(114): warning C26812: The enum type 'QFontDatabase::SystemFont' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qrawfont.h(157): warning C26812: The enum type 'QRawFont::LayoutFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextlayout.h(255): warning C26812: The enum type 'QTextLine::Edge' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qplaintextedit.h(93): warning C26812: The enum type 'QPlainTextEdit::LineWrapMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qpainter.h(98): warning C26812: The enum type 'QPainter::RenderHint' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qtextobject.h(156): warning C26495: Variable 'QTextFrame::iterator::f' is uninitialized. Always initialize a member variable (type.6).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtSerialPort\qserialport.h(87): warning C26812: The enum type 'QSerialPort::Direction' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtSerialPort\qserialport.h(101): warning C26812: The enum type 'QSerialPort::BaudRate' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtSerialPort\qserialport.h(110): warning C26812: The enum type 'QSerialPort::DataBits' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtSerialPort\qserialport.h(120): warning C26812: The enum type 'QSerialPort::Parity' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtSerialPort\qserialport.h(128): warning C26812: The enum type 'QSerialPort::StopBits' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtSerialPort\qserialport.h(136): warning C26812: The enum type 'QSerialPort::FlowControl' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtSerialPort\qserialport.h(151): warning C26812: The enum type 'QSerialPort::PinoutSignal' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtSerialPort\qserialport.h(174): warning C26812: The enum type 'QSerialPort::DataErrorPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtSerialPort\qserialport.h(193): warning C26812: The enum type 'QSerialPort::SerialPortError' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtWidgets\qmainwindow.h(90): warning C26812: The enum type 'QMainWindow::DockOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qabstractsocket.h(70): warning C26812: The enum type 'QAbstractSocket::SocketType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qabstractsocket.h(77): warning C26812: The enum type 'QAbstractSocket::NetworkLayerProtocol' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qabstractsocket.h(105): warning C26812: The enum type 'QAbstractSocket::SocketError' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qabstractsocket.h(115): warning C26812: The enum type 'QAbstractSocket::SocketState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qabstractsocket.h(126): warning C26812: The enum type 'QAbstractSocket::SocketOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qabstractsocket.h(244): warning C26812: The enum type 'QAbstractSocket::BindFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qabstractsocket.h(245): warning C26812: The enum type 'QAbstractSocket::PauseMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtCore\qeventloop.h(85): warning C26812: The enum type 'QEventLoop::ProcessEventsFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtGui\qinputmethod.h(87): warning C26812: The enum type 'QInputMethod::Action' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\connections\serialport.cpp(7): warning C26812: The enum type 'GettingMessageType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qhostaddress.h(139): warning C26812: The enum type 'QHostAddress::SpecialAddress' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qhostaddress.h(162): warning C26812: The enum type 'QHostAddress::ConversionModeFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qnetworkproxy.h(70): warning C26812: The enum type 'QNetworkProxyQuery::QueryType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+C:\QtCommercial\5.15.2\msvc2019_64\include\QtNetwork\qnetworkproxy.h(216): warning C26812: The enum type 'QNetworkProxy::Capability' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+E:\M14HL2 Moxa\M14HL2-Moxa-NPort-54501\connections\tcpsocket.cpp(8): warning C26812: The enum type 'GettingMessageType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).

@@ -15,33 +15,41 @@
 
 #include "presenter/firmwarepresenter.h"
 
-#include "ui/widgets/sourcecodewidget.h"
+#include "ui/firmwareflasherwidget.h"
+#include "ui/firmwarereaderwidget.h"
 
-class TcpSocket;
+class TcpHandler;
 
-class FirmWareWidget:public QWidget
+class FirmWareWidget: public QWidget
 {
     Q_OBJECT
 public:
-    FirmWareWidget(TcpSocket *m_socket, QWidget *parent);
+    FirmWareWidget(QWidget *parent);
     ~FirmWareWidget();
-public Q_SLOTS:
-    void ConsoleLog(const QString message);
-Q_SIGNALS:
-    void SetStateButtonIdClicked(int id);
-    void SendFirmwareToTextEditViewFromDevice(QByteArray &firmwarePart);
 private:
     void CreateUI();
     void InsertWidgetsIntoLayout();
     void FillUI();
-    void CreateConnections();
+    void ConnectObjects();
+public Q_SLOTS:
+    void WhenConsoleLog(const QString message);
+Q_SIGNALS:
+    void ToSetStateButtonIdClicked(int id);
+    void ToDataHanderChanged();
+
 private Q_SLOTS:
     void OnUserCommandButtonClicked();
     void SetButtonsEnabled(int state);
+    void SetMaximumProgressBar(int top);
+    void UpdateProgressBar(int page);
+    void SetWidgetsEnable(bool state);
+public:
+    void DisconnectOldHander();
+    void ConnectHander(DataHandler *dataHandler);
 private:
-    QHBoxLayout *m_mainLayout;
+    QVBoxLayout *m_mainLayout;
     QSplitter *m_splitter;
-    SourceCodeWidget *m_readerFirmwareDataWidget;
+
 
     QVBoxLayout *m_commandsLayout;
     QHBoxLayout *m_flashStateLayout;
@@ -60,14 +68,15 @@ private:
     QLineEdit *m_numOfBytesLineEdit;
     QPushButton *m_sendCommandButton;
     QPlainTextEdit *m_log;
+    FirmwareReaderWidget *m_firmwareReaderWidget;
+    FirmwareFlasherWidget *m_firmwareFlasherWidget;
 
-    SourceCodeWidget *m_writerFirmwareDataWidget;
+    QProgressBar *m_progressBar;
 private:
     void resetProgressBar(int blocksCount);
 
 private:
-    const int m_blockSize;
-    const QMap<QString, quint8> *m_actionsValues;
+    const QMap<QString, quint8> *m_actions;
     FirmwarePresenter *m_firmwarePresenter;
     QByteArray *m_firmWareSource;
 

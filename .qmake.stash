@@ -1,21 +1,22 @@
-QMAKE_CXX.QT_COMPILER_STDCXX = 201402L
-QMAKE_CXX.QMAKE_GCC_MAJOR_VERSION = 8
-QMAKE_CXX.QMAKE_GCC_MINOR_VERSION = 1
-QMAKE_CXX.QMAKE_GCC_PATCH_VERSION = 0
+QMAKE_CXX.QT_COMPILER_STDCXX = 199711L
+QMAKE_CXX.QMAKE_MSC_VER = 1929
+QMAKE_CXX.QMAKE_MSC_FULL_VER = 192930136
 QMAKE_CXX.COMPILER_MACROS = \
     QT_COMPILER_STDCXX \
-    QMAKE_GCC_MAJOR_VERSION \
-    QMAKE_GCC_MINOR_VERSION \
-    QMAKE_GCC_PATCH_VERSION
+    QMAKE_MSC_VER \
+    QMAKE_MSC_FULL_VER
 QMAKE_CXX.INCDIRS = \
-    C:/Qt/Tools/mingw810_64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++ \
-    C:/Qt/Tools/mingw810_64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/x86_64-w64-mingw32 \
-    C:/Qt/Tools/mingw810_64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/backward \
-    C:/Qt/Tools/mingw810_64/lib/gcc/x86_64-w64-mingw32/8.1.0/include \
-    C:/Qt/Tools/mingw810_64/lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed \
-    C:/Qt/Tools/mingw810_64/x86_64-w64-mingw32/include
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\ATLMFC\\include" \
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\include" \
+    "C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.7.2\\include\\um" \
+    "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.19041.0\\ucrt" \
+    "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.19041.0\\shared" \
+    "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.19041.0\\um" \
+    "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.19041.0\\winrt" \
+    "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.19041.0\\cppwinrt"
 QMAKE_CXX.LIBDIRS = \
-    C:/Qt/Tools/mingw810_64/lib/gcc/x86_64-w64-mingw32/8.1.0 \
-    C:/Qt/Tools/mingw810_64/lib/gcc \
-    C:/Qt/Tools/mingw810_64/x86_64-w64-mingw32/lib \
-    C:/Qt/Tools/mingw810_64/lib
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\ATLMFC\\lib\\x64" \
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\lib\\x64" \
+    "C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.7.2\\lib\\um\\x64" \
+    "C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.19041.0\\ucrt\\x64" \
+    "C:\\Program Files (x86)\\Windows Kits\\10\\lib\\10.0.19041.0\\um\\x64"

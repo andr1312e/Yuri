@@ -1,0 +1,3925 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qglobal.h"
+                },
+                "region": {
+                  "startLine": 660,
+                  "startColumn": 29,
+                  "endLine": 660,
+                  "endColumn": 33
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qRound64@@YA_JM@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '+' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qglobal.h"
+                },
+                "region": {
+                  "startLine": 660,
+                  "startColumn": 48,
+                  "endLine": 660,
+                  "endColumn": 73
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qRound64@@YA_JM@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qglobal.h"
+                },
+                "region": {
+                  "startLine": 660,
+                  "startColumn": 48,
+                  "endLine": 660,
+                  "endColumn": 66
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qRound64@@YA_JM@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26451",
+          "message": {
+            "text": "Arithmetic overflow: Using operator '-' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '-' to avoid overflow (io.2)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qglobal.h"
+                },
+                "region": {
+                  "startLine": 660,
+                  "startColumn": 88,
+                  "endLine": 660,
+                  "endColumn": 89
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qRound64@@YA_JM@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QSysInfo::MacVersion' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qsysinfo.h"
+                },
+                "region": {
+                  "startLine": 226,
+                  "startColumn": 114,
+                  "endLine": 226,
+                  "endColumn": 114
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::KeyboardModifier' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 110,
+                  "startColumn": 5,
+                  "endLine": 110,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4KeyboardModifier@Qt@@@@W4KeyboardModifier@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::MouseButton' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 169,
+                  "startColumn": 5,
+                  "endLine": 169,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4MouseButton@Qt@@@@W4MouseButton@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::Orientation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 177,
+                  "startColumn": 5,
+                  "endLine": 177,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4Orientation@Qt@@@@W4Orientation@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::SplitBehaviorFlags' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 204,
+                  "startColumn": 5,
+                  "endLine": 204,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4SplitBehaviorFlags@Qt@@@@W4SplitBehaviorFlags@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::AlignmentFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 240,
+                  "startColumn": 5,
+                  "endLine": 240,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4AlignmentFlag@Qt@@@@W4AlignmentFlag@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::WindowType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 324,
+                  "startColumn": 5,
+                  "endLine": 324,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4WindowType@Qt@@@@W4WindowType@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::WindowState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 335,
+                  "startColumn": 5,
+                  "endLine": 335,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4WindowState@Qt@@@@W4WindowState@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ScreenOrientation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 355,
+                  "startColumn": 5,
+                  "endLine": 355,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4ScreenOrientation@Qt@@@@W4ScreenOrientation@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ImageConversionFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 596,
+                  "startColumn": 5,
+                  "endLine": 596,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4ImageConversionFlag@Qt@@@@W4ImageConversionFlag@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::DockWidgetArea' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1255,
+                  "startColumn": 5,
+                  "endLine": 1255,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4DockWidgetArea@Qt@@@@W4DockWidgetArea@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ToolBarArea' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1273,
+                  "startColumn": 5,
+                  "endLine": 1273,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4ToolBarArea@Qt@@@@W4ToolBarArea@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::Edge' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1334,
+                  "startColumn": 5,
+                  "endLine": 1334,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4Edge@Qt@@@@W4Edge@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::InputMethodQuery' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1439,
+                  "startColumn": 5,
+                  "endLine": 1439,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4InputMethodQuery@Qt@@@@W4InputMethodQuery@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::InputMethodHint' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1474,
+                  "startColumn": 5,
+                  "endLine": 1474,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4InputMethodHint@Qt@@@@W4InputMethodHint@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::DropAction' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1525,
+                  "startColumn": 5,
+                  "endLine": 1525,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4DropAction@Qt@@@@W4DropAction@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ItemFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1582,
+                  "startColumn": 5,
+                  "endLine": 1582,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4ItemFlag@Qt@@@@W4ItemFlag@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::MatchFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1600,
+                  "startColumn": 5,
+                  "endLine": 1600,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4MatchFlag@Qt@@@@W4MatchFlag@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::TextInteractionFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1625,
+                  "startColumn": 5,
+                  "endLine": 1625,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4TextInteractionFlag@Qt@@@@W4TextInteractionFlag@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::TouchPointState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1677,
+                  "startColumn": 5,
+                  "endLine": 1677,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4TouchPointState@Qt@@@@W4TouchPointState@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::GestureFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1709,
+                  "startColumn": 5,
+                  "endLine": 1709,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4GestureFlag@Qt@@@@W4GestureFlag@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::MouseEventFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1764,
+                  "startColumn": 5,
+                  "endLine": 1764,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??UQt@@YA?AV?$QFlags@W4MouseEventFlag@Qt@@@@W4MouseEventFlag@0@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ScrollBarPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1785,
+                  "startColumn": 5,
+                  "endLine": 1785,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ScrollBarPolicy@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::FocusPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1786,
+                  "startColumn": 5,
+                  "endLine": 1786,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4FocusPolicy@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ContextMenuPolicy' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1787,
+                  "startColumn": 5,
+                  "endLine": 1787,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ContextMenuPolicy@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ArrowType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1788,
+                  "startColumn": 5,
+                  "endLine": 1788,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ArrowType@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ToolButtonStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1789,
+                  "startColumn": 5,
+                  "endLine": 1789,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ToolButtonStyle@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::PenStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1790,
+                  "startColumn": 5,
+                  "endLine": 1790,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4PenStyle@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::PenCapStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1791,
+                  "startColumn": 5,
+                  "endLine": 1791,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4PenCapStyle@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::PenJoinStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1792,
+                  "startColumn": 5,
+                  "endLine": 1792,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4PenJoinStyle@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::BrushStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1793,
+                  "startColumn": 5,
+                  "endLine": 1793,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4BrushStyle@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::FillRule' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1794,
+                  "startColumn": 5,
+                  "endLine": 1794,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4FillRule@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::MaskMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1795,
+                  "startColumn": 5,
+                  "endLine": 1795,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4MaskMode@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::BGMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1796,
+                  "startColumn": 5,
+                  "endLine": 1796,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4BGMode@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ClipOperation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1797,
+                  "startColumn": 5,
+                  "endLine": 1797,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ClipOperation@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::SizeMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1798,
+                  "startColumn": 5,
+                  "endLine": 1798,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4SizeMode@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::Axis' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1799,
+                  "startColumn": 5,
+                  "endLine": 1799,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4Axis@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::Corner' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1800,
+                  "startColumn": 5,
+                  "endLine": 1800,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4Corner@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::LayoutDirection' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1802,
+                  "startColumn": 5,
+                  "endLine": 1802,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4LayoutDirection@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::SizeHint' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1803,
+                  "startColumn": 5,
+                  "endLine": 1803,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4SizeHint@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::TextFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1807,
+                  "startColumn": 5,
+                  "endLine": 1807,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4TextFlag@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::TextFormat' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1816,
+                  "startColumn": 5,
+                  "endLine": 1816,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4TextFormat@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::TextElideMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1817,
+                  "startColumn": 5,
+                  "endLine": 1817,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4TextElideMode@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::DateFormat' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1818,
+                  "startColumn": 5,
+                  "endLine": 1818,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4DateFormat@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::TimeSpec' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1819,
+                  "startColumn": 5,
+                  "endLine": 1819,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4TimeSpec@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::DayOfWeek' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1820,
+                  "startColumn": 5,
+                  "endLine": 1820,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4DayOfWeek@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::CursorShape' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1821,
+                  "startColumn": 5,
+                  "endLine": 1821,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4CursorShape@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::GlobalColor' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1822,
+                  "startColumn": 5,
+                  "endLine": 1822,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4GlobalColor@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::AspectRatioMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1823,
+                  "startColumn": 5,
+                  "endLine": 1823,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4AspectRatioMode@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::TransformationMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1824,
+                  "startColumn": 5,
+                  "endLine": 1824,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4TransformationMode@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::Key' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1826,
+                  "startColumn": 5,
+                  "endLine": 1826,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4Key@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ShortcutContext' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1827,
+                  "startColumn": 5,
+                  "endLine": 1827,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ShortcutContext@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ItemSelectionMode' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1830,
+                  "startColumn": 5,
+                  "endLine": 1830,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ItemSelectionMode@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ItemSelectionOperation' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1831,
+                  "startColumn": 5,
+                  "endLine": 1831,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ItemSelectionOperation@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::CheckState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1833,
+                  "startColumn": 5,
+                  "endLine": 1833,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4CheckState@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ItemDataRole' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1834,
+                  "startColumn": 5,
+                  "endLine": 1834,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ItemDataRole@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::SortOrder' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1835,
+                  "startColumn": 5,
+                  "endLine": 1835,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4SortOrder@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::CaseSensitivity' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1836,
+                  "startColumn": 5,
+                  "endLine": 1836,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4CaseSensitivity@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::WindowModality' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1842,
+                  "startColumn": 5,
+                  "endLine": 1842,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4WindowModality@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::WidgetAttribute' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1843,
+                  "startColumn": 5,
+                  "endLine": 1843,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4WidgetAttribute@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ApplicationAttribute' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1844,
+                  "startColumn": 5,
+                  "endLine": 1844,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ApplicationAttribute@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::FocusReason' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1847,
+                  "startColumn": 5,
+                  "endLine": 1847,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4FocusReason@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::EnterKeyType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1851,
+                  "startColumn": 5,
+                  "endLine": 1851,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4EnterKeyType@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ConnectionType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1856,
+                  "startColumn": 5,
+                  "endLine": 1856,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ConnectionType@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ApplicationState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1857,
+                  "startColumn": 5,
+                  "endLine": 1857,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ApplicationState@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::GestureState' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1859,
+                  "startColumn": 5,
+                  "endLine": 1859,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4GestureState@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::GestureType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1860,
+                  "startColumn": 5,
+                  "endLine": 1860,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4GestureType@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::NativeGestureType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1861,
+                  "startColumn": 5,
+                  "endLine": 1861,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4NativeGestureType@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::CursorMoveStyle' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1863,
+                  "startColumn": 5,
+                  "endLine": 1863,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4CursorMoveStyle@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::TimerType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1864,
+                  "startColumn": 5,
+                  "endLine": 1864,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4TimerType@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ScrollPhase' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1865,
+                  "startColumn": 5,
+                  "endLine": 1865,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ScrollPhase@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::MouseEventSource' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1866,
+                  "startColumn": 5,
+                  "endLine": 1866,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4MouseEventSource@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::ChecksumType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1868,
+                  "startColumn": 5,
+                  "endLine": 1868,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4ChecksumType@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'Qt::TabFocusBehavior' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+                },
+                "region": {
+                  "startLine": 1870,
+                  "startColumn": 5,
+                  "endLine": 1870,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@Qt@@YAPEBUQMetaObject@@W4TabFocusBehavior@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QArrayData::AllocationOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qarraydata.h"
+                },
+                "region": {
+                  "startLine": 126,
+                  "startColumn": 1,
+                  "endLine": 126,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??U@YA?AV?$QFlags@W4AllocationOption@QArrayData@@@@W4AllocationOption@QArrayData@@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QByteArray::Base64Option' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qbytearray.h"
+                },
+                "region": {
+                  "startLine": 492,
+                  "startColumn": 1,
+                  "endLine": 492,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??U@YA?AV?$QFlags@W4Base64Option@QByteArray@@@@W4Base64Option@QByteArray@@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QChar::SpecialCharacter' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qchar.h"
+                },
+                "region": {
+                  "startLine": 101,
+                  "startColumn": 5,
+                  "endLine": 101,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0QChar@@QEAA@W4SpecialCharacter@0@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QChar::Category' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qchar.h"
+                },
+                "region": {
+                  "startLine": 451,
+                  "startColumn": 63,
+                  "endLine": 451,
+                  "endColumn": 72
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?category@QChar@@QEBA?AW4Category@1@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QChar::Direction' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qchar.h"
+                },
+                "region": {
+                  "startLine": 452,
+                  "startColumn": 65,
+                  "endLine": 452,
+                  "endColumn": 75
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?direction@QChar@@QEBA?AW4Direction@1@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QChar::JoiningType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qchar.h"
+                },
+                "region": {
+                  "startLine": 453,
+                  "startColumn": 69,
+                  "endLine": 453,
+                  "endColumn": 81
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?joiningType@QChar@@QEBA?AW4JoiningType@1@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QChar::Joining' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qchar.h"
+                },
+                "region": {
+                  "startLine": 460,
+                  "startColumn": 36,
+                  "endLine": 460,
+                  "endColumn": 50
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?joining@QChar@@QEBA?AW4Joining@1@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QChar::Decomposition' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qchar.h"
+                },
+                "region": {
+                  "startLine": 474,
+                  "startColumn": 76,
+                  "endLine": 474,
+                  "endColumn": 93
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?decompositionTag@QChar@@QEBA?AW4Decomposition@1@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QChar::Script' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qchar.h"
+                },
+                "region": {
+                  "startLine": 482,
+                  "startColumn": 59,
+                  "endLine": 482,
+                  "endColumn": 66
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?script@QChar@@QEBA?AW4Script@1@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QChar::UnicodeVersion' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qchar.h"
+                },
+                "region": {
+                  "startLine": 484,
+                  "startColumn": 75,
+                  "endLine": 484,
+                  "endColumn": 90
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?unicodeVersion@QChar@@QEBA?AW4UnicodeVersion@1@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QString::SectionFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qstring.h"
+                },
+                "region": {
+                  "startLine": 1595,
+                  "startColumn": 1,
+                  "endLine": 1595,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??U@YA?AV?$QFlags@W4SectionFlag@QString@@@@W4SectionFlag@QString@@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QtPrivate::ArgBase::Tag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qstring.h"
+                },
+                "region": {
+                  "startLine": 2095,
+                  "startColumn": 80,
+                  "endLine": 2095,
+                  "endColumn": 80
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0QStringViewArg@QtPrivate@@QEAA@VQStringView@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QMapNodeBase::Color' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmap.h"
+                },
+                "region": {
+                  "startLine": 93,
+                  "startColumn": 27,
+                  "endLine": 93,
+                  "endColumn": 44
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?color@QMapNodeBase@@QEBA?AW4Color@1@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QMetaType::ExtensionFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 734,
+                  "startColumn": 17,
+                  "endLine": 734,
+                  "endColumn": 17
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?isExtended@QMetaType@@AEBA_NW4ExtensionFlag@1@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QMetaType::TypeFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 786,
+                  "startColumn": 1,
+                  "endLine": 786,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??U@YA?AV?$QFlags@W4TypeFlag@QMetaType@@@@W4TypeFlag@QMetaType@@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QtMetaTypePrivate::IteratorCapability' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 1101,
+                  "startColumn": 48,
+                  "endLine": 1101,
+                  "endColumn": 111
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?iteratorCapabilities@QSequentialIterableImpl@QtMetaTypePrivate@@QEAA?AW4IteratorCapability@2@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QIODevice::OpenModeFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qiodevice.h"
+                },
+                "region": {
+                  "startLine": 185,
+                  "startColumn": 1,
+                  "endLine": 185,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??U@YA?AV?$QFlags@W4OpenModeFlag@QIODevice@@@@W4OpenModeFlag@QIODevice@@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QDataStream::Status' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qdatastream.h"
+                },
+                "region": {
+                  "startLine": 227,
+                  "startColumn": 68,
+                  "endLine": 227,
+                  "endColumn": 77
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0StreamStateSaver@QtPrivate@@QEAA@PEAVQDataStream@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QDataStream::ByteOrder' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qdatastream.h"
+                },
+                "region": {
+                  "startLine": 372,
+                  "startColumn": 3,
+                  "endLine": 372,
+                  "endColumn": 10
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?byteOrder@QDataStream@@QEBA?AW4ByteOrder@1@XZ",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QLocale::Language' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qlocale.h"
+                },
+                "region": {
+                  "startLine": 949,
+                  "startColumn": 5,
+                  "endLine": 949,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@@YAPEBUQMetaObject@@W4Language@QLocale@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QLocale::Country' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qlocale.h"
+                },
+                "region": {
+                  "startLine": 950,
+                  "startColumn": 5,
+                  "endLine": 950,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@@YAPEBUQMetaObject@@W4Country@QLocale@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QLocale::Script' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qlocale.h"
+                },
+                "region": {
+                  "startLine": 951,
+                  "startColumn": 5,
+                  "endLine": 951,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@@YAPEBUQMetaObject@@W4Script@QLocale@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QLocale::MeasurementSystem' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qlocale.h"
+                },
+                "region": {
+                  "startLine": 959,
+                  "startColumn": 5,
+                  "endLine": 959,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?qt_getEnumMetaObject@@YAPEBUQMetaObject@@W4MeasurementSystem@QLocale@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QLocale::NumberOption' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qlocale.h"
+                },
+                "region": {
+                  "startLine": 1194,
+                  "startColumn": 1,
+                  "endLine": 1194,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??U@YA?AV?$QFlags@W4NumberOption@QLocale@@@@W4NumberOption@QLocale@@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QTextStream::NumberFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qtextstream.h"
+                },
+                "region": {
+                  "startLine": 202,
+                  "startColumn": 1,
+                  "endLine": 202,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??U@YA?AV?$QFlags@W4NumberFlag@QTextStream@@@@W4NumberFlag@QTextStream@@0@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26495",
+          "message": {
+            "text": "Variable 'QtSharedPointer::ExternalRefCountData::destroyer' is uninitialized. Always initialize a member variable (type.6)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qsharedpointer_impl.h"
+                },
+                "region": {
+                  "startLine": 146,
+                  "startColumn": 9,
+                  "endLine": 146,
+                  "endColumn": 9
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0ExternalRefCountData@QtSharedPointer@@QEAA@W4Initialization@Qt@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "targetSymbol": "QtSharedPointer::ExternalRefCountData::destroyer"
+          }
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QtMsgType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qdebug.h"
+                },
+                "region": {
+                  "startLine": 73,
+                  "startColumn": 61,
+                  "endLine": 73,
+                  "endColumn": 62
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??0Stream@QDebug@@QEAA@PEAVQIODevice@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QDebug::Stream::FormatFlag' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qdebug.h"
+                },
+                "region": {
+                  "startLine": 92,
+                  "startColumn": 14,
+                  "endLine": 92,
+                  "endColumn": 14
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?testFlag@Stream@QDebug@@QEBA_NW4FormatFlag@12@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26498",
+          "message": {
+            "text": "The function 'qMetaTypeId<QPair<QVariant,QVariant> >' is constexpr, mark variable 'vid' constexpr if compile-time evaluation is desired (con.5)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qvariant.h"
+                },
+                "region": {
+                  "startLine": 742,
+                  "startColumn": 23,
+                  "endLine": 742,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?metaType@?$QVariantValueHelper@U?$QPair@VQVariant@@V1@@@@QtPrivate@@SA?AU?$QPair@VQVariant@@V1@@@AEBVQVariant@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26498",
+          "message": {
+            "text": "The function 'qMetaTypeId<QMap<QString,QVariant> >' is constexpr, mark variable 'vid' constexpr if compile-time evaluation is desired (con.5)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qvariant.h"
+                },
+                "region": {
+                  "startLine": 742,
+                  "startColumn": 23,
+                  "endLine": 742,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?metaType@?$QVariantValueHelper@V?$QMap@VQString@@VQVariant@@@@@QtPrivate@@SA?AV?$QMap@VQString@@VQVariant@@@@AEBVQVariant@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26498",
+          "message": {
+            "text": "The function 'qMetaTypeId<QHash<QString,QVariant> >' is constexpr, mark variable 'vid' constexpr if compile-time evaluation is desired (con.5)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qvariant.h"
+                },
+                "region": {
+                  "startLine": 742,
+                  "startColumn": 23,
+                  "endLine": 742,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?metaType@?$QVariantValueHelper@V?$QHash@VQString@@VQVariant@@@@@QtPrivate@@SA?AV?$QHash@VQString@@VQVariant@@@@AEBVQVariant@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26498",
+          "message": {
+            "text": "The function 'qMetaTypeId<QList<QVariant> >' is constexpr, mark variable 'vid' constexpr if compile-time evaluation is desired (con.5)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qvariant.h"
+                },
+                "region": {
+                  "startLine": 742,
+                  "startColumn": 23,
+                  "endLine": 742,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?metaType@?$QVariantValueHelper@V?$QList@VQVariant@@@@@QtPrivate@@SA?AV?$QList@VQVariant@@@@AEBVQVariant@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QtPrivate::MetaTypeDefinedHelper<QtMetaTypePrivate::QSequentialIterableImpl,1>::DefinedType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 1884,
+                  "startColumn": 1,
+                  "endLine": 1884,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??$qRegisterMetaType@VQSequentialIterableImpl@QtMetaTypePrivate@@@@YAHPEBDPEAVQSequentialIterableImpl@QtMetaTypePrivate@@W4DefinedType@?$MetaTypeDefinedHelper@VQSequentialIterableImpl@QtMetaTypePrivate@@$00@QtPrivate@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QtPrivate::MetaTypeDefinedHelper<QtMetaTypePrivate::QAssociativeIterableImpl,1>::DefinedType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 1884,
+                  "startColumn": 1,
+                  "endLine": 1884,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??$qRegisterMetaType@VQAssociativeIterableImpl@QtMetaTypePrivate@@@@YAHPEBDPEAVQAssociativeIterableImpl@QtMetaTypePrivate@@W4DefinedType@?$MetaTypeDefinedHelper@VQAssociativeIterableImpl@QtMetaTypePrivate@@$00@QtPrivate@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QtPrivate::MetaTypeDefinedHelper<QtMetaTypePrivate::QPairVariantInterfaceImpl,1>::DefinedType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 1884,
+                  "startColumn": 1,
+                  "endLine": 1884,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??$qRegisterMetaType@VQPairVariantInterfaceImpl@QtMetaTypePrivate@@@@YAHPEBDPEAVQPairVariantInterfaceImpl@QtMetaTypePrivate@@W4DefinedType@?$MetaTypeDefinedHelper@VQPairVariantInterfaceImpl@QtMetaTypePrivate@@$00@QtPrivate@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QtPrivate::MetaTypeDefinedHelper<qfloat16,1>::DefinedType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 1884,
+                  "startColumn": 1,
+                  "endLine": 1884,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??$qRegisterMetaType@Vqfloat16@@@@YAHPEBDPEAVqfloat16@@W4DefinedType@?$MetaTypeDefinedHelper@Vqfloat16@@$00@QtPrivate@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QtPrivate::MetaTypeDefinedHelper<QPair<QVariant,QVariant>,1>::DefinedType' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 1847,
+                  "startColumn": 1,
+                  "endLine": 1847,
+                  "endColumn": 1
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??$qRegisterNormalizedMetaType@U?$QPair@VQVariant@@V1@@@@@YAHAEBVQByteArray@@PEAU?$QPair@VQVariant@@V1@@@W4DefinedType@?$MetaTypeDefinedHelper@U?$QPair@VQVariant@@V1@@@$00@QtPrivate@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26498",
+          "message": {
+            "text": "The function 'qMetaTypeId<QtMetaTypePrivate::QAssociativeIterableImpl>' is constexpr, mark variable 'vid' constexpr if compile-time evaluation is desired (con.5)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qvariant.h"
+                },
+                "region": {
+                  "startLine": 742,
+                  "startColumn": 23,
+                  "endLine": 742,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?metaType@?$QVariantValueHelper@VQAssociativeIterableImpl@QtMetaTypePrivate@@@QtPrivate@@SA?AVQAssociativeIterableImpl@QtMetaTypePrivate@@AEBVQVariant@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26498",
+          "message": {
+            "text": "The function 'qMetaTypeId<QtMetaTypePrivate::QSequentialIterableImpl>' is constexpr, mark variable 'vid' constexpr if compile-time evaluation is desired (con.5)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qvariant.h"
+                },
+                "region": {
+                  "startLine": 742,
+                  "startColumn": 23,
+                  "endLine": 742,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?metaType@?$QVariantValueHelper@VQSequentialIterableImpl@QtMetaTypePrivate@@@QtPrivate@@SA?AVQSequentialIterableImpl@QtMetaTypePrivate@@AEBVQVariant@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26812",
+          "message": {
+            "text": "The enum type 'QtMetaTypePrivate::QSequentialIterableImpl::Position' is unscoped. Prefer 'enum class' over 'enum' (Enum.3)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 1142,
+                  "startColumn": 5,
+                  "endLine": 1142,
+                  "endColumn": 5
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "??$moveToImpl@V?$QList@VQVariant@@@@@QSequentialIterableImpl@QtMetaTypePrivate@@SAXPEBXPEAPEAXW4Position@01@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26498",
+          "message": {
+            "text": "The function 'qMetaTypeId<QtMetaTypePrivate::QPairVariantInterfaceImpl>' is constexpr, mark variable 'toId' constexpr if compile-time evaluation is desired (con.5)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+                },
+                "region": {
+                  "startLine": 2413,
+                  "startColumn": 15,
+                  "endLine": 2413,
+                  "endColumn": 79
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?registerConverter@?$IsMetaTypePair@U?$QPair@VQVariant@@V1@@@$00@QtPrivate@@SA_NH@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C26498",
+          "message": {
+            "text": "The function 'qMetaTypeId<QtMetaTypePrivate::QPairVariantInterfaceImpl>' is constexpr, mark variable 'vid' constexpr if compile-time evaluation is desired (con.5)."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qvariant.h"
+                },
+                "region": {
+                  "startLine": 742,
+                  "startColumn": 23,
+                  "endLine": 742,
+                  "endColumn": 43
+                }
+              },
+              "logicalLocations": [
+                {
+                  "decoratedName": "?metaType@?$QVariantValueHelper@VQPairVariantInterfaceImpl@QtMetaTypePrivate@@@QtPrivate@@SA?AVQPairVariantInterfaceImpl@QtMetaTypePrivate@@AEBVQVariant@@@Z",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.29.30136.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "commandLine": "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX86\\x64\\c1xx.dll\" -ACf{1F7B090C-16DB-4822-966A-A93D26ED4681} -ACpmspft140.dll -Alint -D_PREFAST_ -D_AST_FE_ -Analyze -zm0x0034C1B0 -il C:\\Users\\Pilikin\\AppData\\Local\\Temp\\_CL_21a735ecast -typedil -f messageCreators\\statemessagegetter.cpp -Ze -D_MSC_EXTENSIONS -Zp16 -pc \\:/ -D_MSC_VER=1929 -D_MSC_FULL_VER=192930136 -D_MSC_BUILD=0 -D_M_AMD64=100 -ZILP448 -D_M_X64=100 -D_WIN64 -D_WIN32 -GR -D_CPPRTTI -I E:\\M14HL2 Moxa\\M14HL2-Moxa-NPort-54501\\Debug -I E:\\M14HL2 Moxa\\M14HL2-Moxa-NPort-54501 -I E:\\M14HL2 Moxa\\M14HL2-Moxa-NPort-54501\\debug -I E:\\include -I E:\\M14HL2 Moxa\\M14HL2-Moxa-NPort-54501\\debug\\qmake\\temp -I C:\\QtCommercial\\5.15.2\\msvc2019_64\\include -I C:\\QtCommercial\\5.15.2\\msvc2019_64\\include\\QtWidgets -I C:\\QtCommercial\\5.15.2\\msvc2019_64\\include\\QtGui -I C:\\QtCommercial\\5.15.2\\msvc2019_64\\include\\QtANGLE -I C:\\QtCommercial\\5.15.2\\msvc2019_64\\include\\QtNetwork -I C:\\QtCommercial\\5.15.2\\msvc2019_64\\include\\QtSerialPort -I C:\\QtCommercial\\5.15.2\\msvc2019_64\\include\\QtCore -I E:\\include -I C:\\QtCommercial\\5.15.2\\msvc2019_64\\mkspecs\\win32-msvc -I E:\\M14HL2 Moxa\\M14HL2-Moxa-NPort-54501\\Debug -nologo -W 3 -diagnostics:column -Ot -DCODE_ANALYSIS -D_WINDOWS -DUNICODE -D_UNICODE -DWIN32 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB -EHs -D_CPPUNWIND -EHc -MDd -D_DEBUG -D_MT -D_DLL -GS -D_M_FP_PRECISE -Zc:wchar_t -Zc:forScope -std:c++latest -Fodebug\\statemessagegetter.obj -Fddebug\\vc142.pdb -external:W 3 -Gd -wd 4577 -wd 4467 -analyze:projectdirectory E:\\M14HL2 Moxa\\M14HL2-Moxa-NPort-54501 -analyze:rulesetdirectory ;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Team Tools\\Static Analysis Tools\\\\Rule Sets; -analyze:ruleset C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Team Tools\\Static Analysis Tools\\Rule Sets\\NativeRecommendedRules.ruleset -analyze:quiet -analyze:plugin C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX86\\x86\\EspXEngine.dll -FC -errorreport:prompt -Zc:rvalueCast -Zc:strictStrings -Zc:referenceBinding -Zc:__cplusplus -w3 4100 -w3 4189 -w4 4996 -w4 4456 -w4 4457 -w4 4458 -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\include -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\atlmfc\\include -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\VS\\include -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\ucrt -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\VS\\UnitTest\\include -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\shared -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\winrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\cppwinrt -I C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.7.2\\Include\\um -external:I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\include -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\include -external:I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\atlmfc\\include -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Tools\\MSVC\\14.29.30133\\atlmfc\\include -external:I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\VS\\include -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\VS\\include -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\ucrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\ucrt -external:I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\VS\\UnitTest\\include -I C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\\Auxiliary\\VS\\UnitTest\\include -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\um -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\shared -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\shared -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\winrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\winrt -external:I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\cppwinrt -I C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.19041.0\\cppwinrt -external:I C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.7.2\\Include\\um -I C:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.7.2\\Include\\um -MPdiagMutex 00000000000001D0",
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qglobal.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "a695194c2b66ef5cd9fe91cddf419e62"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qsysinfo.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "0863c4c301080d219223a68fa42168fc"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qnamespace.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "a26bd1160cfaa3547f0450917ba7b501"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qarraydata.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "a48b86734f257e246bc24017aa1c294b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qbytearray.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "a4717d0d33732ad9253a3232fdad6c5f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qchar.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "52e652a582b9c6eff2babe78fea6afac"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qstring.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "175d4e01f8875534c1f7dc132e856188"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmap.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "fdf7ef9e8829d6bbcefefe89df2478a8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qmetatype.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "59b7eaa0c9aa4ee5ce399ecaa03b5d88"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qiodevice.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "0baebdac5526eda5ccc387ff11c7f7dc"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qlocale.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "8af0867bffe110b99fdcee07ac23609d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qtextstream.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "fd1ab21fc80d8ce5e1d5770f9ddc25bf"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qsharedpointer_impl.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "955cadfd1efeefd9d510345b8e6e578c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qdebug.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "15dda264129acfb47bd05c7d86a139f2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qdatastream.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "12d64ae2f6b3f82cdeb4fe8f5cc67164"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///C:/QtCommercial/5.15.2/msvc2019_64/include/QtCore/qvariant.h"
+          },
+          "roles": [
+            "resultFile"
+          ],
+          "hashes": {
+            "md5": "90094f0c4dc27575920a2cab608c0d10"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/m14hl2 moxa/m14hl2-moxa-nport-54501/messagecreators/firmwarecommansmaker.cpp"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "md5": "dff60fa1b747dabf86a7046df4566819"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/m14hl2 moxa/m14hl2-moxa-nport-54501/messagecreators/firmwarecommansmaker.h"
+          },
+          "hashes": {
+            "md5": "73415254179be01cbb242967f625c25c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qbytearray"
+          },
+          "hashes": {
+            "md5": "1ebb03681dc372a065e50c2cbd546c09"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qrefcount.h"
+          },
+          "hashes": {
+            "md5": "04e4e8595636f0cc299f1a1ec3cf85c8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qatomic.h"
+          },
+          "hashes": {
+            "md5": "7652d1c9a27d68caad63b36d71df383c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qconfig.h"
+          },
+          "hashes": {
+            "md5": "8b66f8990cda75ad4be5e963c87904ec"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qtcore-config.h"
+          },
+          "hashes": {
+            "md5": "ea34ba71581e00c3c99f5fec6f3412e9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qsystemdetection.h"
+          },
+          "hashes": {
+            "md5": "c773499524b7051fce3e570704785130"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qprocessordetection.h"
+          },
+          "hashes": {
+            "md5": "1afd605bc49ef7dd3a7b7cbd7d7147fb"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qcompilerdetection.h"
+          },
+          "hashes": {
+            "md5": "234158604994f475a91353739a2bbb57"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qtypeinfo.h"
+          },
+          "hashes": {
+            "md5": "544c1db41a9d1116cc6fd68c21863065"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qlogging.h"
+          },
+          "hashes": {
+            "md5": "4bd7d3a360fc344c4d30b165d9ea6c4d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qflags.h"
+          },
+          "hashes": {
+            "md5": "433d43cd605cafdf937756bd8585fb9e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qbasicatomic.h"
+          },
+          "hashes": {
+            "md5": "b1f76f6c63fc330416b69e69f5491662"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qatomic_cxx11.h"
+          },
+          "hashes": {
+            "md5": "4b03464a5dc41becd5f0c39a30410301"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qgenericatomic.h"
+          },
+          "hashes": {
+            "md5": "c581d79d8539574e76a4e0c830c2df88"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qglobalstatic.h"
+          },
+          "hashes": {
+            "md5": "f2ede6a509bc3f8055425f5b16907221"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qnumeric.h"
+          },
+          "hashes": {
+            "md5": "2819b50dc7d5bf11774fc85627b5faf8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qversiontagging.h"
+          },
+          "hashes": {
+            "md5": "d134ef4ab1bd2dd548c0b8e2a5550839"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qvector"
+          },
+          "hashes": {
+            "md5": "925bf0ae3cc15ba9d8ff6f6602f462b9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qvector.h"
+          },
+          "hashes": {
+            "md5": "05c39dc95aecc9ac95fb81046f2a45a2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qalgorithms.h"
+          },
+          "hashes": {
+            "md5": "44ddb08eada33e2ba51d8f3e3391b4b6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qiterator.h"
+          },
+          "hashes": {
+            "md5": "46a42f8e569d2eda302d0f791775d5b9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qhashfunctions.h"
+          },
+          "hashes": {
+            "md5": "89c5046c5565b9f65fc2fe8dc3c659fe"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qstringliteral.h"
+          },
+          "hashes": {
+            "md5": "de00809289478e56551791fb30b7f8f9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qstringalgorithms.h"
+          },
+          "hashes": {
+            "md5": "56f5b75b4a8342385dabffa98f6b4d35"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qstringview.h"
+          },
+          "hashes": {
+            "md5": "15edde7c489403cdefffb0c9b09bb325"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qpair.h"
+          },
+          "hashes": {
+            "md5": "4c1f0cc4f90726aa14557722ef79c77d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qcontainertools_impl.h"
+          },
+          "hashes": {
+            "md5": "a159540e0cc276df518f8876634b9fda"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qpoint.h"
+          },
+          "hashes": {
+            "md5": "7043b16ffb50f9e6ec3f40618c4cd65f"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qdebug"
+          },
+          "hashes": {
+            "md5": "0c81b97088327333c4144bedc1e090a2"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qhash.h"
+          },
+          "hashes": {
+            "md5": "96cb1b909b8ba097373e197dbbd8fdca"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qlist.h"
+          },
+          "hashes": {
+            "md5": "46a219b9ba07d4404c3ced429c457adf"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qbytearraylist.h"
+          },
+          "hashes": {
+            "md5": "c3cdb7cccdf1bd4c4f4fa1abf75d7e45"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qstringlist.h"
+          },
+          "hashes": {
+            "md5": "3a26ea6d69d1d990372ed05955152847"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qregexp.h"
+          },
+          "hashes": {
+            "md5": "3fd3ed451790f3b5a26f5513759d5660"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qstringmatcher.h"
+          },
+          "hashes": {
+            "md5": "b7533e3445ffa7166b6ee0df5668c6f7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qobject.h"
+          },
+          "hashes": {
+            "md5": "1d726fe6f5c370bd75e4092bb71c7557"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qobjectdefs.h"
+          },
+          "hashes": {
+            "md5": "642871dc67bc301fbd142a896f1a5f5c"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qobjectdefs_impl.h"
+          },
+          "hashes": {
+            "md5": "d5851450a8d60d29366d4160ce2a1f08"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qscopedpointer.h"
+          },
+          "hashes": {
+            "md5": "a0f0a11416ab17cb8f12a9dd0ab263ea"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qvarlengtharray.h"
+          },
+          "hashes": {
+            "md5": "f195f485a345ea82512db5b40ad75ae0"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qcontainerfwd.h"
+          },
+          "hashes": {
+            "md5": "a15276a66414798288f6e33993f14a4e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qobject_impl.h"
+          },
+          "hashes": {
+            "md5": "89c7c9914e0e57d87f41b00df9aa37b9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qshareddata.h"
+          },
+          "hashes": {
+            "md5": "de9782832f172e77c5131c2e21fae76e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qset.h"
+          },
+          "hashes": {
+            "md5": "1c559a2188428e072f63cc9c72ad97e7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qcontiguouscache.h"
+          },
+          "hashes": {
+            "md5": "6f37b1522074fcee9ebe50c1010ccdb5"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qsharedpointer.h"
+          },
+          "hashes": {
+            "md5": "c4ffe432a0e37fdd5ad7122fc73c04dd"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qdatastream"
+          },
+          "hashes": {
+            "md5": "bfef78a570089de65aa1bf28a9c3a7a4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qiodevice"
+          },
+          "hashes": {
+            "md5": "743aca2b149fb06b4b5b08827e768bd7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/m14hl2 moxa/m14hl2-moxa-nport-54501/messagecreators/statemessagegetter.cpp"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "md5": "75342ff61341e51ef3222b115db42fdb"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/m14hl2 moxa/m14hl2-moxa-nport-54501/messagecreators/statemessagegetter.h"
+          },
+          "hashes": {
+            "md5": "b28c23920471cf9e779b76ef59c6deee"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///e:/m14hl2 moxa/m14hl2-moxa-nport-54501/constantsandfunctions.h"
+          },
+          "hashes": {
+            "md5": "49ff3791661598d79c5cbf066e5fca33"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qtglobal"
+          },
+          "hashes": {
+            "md5": "be81376a7ee25afd5b298ec3167d7841"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qmap"
+          },
+          "hashes": {
+            "md5": "cb0870f27f0f57f47652efead23734c4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qtendian"
+          },
+          "hashes": {
+            "md5": "1317703b5e63b3195f37e50690479686"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qendian.h"
+          },
+          "hashes": {
+            "md5": "78e58e56fab5f0c5c964f9c76c917cd9"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qfloat16.h"
+          },
+          "hashes": {
+            "md5": "227b87f45b412c3a1928478f1f2910cd"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qtmath"
+          },
+          "hashes": {
+            "md5": "93c9e80aa23e7e10fdef48c17235970e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/qtcommercial/5.15.2/msvc2019_64/include/qtcore/qmath.h"
+          },
+          "hashes": {
+            "md5": "02e79f2830482f7007620e21c1f58b41"
+          }
+        }
+      ]
+    }
+  ]
+}

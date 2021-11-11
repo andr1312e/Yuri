@@ -1,8 +1,4 @@
 #include "statemessagesender.h"
-#include <QDebug>
-#include <QIODevice>
-#include <qdatastream.h>
-
 
 StateMessageSender::StateMessageSender()
 {
@@ -14,7 +10,7 @@ StateMessageSender::~StateMessageSender()
 
 }
 
-QByteArray StateMessageSender::createZeroCommand()
+const QByteArray StateMessageSender::createZeroCommand()
 {
     QByteArray command={};
     command.append(messagesIds.at(0));
@@ -104,11 +100,18 @@ QByteArray StateMessageSender::createFiveCommand(double AttenuatorDb)
     return command;
 }
 
-QByteArray StateMessageSender::createSixCommand(double noiseValue)
+QByteArray StateMessageSender::createSixCommand(double noiseType, double noiseValue)
 {
     QByteArray command;
     command.append(messagesIds.at(6));
-    command.append(quint8(noiseValue));
+    command.append(quint8(noiseType));
+    quint32 noiseVal=(quint32)noiseValue;
+    quint8 first=(noiseVal >> (8*0)) & 0xff;
+    quint8 second=(noiseVal >> (8*1)) & 0xff;
+    quint8 third=(noiseVal >> (8*2)) & 0xff;
+    command.append(third);
+    command.append(second);
+    command.append(first);
     return command;
 }
 
@@ -120,7 +123,7 @@ QByteArray StateMessageSender::createSevenCommand(quint8 param)
     return command;
 }
 
-quint16 StateMessageSender::calculateINT_Rx(double Fvco)
+quint16 StateMessageSender::calculateINT_Rx(double Fvco) const
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
     double INT_RxDouble=Fvco-3000000.0;
@@ -132,7 +135,7 @@ quint16 StateMessageSender::calculateINT_Rx(double Fvco)
     return INT_Rx;
 }
 
-quint32 StateMessageSender::calculateFRACT_Rx(double Fvco)
+quint32 StateMessageSender::calculateFRACT_Rx(double Fvco) const
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
     quint32 FRACT_Rx=(pow(2,20));
@@ -144,7 +147,7 @@ quint32 StateMessageSender::calculateFRACT_Rx(double Fvco)
     return FRACT_Rx;
 }
 
-quint8 StateMessageSender::calculateGAIN(quint8 gain)
+quint8 StateMessageSender::calculateGAIN(quint8 gain) const
 {
     if (gain>(63))
     {
@@ -154,7 +157,7 @@ quint8 StateMessageSender::calculateGAIN(quint8 gain)
     return GAIN_X;
 }
 
-quint8 StateMessageSender::calculateAtteniator(quint16 atteniatorDb)
+quint8 StateMessageSender::calculateAtteniator(quint16 atteniatorDb) const
 {
     if (atteniatorTable.count(atteniatorDb))
     {

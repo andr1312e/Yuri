@@ -10,32 +10,36 @@
 #include <QWidget>
 #include <QDir>
 #include <QButtonGroup>
-#include <tcpsocket.h>
 
-#include <presenter/statepresenter.h>
+#include "connections/datahandler.h"
+#include "presenter/statepresenter.h"
 
 class StateWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StateWidget(TcpSocket *m_socket, QWidget *parent);
+    explicit StateWidget(QWidget *parent);
     ~StateWidget();
+    void DisconnectOldHander();
+    void ConnectHander(DataHandler *dataHandler);
 private:
+    void CreateObjects();
     void CreateUI();
     void FillButtonGroup();
     void InsertWidgetsIntoLayout();
     void FillUI();
-    void CreateConnections();
+    void ConnectObjects();
 
 Q_SIGNALS:
     void SetStateMessage(quint8 messageId, double fistParam=0.0, double SecondParam=0.0);
+    void ToDataHanderChanged();
 
 
 public Q_SLOTS:
     void SetStateButtonIdClicked(int id);
     void GetStateButtonIdClicked(int messageWantToGet);
     void SetButtonEnabled(bool state);
-    void ConsoleLog(QString message);
+    void WhenConsoleLog(QString message);
 
 private:
     void updateHistory();
@@ -66,6 +70,8 @@ private:
     QComboBox *m_attenuatorComboBox;
 
     QHBoxLayout *m_noiseLineLayout;
+    QLabel *m_noiseValueLabel;
+    QLineEdit *m_noiseLineEdit;
     QLabel *m_noiseLabel;
     QComboBox *m_noiseComboBox;
 

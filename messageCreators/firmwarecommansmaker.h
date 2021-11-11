@@ -7,21 +7,22 @@
 class FirmwareMessageMaker
 {
 public:
-    FirmwareMessageMaker();
+    explicit FirmwareMessageMaker();
     ~FirmwareMessageMaker();
 
-    QByteArray ReadToBufferCommand(quint32 adress, quint8 lenght);
+    QByteArray *ReadToBufferCommand(quint32 adress, quint8 lenght);
     QByteArray WriteBufferToFlashCommand(quint32 adress, quint16 lenght);
-    QByteArray MakeWriteOnlyBufferCommand();
-    QByteArray MakeReadOnlyBufferCommand();
-    QByteArray EraseCommand();
-//    QByteArray GetFlashIdCommand();
     QByteArray WriteDataToBufferCommand(bool isNewPage, const QByteArray &data);//0e 5.0 команда запись
-    const QByteArray *m_ReadRegisterStatusCommand;
-    const QByteArray *m_ReadFromBufferCommand;
-    const QByteArray m_flashIdCommad;
 
-    QByteArray RestartFlashCommand();
+    const QByteArray *m_readRegisterStatusCommand;
+    const QByteArray *m_readFromBufferCommand;
+    const QByteArray *m_flashIdCommad;
+    const QByteArray *m_eraseCommand;
+    const QByteArray *m_makeWriteOnlyBufferCommand;
+    const QByteArray *m_makeReadOnlyBufferCommand;
+    const QByteArray *m_restartHardwareCommand;
+
+    QByteArray *m_readToBufferCommand;
 
 private:
     QByteArray CreateTypeCommand(quint8 commandId);

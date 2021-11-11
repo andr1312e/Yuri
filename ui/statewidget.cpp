@@ -1,25 +1,17 @@
 #include "statewidget.h"
+#include "qdatetime.h"
+#include <QDebug>
 
-StateWidget::StateWidget(TcpSocket *m_socket, QWidget *parent)
+StateWidget::StateWidget(QWidget *parent)
     : QWidget(parent)
-    , m_statePresenter(new StatePresenter(m_socket))
-    , m_file(new QFile(QDir::currentPath()+"/история запросов.txt"))
     , m_attenuatorValues({"0", "1", "2", "3", "4", "5", "6", "9", "12", "15", "18", "21", "24", "27", "30"})
-    , m_noiseValues({"шумогенератор ВЫКЛЮЧЕН, ответчик ВЫКЛЮЧЕН", "шумогенератор ВЫКЛЮЧЕН, ответчик ВКЛЮЧЕН", "шумогенератор ВКЛЮЧЕН, ответчик ВЫКЛЮЧЕН"})
-    , m_intValidator(new QIntValidator())
-    , m_gainValidator(new QIntValidator())
+    , m_noiseValues({"все Отключено", "ответчик ВКЛЮЧЕН", "шумогенератор ВКЛЮЧЕН", "Синус ВКЛЮЧЕН", "М-сигнал ВКЛЮЧЕН"})
 {
-    m_file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
-    long long minWorkPointValue=2695;
-    for (int i=0; i<30; i++)
-    {
-        workPointsValues.append(QString::number(minWorkPointValue));
-        minWorkPointValue=minWorkPointValue+10;
-    }
+    CreateObjects();
     CreateUI();
     InsertWidgetsIntoLayout();
     FillUI();
-    CreateConnections();
+    ConnectObjects();
 }
 
 StateWidget::~StateWidget()
@@ -73,6 +65,31 @@ StateWidget::~StateWidget()
     delete m_log;
 }
 
+void StateWidget::DisconnectOldHander()
+{
+    m_statePresenter->DisconnectOldHandler();
+}
+
+void StateWidget::ConnectHander(DataHandler *dataHandler)
+{
+    m_statePresenter->ConnectHander(dataHandler);
+}
+
+void StateWidget::CreateObjects()
+{
+    m_statePresenter=new StatePresenter();
+    m_file=new QFile(QDir::currentPath()+"/история запросов.txt");
+    m_intValidator=new QIntValidator();
+    m_gainValidator=new QIntValidator(0, 64);
+    m_file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
+    long long minWorkPointValue=2695;
+    for (int i=0; i<30; i++)
+    {
+        workPointsValues.append(QString::number(minWorkPointValue));
+        minWorkPointValue=minWorkPointValue+10;
+    }
+}
+
 
 void StateWidget::CreateUI()
 {
@@ -113,6 +130,8 @@ void StateWidget::CreateUI()
 
 
     m_noiseLabel=new QLabel();
+    m_noiseValueLabel=new QLabel();
+    m_noiseLineEdit=new QLineEdit();
     m_noiseComboBox=new QComboBox();
 
     m_sendStateButtonsGroup=new QButtonGroup();
@@ -136,7 +155,7 @@ void StateWidget::FillButtonGroup()
 
     m_sendStateButtonsGroup->addButton(new QPushButton("Установка усиления Rx Tx"), 4);
     m_sendStateButtonsGroup->addButton(new QPushButton("Установка ослабления"), 5);
-    m_sendStateButtonsGroup->addButton(new QPushButton("Генератор шума"), 6);
+    m_sendStateButtonsGroup->addButton(new QPushButton("Изменить режим работы"), 6);
 
     m_getStateButtonGroup=new QButtonGroup();
     m_getStateButtonGroup->addButton(new QPushButton("Получаем частоты Rx"), 1);
@@ -165,6 +184,8 @@ void StateWidget::InsertWidgetsIntoLayout()
     m_attenuatorLineLayout->addWidget(m_attenuatorLabel);
     m_attenuatorLineLayout->addWidget(m_attenuatorComboBox);
 
+    m_noiseLineLayout->addWidget(m_noiseValueLabel);
+    m_noiseLineLayout->addWidget(m_noiseLineEdit);
     m_noiseLineLayout->addWidget(m_noiseLabel);
     m_noiseLineLayout->addWidget(m_noiseComboBox);
 
@@ -203,7 +224,8 @@ void StateWidget::FillUI()
     m_gainTXLabel->setText("Усиление TX GAIN_TX: децибелы");
     m_gainRXLabel->setText("Усиление RX GAIN_RX: децибелы");
     m_attenuatorLabel->setText("Установка ослабления Attenuator_RX: децибелы");
-    m_noiseLabel->setText("Генератор шума");
+    m_noiseValueLabel->setText("Значения для синуса и м сигнала");
+    m_noiseLabel->setText("Режимы работы:");
 
     m_speedLineEdit->setValidator(m_intValidator);
     m_doplerFreqLineEdit->setValidator(m_intValidator);
@@ -212,6 +234,7 @@ void StateWidget::FillUI()
     m_gainRXLineEdit->setValidator(m_gainValidator);
 
     m_doplerFreqLineEdit->setText("0");
+    m_noiseLineEdit->setText("0");
 
     m_fvcoComboBox->setEditable(true);
     m_fvcoComboBox->addItems(workPointsValues);
@@ -227,15 +250,20 @@ void StateWidget::FillUI()
 
 }
 
-void StateWidget::CreateConnections()
+void StateWidget::ConnectObjects()
 {
     connect(m_speedLineEdit, &QLineEdit::textEdited, this, &StateWidget::ChangeDoplerLineEdit);
     connect(m_doplerFreqLineEdit, &QLineEdit::textEdited, this, &StateWidget::ChangeSpeedLineEdit);
+    connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
+    connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::WhenConsoleLog);
+    connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::SetButtonEnabled);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(m_sendStateButtonsGroup, &QButtonGroup::idClicked, this, &StateWidget::SetStateButtonIdClicked);
     connect(m_getStateButtonGroup, &QButtonGroup::idClicked, this, &StateWidget::GetStateButtonIdClicked);
-    connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
-    connect(m_statePresenter, &StatePresenter::ConsoleLog, this, &StateWidget::ConsoleLog);
-    connect(m_statePresenter, &StatePresenter::SetButtonsEnabled, this, &StateWidget::SetButtonEnabled);
+#else
+    connect(m_sendStateButtonsGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::SetStateButtonIdClicked);
+    connect(m_getStateButtonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::GetStateButtonIdClicked);
+#endif
 }
 
 void StateWidget::updateHistory()
@@ -256,7 +284,7 @@ void StateWidget::updateHistory()
 }
 
 
-void StateWidget::ConsoleLog(QString message)
+void StateWidget::WhenConsoleLog(QString message)
 {
     QString time=QDateTime::currentDateTime().toString("hh:mm:ss");
     m_log->appendPlainText(time+ " "+ message);
@@ -268,7 +296,7 @@ void StateWidget::SetStateButtonIdClicked(int id)
     switch (id) {
     case 0:
     {
-        ConsoleLog("Высылаем сообщение пинга");
+        WhenConsoleLog("Высылаем сообщение пинга");
         break;
     }
     case 1:
@@ -280,18 +308,18 @@ void StateWidget::SetStateButtonIdClicked(int id)
             if (isOk)
             {
                 firstValue=firstValue*1000000;
-                ConsoleLog("Высылаем первое сообщение: установка частоты RX fvco= " +QString::number(firstValue)+ " ГЦ");
+                WhenConsoleLog("Высылаем первое сообщение: установка частоты RX fvco= " +QString::number(firstValue)+ " ГЦ");
                 break;
             }
             else
             {
-                ConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
+                WhenConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
                 return;
             }
         }
         else
         {
-            ConsoleLog("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx");
+            WhenConsoleLog("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx");
             return;
         }
     }
@@ -308,25 +336,25 @@ void StateWidget::SetStateButtonIdClicked(int id)
                 if (isOk2)
                 {
 
-                    ConsoleLog("Высылаем второе сообщение: установка частоты Tx fvco= " +QString::number(firstValue) + " ГЦ и доплер= "+ QString::number(secondValue, 'f')+ " ГЦ");
+                    WhenConsoleLog("Высылаем второе сообщение: установка частоты Tx fvco= " +QString::number(firstValue) + " ГЦ и доплер= "+ QString::number(secondValue, 'f')+ " ГЦ");
                     break;
                 }
                 else
                 {
-                    ConsoleLog("Не смогли перевесли в число " + m_doplerFreqLineEdit->text());
-                    ConsoleLog("Высылаем сообщение fvco= "+QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
+                    WhenConsoleLog("Не смогли перевесли в число " + m_doplerFreqLineEdit->text());
+                    WhenConsoleLog("Высылаем сообщение fvco= "+QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
                     break;
                 }
             }
             else
             {
-                ConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
+                WhenConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
                 return;
             }
         }
         else
         {
-            ConsoleLog("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx");
+            WhenConsoleLog("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx");
             return;
         }
     }
@@ -338,18 +366,18 @@ void StateWidget::SetStateButtonIdClicked(int id)
             firstValue=m_rangeLineEdit->text().toDouble(&isOk);
             if (isOk)
             {
-                ConsoleLog("Высылаем третье сообщение: установка дальности ответного сигнала. Дистанция" + QString::number(firstValue, 'f') );
+                WhenConsoleLog("Высылаем третье сообщение: установка дальности ответного сигнала. Дистанция= " + QString::number(firstValue, 'f') );
                 break;
             }
             else
             {
-                ConsoleLog("Не смогли перевесли в число " + m_rangeLineEdit->text());
+                WhenConsoleLog("Не смогли перевесли в число " + m_rangeLineEdit->text());
                 return;
             }
         }
         else
         {
-            ConsoleLog("Заполните пожалуйста поля: Дальность ответного сигнала: d");
+            WhenConsoleLog("Заполните пожалуйста поля: Дальность ответного сигнала: d");
             return;
         }
     }
@@ -362,18 +390,18 @@ void StateWidget::SetStateButtonIdClicked(int id)
             secondValue=m_gainRXLineEdit->text().toDouble(&isOk2);
             if (isOk1&&isOk2)
             {
-                ConsoleLog("Высылаем четвертое сообщение: установка усиления");
+                WhenConsoleLog("Высылаем четвертое сообщение: установка усиления");
                 break;
             }
             else
             {
-                ConsoleLog("Не смогли перевесли в число " + m_gainRXLineEdit->text() + " или  "+ m_gainTXLineEdit->text());
+                WhenConsoleLog("Не смогли перевесли в число " + m_gainRXLineEdit->text() + " или  "+ m_gainTXLineEdit->text());
                 return;
             }
         }
         else
         {
-            ConsoleLog("Заполните пожалуйста поля: Усиление RX а так же Усиление TX");
+            WhenConsoleLog("Заполните пожалуйста поля: Усиление RX а так же Усиление TX");
             return;
         }
     }
@@ -384,24 +412,41 @@ void StateWidget::SetStateButtonIdClicked(int id)
         if (isOk)
         {
 
-            ConsoleLog("Высылаем пятое сообщение: установка ослабления");
+            WhenConsoleLog("Высылаем пятое сообщение: установка ослабления");
             break;
         }
         else
         {
-            ConsoleLog("Не смогли перевесли в число " + m_attenuatorComboBox->currentText());
+            WhenConsoleLog("Не смогли перевесли в число " + m_attenuatorComboBox->currentText());
             return;
         }
     }
     case 6:
     {
         firstValue=m_noiseComboBox->currentIndex();
-        ConsoleLog("Высылаем шестое сообщение: установка шума");
+        if (firstValue==4 || firstValue==3)
+        {
+            bool isOk;
+            secondValue=m_noiseLineEdit->text().toDouble(&isOk);
+            if (isOk)
+            {
+
+                WhenConsoleLog("Шестое сообщение: параметр равен: "+ m_noiseLineEdit->text());
+                break;
+            }
+            else
+            {
+                WhenConsoleLog("Не смогли перевесли в число: " + m_noiseLineEdit->text() + ".Берем значение 0");
+                secondValue=0.0;
+                break;
+            }
+        }
+        WhenConsoleLog("Высылаем шестое сообщение: установка шума");
         break;
     }
     default:
     {
-        ConsoleLog("Обработка не написана void CommandWidget::buttonIdClicked");
+        WhenConsoleLog("Обработка не написана void CommandWidget::buttonIdClicked");
         return;
     }
     }
@@ -414,22 +459,22 @@ void StateWidget::GetStateButtonIdClicked(int id)
     switch (id) {
     case 1:
     {
-        ConsoleLog("Получаем частоты RX");
+        WhenConsoleLog("Получаем частоты RX");
         break;
     }
     case 4:
     {
-        ConsoleLog("Получаем усиление");
+        WhenConsoleLog("Получаем усиление");
         break;
     }
     case 5:
     {
-        ConsoleLog("Получаем ослабление");
+        WhenConsoleLog("Получаем ослабление");
         break;
     }
     default:
     {
-        ConsoleLog("Обработка команды не реализована");
+        WhenConsoleLog("Обработка команды не реализована");
         return;
     }
     }

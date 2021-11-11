@@ -1,12 +1,11 @@
 #include "statepresenter.h"
-
+#include <QDebug>
 #include <QByteArray>
 
-StatePresenter::StatePresenter(TcpSocket *socket)
-    : m_socket(socket)
+StatePresenter::StatePresenter()
+    :m_dataHandler(Q_NULLPTR)
 {
     CreateObjects();
-    CreateConnections();
 }
 
 StatePresenter::~StatePresenter()
@@ -15,9 +14,38 @@ StatePresenter::~StatePresenter()
     delete m_messageSetter;
 }
 
+void StatePresenter::CreateObjects()
+{
+    m_messageSetter=new StateMessageSender();
+    m_messageGetter=new StateMessageGetter();
+}
+
+void StatePresenter::WhenGetMessageWithState(const QByteArray &messageFromDevice)
+{
+    QString currentValue=m_messageGetter->getDataFromMessage(messageFromDevice);
+    Q_EMIT ToConsoleLog(currentValue);
+}
+
+void StatePresenter::DisconnectOldHandler()
+{
+    disconnect(m_dataHandler, &DataHandler::ToConsoleLog, this, &StatePresenter::ToConsoleLog);
+    disconnect(m_dataHandler, &DataHandler::ToStateWidgetConsoleLog, this, &StatePresenter::ToConsoleLog);
+    disconnect(m_dataHandler, &DataHandler::ToButtonsEnabledChanging, this, &StatePresenter::ToSetButtonsEnabled);
+    disconnect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::WhenGetMessageWithState);
+}
+
+void StatePresenter::ConnectHander(DataHandler *dataHandler)
+{
+    m_dataHandler=dataHandler;
+    connect(m_dataHandler, &DataHandler::ToConsoleLog, this, &StatePresenter::ToConsoleLog);
+    connect(m_dataHandler, &DataHandler::ToStateWidgetConsoleLog, this, &StatePresenter::ToConsoleLog);
+    connect(m_dataHandler, &DataHandler::ToButtonsEnabledChanging, this, &StatePresenter::ToSetButtonsEnabled);
+    connect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::WhenGetMessageWithState);
+}
+
 void StatePresenter::SetStateToDevice(quint8 messageId, double firstParam, double SecondParam)
 {
-    m_socket->SetSocketState(0);
+    m_dataHandler->SetHandlerState(HandlerState::Normal);
     QByteArray message;
     switch (messageId) {
     case 1:
@@ -47,7 +75,7 @@ void StatePresenter::SetStateToDevice(quint8 messageId, double firstParam, doubl
     }
     case 6:
     {
-        message=m_messageSetter->createSixCommand(firstParam);
+        message=m_messageSetter->createSixCommand(firstParam, SecondParam);
         break;
     }
     case 7:
@@ -62,36 +90,14 @@ void StatePresenter::SetStateToDevice(quint8 messageId, double firstParam, doubl
     }
 
     }
-    Q_EMIT UpdateHistoryFile();
-    Q_EMIT ConsoleLog("Отправляемое сообщeние " +message.toHex() + " его размер: " + QString::number(message.size()) + " байт сформировано");
-    m_socket->send(message);
+    Q_EMIT ToUpdateHistoryFile();
+    Q_EMIT ToConsoleLog("Отправляемое сообщeние " +message.toHex() + " его размер: " + QString::number(message.size()) + " байт сформировано");
+    m_dataHandler->SendMessageDevice(message);
 }
 
-void StatePresenter::GetStateFromDevice(quint8 messageWantToGetId)
+void StatePresenter::GetStateFromDevice(quint8 messageIdWantToGet)
 {
-    m_socket->SetSocketState(0);
-    quint8 messageIdWantToGet=quint8(messageWantToGetId);
-    QByteArray message;
-    message=m_messageSetter->createSevenCommand(messageIdWantToGet);
-    m_socket->send(message);
-}
-
-void StatePresenter::CreateObjects()
-{
-    m_messageSetter=new StateMessageSender();
-    m_messageGetter=new StateMessageGetter();
-}
-
-void StatePresenter::CreateConnections()
-{
-    connect(m_socket, &TcpSocket::ConsoleLog, this, &StatePresenter::ConsoleLog);
-    connect(m_socket, &TcpSocket::StateConsoleLog, this, &StatePresenter::ConsoleLog);
-    connect(m_socket, &TcpSocket::SetButtonsEnabled, this, &StatePresenter::SetButtonsEnabled);
-    connect(m_socket, &TcpSocket::GetMessageWithState, this, &StatePresenter::GetMessageWithState);
-}
-
-void StatePresenter::GetMessageWithState(QByteArray &byteArray)
-{
-    QString currentValue=m_messageGetter->getDataFromMessage(byteArray);
-    ConsoleLog(currentValue);
+    m_dataHandler->SetHandlerState(HandlerState::Normal);
+    QByteArray message(m_messageSetter->createSevenCommand(messageIdWantToGet));
+    m_dataHandler->SendMessageDevice(message);
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<RefData version="1.0" exporter="EA.25">
+	<DataSet name="Macro List" table="t_genopt where AppliesTo='CMACRO'" filter="Option='#Option#'">
+		<DataRow>
+			<Column name="AppliesTo" value="CMACRO"/>
+			<Column name="Option" value="_AFX_NO_DEBUG_CRT;_AFX_NO_OCC_SUPPORT;_AFX_OLD_EXCEPTIONS;_AFX_PACKING;_AFXDLL;_DEBUG;_MSC_VER;_UNICODE;AFX_CDECL;AFX_COMDAT;AFX_DATA;AFX_DATADEF;AFX_NOVTABLE;AFXAPI;APICALL;BEGIN_INTERFACE_PART ^ END_INTERFACE_PART;BEGIN_PARAM_MAP ^ END_PARAM_MAP;CONTROLLER_API;DECLARE_DYNAMIC();DECLARE_DYNCREATE();DECLARE_INTERFACE_MAP();DECLARE_MESSAGE_MAP();defined();PASCAL;Q_OBJECT;Q_SIGNALS;signals:;SWLAPI;WINAPI;"/>
+		</DataRow>
+	</DataSet>
+</RefData>
