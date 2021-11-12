@@ -20,7 +20,7 @@ Q_SIGNALS:
     void ToConsoleLog(QString message);
     void ToStateWidgetConsoleLog(QString message);
     void ToFirmwareWidgetConsoleLog(QString message);
-    void ToStateGettingFromMessage(const QByteArray &message);
+    void ToStateGettingFromMessage(QByteArray &message);
     void ToRegisterStateChanging(quint8 state);
     void ToReadFirmwareAgain();
     void ToFirmWareFormDeviceLoaded(QByteArray *firmwareFromDevice);

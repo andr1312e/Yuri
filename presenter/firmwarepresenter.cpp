@@ -3,8 +3,6 @@
 #include <QElapsedTimer>
 
 
-using namespace std::chrono;
-
 FirmwarePresenter::FirmwarePresenter(const QMap<QString, quint8> *actions, QObject *parent)
     : QObject(parent)
     , m_dataHandler(Q_NULLPTR)
@@ -49,11 +47,11 @@ void FirmwarePresenter::CreateObjects()
 
 void FirmwarePresenter::InitObjects()
 {
-    m_timer->setInterval(3ms);
+    m_timer->setInterval(3);
     m_timer->setTimerType(Qt::PreciseTimer);
-    m_writingFirmwareTimer->setInterval(10ms);
+    m_writingFirmwareTimer->setInterval(10);
     m_writingFirmwareTimer->setTimerType(Qt::PreciseTimer);
-    m_erasingTimer->setInterval(1s);
+    m_erasingTimer->setInterval(1000);
     m_timer->start();
 }
 
@@ -159,8 +157,9 @@ void FirmwarePresenter::FillLastPageIntoBuffer(QByteArray *partOfFirmware)
 
 void FirmwarePresenter::OnFlash(QByteArray *firmwareFromFile)
 {
-     m_currentPage=0;
-     m_currentAdress=0;
+    m_currentPage=0;
+    m_currentAdress=0;
+    m_isPcbBisy=true;
     m_firmwareFromFile=firmwareFromFile;
     m_timer->stop();
     Q_EMIT ToWidgetsEnable(false);
@@ -181,7 +180,7 @@ void FirmwarePresenter::OnFlash(QByteArray *firmwareFromFile)
 
 void FirmwarePresenter::OnStartReadingFirmWareFromDevice()
 {
-//    m_elapsedTimer.start();
+    //    m_elapsedTimer.start();
     Q_EMIT ToConsoleLog(QStringLiteral("Начали читать страницы с устройства"));
     m_currentPage=0;
     m_currentAdress=0;
@@ -191,7 +190,6 @@ void FirmwarePresenter::OnStartReadingFirmWareFromDevice()
 
 void FirmwarePresenter::OnFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevice)
 {
-//    qDebug()<< "timer" << m_elapsedTimer.elapsed();
     if ((*m_firmwareFromFile)==(*firmwareFromDevice))
     {
         Q_EMIT ToConsoleLog(QStringLiteral("Верификация файла прошла успешно, прошивки совпадают"));
@@ -221,6 +219,7 @@ void FirmwarePresenter::OnReadFirmwareAgain()
     SleepMiliseconds(3);
     m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->m_readFromBufferCommand);
     m_currentAdress=m_currentAdress+m_maxMessageSize;
+    Q_EMIT ToConsoleLog("новый адрес: " + QString::number(m_currentAdress));
 }
 
 void FirmwarePresenter::OnWritingTimerTimeOut()
@@ -264,7 +263,7 @@ void FirmwarePresenter::OnErasingTimerTimeOut()
     Q_EMIT ToConsoleLog(QStringLiteral("Проверяем состояние регистров после форматирования:"));
     if (m_isPcbBisy)
     {
-//        m_isPcbBisy=false;
+        //        m_isPcbBisy=false;
         Q_EMIT ToConsoleLog(QStringLiteral("Занят. Форматируется еще..."));
         Q_EMIT ToConsoleLog(QStringLiteral("Высылаем еще раз запрос на проверку состояния"));
         m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->m_readRegisterStatusCommand);
@@ -323,7 +322,7 @@ void FirmwarePresenter::GetDataFromWidget(const QString &id, const QString &adre
     SendMessageToQueue(idVal, adressVal, lenghtVal);
 }
 
-const QByteArray FirmwarePresenter::GetPartOfFirmwareFromArray(quint32 currentIndex, QByteArray *firmwareFromFile) const
+const QByteArray FirmwarePresenter::GetPartOfFirmwareFromArray(quint32 currentIndex, QByteArray *firmwareFromFile)
 {
     if (currentIndex+m_maxMessageSize<m_firmwareSize)
     {
@@ -337,9 +336,9 @@ const QByteArray FirmwarePresenter::GetPartOfFirmwareFromArray(quint32 currentIn
 
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-
 QLinkedList<QByteArray> FirmwarePresenter::GenerateFirmwarePages(QByteArray *firmwareFromFile)
 {
+    m_firmwareSize=firmwareFromFile->size();
     QLinkedList<QByteArray> pagesOfFirmware;
     quint32 currentAdress=0;
     while(true)
@@ -364,7 +363,7 @@ void FirmwarePresenter::PrepareCommandsToFlash(QLinkedList<QByteArray> &pagesOfF
     quint32 currentAdress=0;
     for(QLinkedList<QByteArray>::iterator it=pagesOfFirmware.begin(); it!=pagesOfFirmware.end(); ++it)
     {
-        m_writinFirmwareCommandsList->append(*m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
+        m_writinFirmwareCommandsList->push_back(*m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
         if(it->count()==m_maxMessageSize)
         {
             FillFullPageIntoBuffer(&*it);
@@ -373,7 +372,7 @@ void FirmwarePresenter::PrepareCommandsToFlash(QLinkedList<QByteArray> &pagesOfF
         {
             FillLastPageIntoBuffer(&*it);
         }
-        m_writinFirmwareCommandsList->append(m_firmwareMessageMaker->WriteBufferToFlashCommand(currentAdress, it->length()));
+        m_writinFirmwareCommandsList->push_back(m_firmwareMessageMaker->WriteBufferToFlashCommand(currentAdress, it->length()));
         currentAdress+=m_maxMessageSize;
     }
     m_writingFirmwareCommandsListIterator=m_writinFirmwareCommandsList->begin();
@@ -387,6 +386,7 @@ void FirmwarePresenter::PrepareCommandsToFlash(QLinkedList<QByteArray> &pagesOfF
 
 QList<QByteArray> FirmwarePresenter::GenerateFirmwarePages(QByteArray *firmwareFromFile)
 {
+    m_firmwareSize=firmwareFromFile->size();
     QList<QByteArray> pagesOfFirmware;
     quint32 currentAdress=0;
     while(true)

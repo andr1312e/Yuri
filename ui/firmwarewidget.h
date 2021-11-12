@@ -16,7 +16,6 @@
 #include "presenter/firmwarepresenter.h"
 
 #include "ui/firmwareflasherwidget.h"
-#include "ui/firmwarereaderwidget.h"
 
 class TcpHandler;
 
@@ -68,7 +67,6 @@ private:
     QLineEdit *m_numOfBytesLineEdit;
     QPushButton *m_sendCommandButton;
     QPlainTextEdit *m_log;
-    FirmwareReaderWidget *m_firmwareReaderWidget;
     FirmwareFlasherWidget *m_firmwareFlasherWidget;
 
     QProgressBar *m_progressBar;

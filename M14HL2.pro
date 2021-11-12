@@ -1,7 +1,7 @@
 QT       += core network widgets serialport
 
 CONFIG += c++latest
-VERSION = 3.2.0
+VERSION = 3.2.4
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 TARGET = "YUstirovojchnyj_komplekt"
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -21,7 +21,6 @@ SOURCES += \
     connections\tcphandler.cpp \
     ui/connectionwidget.cpp \
     ui/firmwareflasherwidget.cpp \
-    ui/firmwarereaderwidget.cpp \
     ui/firmwarewidget.cpp \
     ui/infowidget.cpp \
     ui/statewidget.cpp
@@ -39,7 +38,6 @@ HEADERS += \
     connections\tcphandler.h \
     ui/connectionwidget.h \
     ui/firmwareflasherwidget.h \
-    ui/firmwarereaderwidget.h \
     ui/firmwarewidget.h \
     ui/infowidget.h \
     ui/statewidget.h

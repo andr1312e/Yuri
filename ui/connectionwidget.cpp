@@ -1,8 +1,5 @@
 #include "connectionwidget.h"
 #include <QDebug>
-#include <chrono>
-
-using namespace std::chrono_literals;
 
 ConnectionWidget::ConnectionWidget(QWidget *parent)
     : QWidget(parent)
@@ -38,7 +35,7 @@ void ConnectionWidget::CreateObjects()
 void ConnectionWidget::InitObjects()
 {
     m_checkSerialPortsTimer->setTimerType(Qt::VeryCoarseTimer);
-    m_checkSerialPortsTimer->setInterval(2s);
+    m_checkSerialPortsTimer->setInterval(2000);
     m_checkSerialPortsTimer->setSingleShot(false);
     m_checkSerialPortsTimer->start();
 }
@@ -179,6 +176,6 @@ bool ConnectionWidget::IsComPortBisy(const QSerialPortInfo *info)
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     return info->isBusy();
 #else
-    return !info->isNull();
+    return info->isNull();
 #endif
 }

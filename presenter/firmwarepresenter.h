@@ -63,7 +63,7 @@ public:
 private:
     void FillFullPageIntoBuffer(QByteArray *partOfFirmware);
     void FillLastPageIntoBuffer(QByteArray *partOfFirmware);
-    const QByteArray GetPartOfFirmwareFromArray(quint32 currentIndex, QByteArray *firmwareFromFile) const;
+    const QByteArray GetPartOfFirmwareFromArray(quint32 currentIndex, QByteArray *firmwareFromFile);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QLinkedList<QByteArray> GenerateFirmwarePages (QByteArray *firmwareFromFile);
     void PrepareCommandsToFlash(QLinkedList<QByteArray> &pagesOfFirmware);

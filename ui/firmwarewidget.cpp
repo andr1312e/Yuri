@@ -37,7 +37,6 @@ FirmWareWidget::~FirmWareWidget()
     delete m_sendCommandButton;
     delete m_log;
 
-    delete m_firmwareReaderWidget;
     delete m_firmwareFlasherWidget;
 
     delete m_splitter;
@@ -74,7 +73,6 @@ void FirmWareWidget::CreateUI()
     m_sendCommandButton=new QPushButton();
     m_log=new QPlainTextEdit();
 
-    m_firmwareReaderWidget=new FirmwareReaderWidget(this);
     m_firmwareFlasherWidget=new FirmwareFlasherWidget(this);
 
     m_progressBar=new QProgressBar();
@@ -111,7 +109,6 @@ void FirmWareWidget::InsertWidgetsIntoLayout()
 void FirmWareWidget::FillUI()
 {
     m_progressBar->setRange(0, 100);
-    m_splitter->addWidget(m_firmwareReaderWidget);
     m_splitter->addWidget(m_firmwareFlasherWidget);
     m_adressForWriteLineEdit->setText(QStringLiteral("0"));
     m_numOfBytesLineEdit->setText(QStringLiteral("15"));
@@ -132,9 +129,8 @@ void FirmWareWidget::ConnectObjects()
 {
     connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToFlash, m_firmwarePresenter, &FirmwarePresenter::OnFlash);
     connect(m_sendCommandButton, &QPushButton::clicked, this, &FirmWareWidget::OnUserCommandButtonClicked);
-    connect(m_firmwareReaderWidget, &FirmwareReaderWidget::StartReadingFirmWareFromDevice, m_firmwarePresenter, &FirmwarePresenter::OnStartReadingFirmWareFromDevice);
+    connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::StartReadingFirmWareFromDevice, m_firmwarePresenter, &FirmwarePresenter::OnStartReadingFirmWareFromDevice);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToConsoleLog,  this, &FirmWareWidget::WhenConsoleLog);
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarUpdate, m_firmwareReaderWidget, &FirmwareReaderWidget::WhenProgressBarUpdated);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToSetButtonsEnabled, this, &FirmWareWidget::SetButtonsEnabled);
     connect(m_restarPushButton, &QPushButton::clicked, [&](){m_firmwarePresenter->SendMessageToQueue(0, 0, 0);});
     connect(m_firmwarePresenter, &FirmwarePresenter::ToSetMaximumCountOfPages, this, &FirmWareWidget::SetMaximumProgressBar);
@@ -153,7 +149,6 @@ void FirmWareWidget::OnUserCommandButtonClicked()
 void FirmWareWidget::SetButtonsEnabled(int state)
 {
     m_actionComboBox->setEnabled(state);
-    m_firmwareReaderWidget->setEnabled(state);
     m_firmwareFlasherWidget->setEnabled(state);
     m_sendCommandButton->setEnabled(state);
 }
@@ -171,7 +166,6 @@ void FirmWareWidget::UpdateProgressBar(int page)
 
 void FirmWareWidget::SetWidgetsEnable(bool state)
 {
-    m_firmwareReaderWidget->setEnabled(state);
     m_firmwareFlasherWidget->setEnabled(state);
     m_sendCommandButton->setEnabled(state);
     m_restarPushButton->setEnabled(state);

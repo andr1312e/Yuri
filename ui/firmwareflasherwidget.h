@@ -27,6 +27,8 @@ private:
 Q_SIGNALS:
     void ToConsoleLog(QString message);
     void ToFlash(QByteArray *firmware);
+    void StartReadingFirmWareFromDevice();
+
 private Q_SLOTS:
     void WhenAddNewFirmwareButtonClicked();
 private:
@@ -35,6 +37,7 @@ private:
     QLabel *m_fileNameValue;
     QPushButton *m_addNewFileButton;
     QPushButton *m_flashButton;
+    QPushButton *m_readFirmwareButton;
     QLabel *m_firmWareProcessLabel;
     QCheckBox *m_checkFirmwareCheckBox;
     QCheckBox *m_restartFirmwareCheckBox;

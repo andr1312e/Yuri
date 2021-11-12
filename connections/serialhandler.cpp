@@ -9,6 +9,7 @@ SerialHandler::SerialHandler(QObject *parent)
 
 SerialHandler::~SerialHandler()
 {
+    FromHostDisconnect();
     delete m_connectionPort;
 }
 
@@ -123,5 +124,6 @@ void SerialHandler::FromHostDisconnect()
     if(m_connectionPort->isOpen())
     {
         m_connectionPort->close();
+        DataHandler::FromHostDisconnected();
     }
 }

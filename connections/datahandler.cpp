@@ -38,6 +38,7 @@ void DataHandler::SetHandlerState(HandlerState state)
 void DataHandler::SendMessageToDevice(const QByteArray &array)
 {
     WriteMessageToBuffer(array);
+    Q_EMIT ToConsoleLog(QString::number(array.size())+" выслали "  + QString::fromLatin1(array.toHex()));
     FlushBuffer();
 }
 
@@ -61,35 +62,29 @@ void DataHandler::ToHostConnected()
 void DataHandler::NormalStateMessageAnalyze(const QByteArray &incomingByteArray)
 {
     m_readyReadBuffer->append(incomingByteArray);
-    if(!m_readyReadBuffer->isEmpty())
+    if (m_readyReadBuffer->count()<3)
     {
-        if (m_readyReadBuffer->count()<3)
-        {
 #if QT_VERSION > QT_VERSION_CHECK(5, 10, 0)
-            if (static_cast<char>(0x07)==m_readyReadBuffer->front())
+        if (static_cast<char>(0x07)!=m_readyReadBuffer->front())
 #else
-            if (static_cast<char>(0x07)==m_readyReadBuffer->at(0))
+        if (static_cast<char>(0x07)!=m_readyReadBuffer->at(0))
 #endif
-            {
-
-            }
-            else
-            {
-                Q_EMIT ToStateWidgetConsoleLog("Получили сообщение ("+ QString::fromLatin1(incomingByteArray.toHex())+") - OK");
-            }
-
-        }
-        else
         {
-            Q_EMIT ToStateWidgetConsoleLog("Получили сообщение c состоянием: "+ QString::fromLatin1(incomingByteArray.toHex()));
-            Q_EMIT ToStateGettingFromMessage(incomingByteArray);
+            Q_EMIT ToStateWidgetConsoleLog("Получили сообщение ("+ QString::fromLatin1(incomingByteArray.toHex())+") - OK");
+            m_readyReadBuffer->clear();
         }
+    }
+    else
+    {
+        Q_EMIT ToStateWidgetConsoleLog("Получили сообщение c состоянием: "+ QString::fromLatin1(incomingByteArray.toHex()));
+        Q_EMIT ToStateGettingFromMessage(*m_readyReadBuffer);
     }
 }
 
 void DataHandler::ReadFirmwareMessageAnalyze(const QByteArray &incomingByteArray)
 {
     m_readyReadBuffer->append(incomingByteArray);
+    Q_EMIT ToConsoleLog(QString::number(m_readyReadBuffer->size())+" cчитали"  + QString::fromLatin1(m_readyReadBuffer->toHex()));
     if (m_readyReadBuffer->count()<m_maxMessageBytesCount)
     {
         return;
@@ -104,6 +99,7 @@ void DataHandler::ReadFirmwareMessageAnalyze(const QByteArray &incomingByteArray
         }
         else
         {
+            Q_EMIT ToConsoleLog("cчитали" + QString::fromLatin1(m_readyReadBuffer->toHex()));
             m_firmwareFromDevice->append(*m_readyReadBuffer);
             m_readyReadBuffer->clear();
             Q_EMIT ToReadFirmwareAgain();

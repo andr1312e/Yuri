@@ -1,5 +1,4 @@
 #include "tcphandler.h"
-//#include <QNetworkProxy>
 
 TcpHandler::TcpHandler(QObject *parent)
     : DataHandler(parent)
@@ -10,6 +9,7 @@ TcpHandler::TcpHandler(QObject *parent)
 
 TcpHandler::~TcpHandler()
 {
+    FromHostDisconnect();
     delete m_connectionPort;
 }
 
@@ -25,7 +25,7 @@ void TcpHandler::ConnectObjects()
     connect(m_connectionPort, &QTcpSocket::readyRead, this, &TcpHandler::OnReadyRead);
     connect(m_connectionPort, &QTcpSocket::disconnected, [&](){DataHandler::FromHostDisconnected();});
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    connect(m_connectionPort, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &TcpHandler::WhenErrorOccurred);
+    connect(m_connectionPort, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &TcpHandler::OnErrorOccurred);
 #else
     connect(m_connectionPort, &QTcpSocket::errorOccurred, this, &TcpHandler::OnErrorOccurred);
 #endif

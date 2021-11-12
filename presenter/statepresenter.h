@@ -16,7 +16,7 @@ private:
     void CreateObjects();
 
 private Q_SLOTS:
-    void WhenGetMessageWithState(const QByteArray &messageFromDevice);
+    void WhenGetMessageWithState(QByteArray &messageFromDevice);
 Q_SIGNALS:
     void ToSetButtonsEnabled(int state);
     void ToConsoleLog(QString message);
