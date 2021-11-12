@@ -31,17 +31,17 @@ private:
     void FillUI();
     void ConnectObjects();
 public Q_SLOTS:
-    void WhenConsoleLog(const QString message);
+    void OnConsoleLog(const QString message);
 Q_SIGNALS:
     void ToSetStateButtonIdClicked(int id);
     void ToDataHanderChanged();
 
 private Q_SLOTS:
     void OnUserCommandButtonClicked();
-    void SetButtonsEnabled(int state);
-    void SetMaximumProgressBar(int top);
-    void UpdateProgressBar(int page);
-    void SetWidgetsEnable(bool state);
+    void OnSetButtonsEnabled(int state);
+    void OnSetMaximumProgressBar(int top);
+    void OnUpdateProgressBar(int page);
+    void OnSetWidgetsEnable(bool state);
 public:
     void DisconnectOldHander();
     void ConnectHander(DataHandler *dataHandler);

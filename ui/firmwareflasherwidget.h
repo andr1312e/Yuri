@@ -30,7 +30,7 @@ Q_SIGNALS:
     void StartReadingFirmWareFromDevice();
 
 private Q_SLOTS:
-    void WhenAddNewFirmwareButtonClicked();
+    void OnAddNewFirmwareButtonClicked();
 private:
     QVBoxLayout *m_mainLayout;
     QLabel *m_fileNameLabel;

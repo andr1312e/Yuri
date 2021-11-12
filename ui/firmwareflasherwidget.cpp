@@ -73,12 +73,12 @@ void FirmwareFlasherWidget::FillUI()
 
 void FirmwareFlasherWidget::ConnectObjects()
 {
-    connect(m_addNewFileButton, &QPushButton::clicked, this, &FirmwareFlasherWidget::WhenAddNewFirmwareButtonClicked);
+    connect(m_addNewFileButton, &QPushButton::clicked, this, &FirmwareFlasherWidget::OnAddNewFirmwareButtonClicked);
     connect(m_flashButton, &QPushButton::clicked,[&](bool checked){Q_UNUSED(checked) Q_EMIT ToFlash(&m_firmwareFromFile);});
     connect(m_readFirmwareButton, &QPushButton::clicked, this, &FirmwareFlasherWidget::StartReadingFirmWareFromDevice);
 }
 
-void FirmwareFlasherWidget::WhenAddNewFirmwareButtonClicked()
+void FirmwareFlasherWidget::OnAddNewFirmwareButtonClicked()
 {
     QString strDesktop = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     QString pathToFirmware=QFileDialog::getOpenFileName(this, QStringLiteral("Выберите файл прошивки"), strDesktop,  QStringLiteral("Файл настроек (*.bit)"));

@@ -43,7 +43,7 @@ FirmWareWidget::~FirmWareWidget()
     delete m_progressBar;
 }
 
-void FirmWareWidget::WhenConsoleLog(const QString message)
+void FirmWareWidget::OnConsoleLog(const QString message)
 {
     m_log->appendPlainText(message);
 }
@@ -130,10 +130,10 @@ void FirmWareWidget::ConnectObjects()
     connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToFlash, m_firmwarePresenter, &FirmwarePresenter::OnFlash);
     connect(m_sendCommandButton, &QPushButton::clicked, this, &FirmWareWidget::OnUserCommandButtonClicked);
     connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::StartReadingFirmWareFromDevice, m_firmwarePresenter, &FirmwarePresenter::OnStartReadingFirmWareFromDevice);
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToConsoleLog,  this, &FirmWareWidget::WhenConsoleLog);
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToSetButtonsEnabled, this, &FirmWareWidget::SetButtonsEnabled);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToConsoleLog,  this, &FirmWareWidget::OnConsoleLog);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToSetButtonsEnabled, this, &FirmWareWidget::OnSetButtonsEnabled);
     connect(m_restarPushButton, &QPushButton::clicked, [&](){m_firmwarePresenter->SendMessageToQueue(0, 0, 0);});
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToSetMaximumCountOfPages, this, &FirmWareWidget::SetMaximumProgressBar);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToSetMaximumCountOfPages, this, &FirmWareWidget::OnSetMaximumProgressBar);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarUpdate, m_progressBar, &QProgressBar::setValue);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToWidgetsEnable, this, &FirmWareWidget::SetWidgetsEnable);
 }
@@ -146,14 +146,14 @@ void FirmWareWidget::OnUserCommandButtonClicked()
     m_firmwarePresenter->GetDataFromWidget(comboBoxValue, adress, lenght);
 }
 
-void FirmWareWidget::SetButtonsEnabled(int state)
+void FirmWareWidget::OnSetButtonsEnabled(int state)
 {
     m_actionComboBox->setEnabled(state);
     m_firmwareFlasherWidget->setEnabled(state);
     m_sendCommandButton->setEnabled(state);
 }
 
-void FirmWareWidget::SetMaximumProgressBar(int top)
+void FirmWareWidget::OnSetMaximumProgressBar(int top)
 {
     m_progressBar->reset();
     m_progressBar->setRange(0, top);

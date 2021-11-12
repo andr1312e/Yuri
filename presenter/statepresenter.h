@@ -1,5 +1,6 @@
 #ifndef PRESENTER_STATEPRESENTER_H
 #define PRESENTER_STATEPRESENTER_H
+
 #include <QObject>
 #include <QtGlobal>
 #include "connections/datahandler.h"
@@ -16,7 +17,7 @@ private:
     void CreateObjects();
 
 private Q_SLOTS:
-    void WhenGetMessageWithState(QByteArray &messageFromDevice);
+    void OnGetMessageWithState(QByteArray &messageFromDevice);
 Q_SIGNALS:
     void ToSetButtonsEnabled(int state);
     void ToConsoleLog(QString message);

@@ -36,13 +36,13 @@ Q_SIGNALS:
 
 
 public Q_SLOTS:
-    void SetStateButtonIdClicked(int id);
-    void GetStateButtonIdClicked(int messageWantToGet);
-    void SetButtonEnabled(bool state);
+    void OnSetStateButtonIdClicked(int id);
+    void OnGetStateButtonIdClicked(int messageWantToGet);
+    void OnSetButtonEnabled(bool state);
     void OnConsoleLog(QString message);
 
 private:
-    void updateHistory();
+    void UpdateHistoryFile();
 private:
     QVBoxLayout *m_mainLayout;
     QHBoxLayout *m_speedLayout;

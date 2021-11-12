@@ -59,7 +59,7 @@ void MainWindow::FillUI()
 void MainWindow::ConnectObjects()
 {
     connect(m_connectionWidget, &ConnectionWidget::ToConsoleLog, m_stateWidget, &StateWidget::OnConsoleLog);
-    connect(m_connectionWidget, &ConnectionWidget::ToConsoleLog, m_firmwareWidget, &FirmWareWidget::WhenConsoleLog);
+    connect(m_connectionWidget, &ConnectionWidget::ToConsoleLog, m_firmwareWidget, &FirmWareWidget::OnConsoleLog);
     connect(m_connectionWidget, &ConnectionWidget::ToConnectEthernetMoxa, this, &MainWindow::OnConnectToInternetMoxa );
     connect(m_connectionWidget, &ConnectionWidget::ToConnectUsbMoxa, this, &MainWindow::OnConnectToUsbMoxa);
     connect(m_connectionWidget, &ConnectionWidget::ToDisconnectFromMoxa,this, &MainWindow::OnDisconnectFromMoxa);

@@ -246,7 +246,7 @@ void StateWidget::FillUI()
     m_log->appendPlainText("Не подключено к ответчику");
     m_logClearButton->setText("Консоль отчистить");
 
-    SetButtonEnabled(false);
+    OnSetButtonEnabled(false);
 
 }
 
@@ -256,17 +256,17 @@ void StateWidget::ConnectObjects()
     connect(m_doplerFreqLineEdit, &QLineEdit::textEdited, this, &StateWidget::ChangeSpeedLineEdit);
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
     connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::OnConsoleLog);
-    connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::SetButtonEnabled);
+    connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::OnSetButtonEnabled);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(m_sendStateButtonsGroup, &QButtonGroup::idClicked, this, &StateWidget::SetStateButtonIdClicked);
     connect(m_getStateButtonGroup, &QButtonGroup::idClicked, this, &StateWidget::GetStateButtonIdClicked);
 #else
-    connect(m_sendStateButtonsGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::SetStateButtonIdClicked);
-    connect(m_getStateButtonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::GetStateButtonIdClicked);
+    connect(m_sendStateButtonsGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::OnSetStateButtonIdClicked);
+    connect(m_getStateButtonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::OnGetStateButtonIdClicked);
 #endif
 }
 
-void StateWidget::updateHistory()
+void StateWidget::UpdateHistoryFile()
 {
     QString time="\n"+QDateTime::currentDateTime().toString("hh:mm:ss");
     int space=5;
@@ -290,7 +290,7 @@ void StateWidget::OnConsoleLog(QString message)
     m_log->appendPlainText(time+ " "+ message);
 }
 
-void StateWidget::SetStateButtonIdClicked(int id)
+void StateWidget::OnSetStateButtonIdClicked(int id)
 {
     double firstValue=0.0, secondValue=0.0;
     switch (id) {
@@ -451,10 +451,10 @@ void StateWidget::SetStateButtonIdClicked(int id)
     }
     }
     m_statePresenter->SetStateToDevice(id, firstValue, secondValue);
-    updateHistory();
+    UpdateHistoryFile();
 }
 
-void StateWidget::GetStateButtonIdClicked(int id)
+void StateWidget::OnGetStateButtonIdClicked(int id)
 {
     switch (id) {
     case 1:
@@ -481,7 +481,7 @@ void StateWidget::GetStateButtonIdClicked(int id)
     m_statePresenter->GetStateFromDevice(id);
 }
 
-void StateWidget::SetButtonEnabled(bool state)
+void StateWidget::OnSetButtonEnabled(bool state)
 {
     m_attenuatorComboBox->setEnabled(state);
     m_noiseComboBox->setEnabled(state);

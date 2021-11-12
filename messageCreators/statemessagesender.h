@@ -1,5 +1,6 @@
 #ifndef MESSAGECREATORS_STATEMESSAGESENDER_H
 #define MESSAGECREATORS_STATEMESSAGESENDER_H
+
 #include <QByteArray>
 #include <QIODevice>
 #include <QDataStream>
@@ -19,6 +20,9 @@ public:
     QByteArray createFiveCommand(double AttenuatorDb);
     QByteArray createSixCommand(double noiseType, double noiseValue);
     QByteArray createSevenCommand(quint8 param);
+private:
+    const double c=299792458.0;
+    const double f=245000000.0;
 private:
     quint16 calculateINT_Rx(double Fvco) const;
     quint32 calculateFRACT_Rx(double Fvco) const;

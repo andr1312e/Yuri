@@ -20,7 +20,7 @@ void StatePresenter::CreateObjects()
     m_messageGetter=new StateMessageGetter();
 }
 
-void StatePresenter::WhenGetMessageWithState(QByteArray &messageFromDevice)
+void StatePresenter::OnGetMessageWithState(QByteArray &messageFromDevice)
 {
     QString currentValue=m_messageGetter->getDataFromMessage(messageFromDevice);
     Q_EMIT ToConsoleLog(currentValue);
@@ -31,7 +31,7 @@ void StatePresenter::DisconnectOldHandler()
     disconnect(m_dataHandler, &DataHandler::ToConsoleLog, this, &StatePresenter::ToConsoleLog);
     disconnect(m_dataHandler, &DataHandler::ToStateWidgetConsoleLog, this, &StatePresenter::ToConsoleLog);
     disconnect(m_dataHandler, &DataHandler::ToButtonsEnabledChanging, this, &StatePresenter::ToSetButtonsEnabled);
-    disconnect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::WhenGetMessageWithState);
+    disconnect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::OnGetMessageWithState);
 }
 
 void StatePresenter::ConnectHander(DataHandler *dataHandler)
@@ -40,7 +40,7 @@ void StatePresenter::ConnectHander(DataHandler *dataHandler)
     connect(m_dataHandler, &DataHandler::ToConsoleLog, this, &StatePresenter::ToConsoleLog);
     connect(m_dataHandler, &DataHandler::ToStateWidgetConsoleLog, this, &StatePresenter::ToConsoleLog);
     connect(m_dataHandler, &DataHandler::ToButtonsEnabledChanging, this, &StatePresenter::ToSetButtonsEnabled);
-    connect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::WhenGetMessageWithState);
+    connect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::OnGetMessageWithState);
 }
 
 void StatePresenter::SetStateToDevice(quint8 messageId, double firstParam, double SecondParam)
