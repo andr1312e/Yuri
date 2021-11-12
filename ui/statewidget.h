@@ -39,7 +39,7 @@ public Q_SLOTS:
     void SetStateButtonIdClicked(int id);
     void GetStateButtonIdClicked(int messageWantToGet);
     void SetButtonEnabled(bool state);
-    void WhenConsoleLog(QString message);
+    void OnConsoleLog(QString message);
 
 private:
     void updateHistory();

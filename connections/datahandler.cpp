@@ -1,13 +1,16 @@
 #include "datahandler.h"
-#include <QDebug>
-#include <QFile>
 
 DataHandler::DataHandler(QObject *parent)
     : QObject(parent)
+    , m_maxNumOfLinesToStop(6)
+    , pcbStateMessageBytesCount(1)
+    , m_maxMessageBytesCount(255)
+    , m_endOfFirmwareSymbol(static_cast<char>(0xff))
     , m_gettingMessageType(Normal)
-    , m_readyReadBuffer(new QByteArray())
     , m_currentStopLineNumber(0)
-    , m_stopHexArray(new QByteArray(256, static_cast<char>(0xff)))
+    , m_readyReadBuffer(new QByteArray())
+    , m_stopReadingFirmwareArray(new QByteArray(256, m_endOfFirmwareSymbol))
+    , m_firmwareFromDevice(new QByteArray())
 {
 
 }
@@ -15,7 +18,8 @@ DataHandler::DataHandler(QObject *parent)
 DataHandler::~DataHandler()
 {
     delete m_readyReadBuffer;
-    delete m_stopHexArray;
+    delete m_stopReadingFirmwareArray;
+    delete m_firmwareFromDevice;
 }
 
 void DataHandler::ClearBuffer()
@@ -27,72 +31,80 @@ void DataHandler::ClearBuffer()
 void DataHandler::SetHandlerState(HandlerState state)
 {
     m_gettingMessageType=state;
-    m_readyReadBuffer->clear();
+    ClearBuffer();
 }
 
 
-void DataHandler::SendMessageDevice(const QByteArray &array)
+void DataHandler::SendMessageToDevice(const QByteArray &array)
 {
     WriteMessageToBuffer(array);
     FlushBuffer();
 }
 
+void DataHandler::SetConnectionState(quint8 state)
+{
+    m_gettingMessageType=static_cast<HandlerState>(state);
+}
+
+void DataHandler::FromHostDisconnected()
+{
+    Q_EMIT ToConsoleLog(QStringLiteral("Отключено..."));
+    Q_EMIT ToButtonsEnabledChanging(false);
+}
+
+void DataHandler::ToHostConnected()
+{
+    Q_EMIT ToConsoleLog(QStringLiteral("Подключились"));
+    Q_EMIT ToButtonsEnabledChanging(true);
+}
+
 void DataHandler::NormalStateMessageAnalyze(const QByteArray &incomingByteArray)
 {
-    if (m_readyReadBuffer->count()<3)
+    m_readyReadBuffer->append(incomingByteArray);
+    if(!m_readyReadBuffer->isEmpty())
     {
-        if (m_readyReadBuffer->front()==static_cast<char>(0x07))
+        if (m_readyReadBuffer->count()<3)
         {
-            m_readyReadBuffer->append(incomingByteArray);
+#if QT_VERSION > QT_VERSION_CHECK(5, 10, 0)
+            if (static_cast<char>(0x07)==m_readyReadBuffer->front())
+#else
+            if (static_cast<char>(0x07)==m_readyReadBuffer->at(0))
+#endif
+            {
+
+            }
+            else
+            {
+                Q_EMIT ToStateWidgetConsoleLog("Получили сообщение ("+ QString::fromLatin1(incomingByteArray.toHex())+") - OK");
+            }
+
         }
         else
         {
-            Q_EMIT ToStateWidgetConsoleLog("Получили сообщение ("+ QString(incomingByteArray.toHex())+") - OK");
+            Q_EMIT ToStateWidgetConsoleLog("Получили сообщение c состоянием: "+ QString::fromLatin1(incomingByteArray.toHex()));
+            Q_EMIT ToStateGettingFromMessage(incomingByteArray);
         }
-    }
-    else
-    {
-        Q_EMIT ToStateWidgetConsoleLog("Получили сообщение c состоянием: "+ QString::fromLatin1(incomingByteArray.toHex()));
-        Q_EMIT ToStateGettingFromMessage(incomingByteArray);
     }
 }
 
 void DataHandler::ReadFirmwareMessageAnalyze(const QByteArray &incomingByteArray)
 {
     m_readyReadBuffer->append(incomingByteArray);
-    if (m_readyReadBuffer->count()<maxMessageBytesCount)
+    if (m_readyReadBuffer->count()<m_maxMessageBytesCount)
     {
         return;
     }
     else
     {
-        if (isFullFArray())
+        if (IsArrayEndOfFirmware())
         {
             m_readyReadBuffer->clear();
-//            QFile file("firmware.bin");
-//            if(file.open(QIODevice::WriteOnly))
-//            {
-//                file.write(m_firmwareFromDevice);
-//                file.close();
-//            }
-            int fBytesCount=0;
-            for (int i=m_firmwareFromDevice.count()-1; i>0; i--)
-            {
-                if(m_firmwareFromDevice.at(i)==static_cast<char>(0xff))
-                {
-                    fBytesCount++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            m_firmwareFromDevice.chop(fBytesCount);
-            Q_EMIT ToFirmWareFormDeviceLoaded(&m_firmwareFromDevice);
+            RemoveLastFBytesInFimware();
+            Q_EMIT ToFirmWareFormDeviceLoaded(m_firmwareFromDevice);
         }
         else
         {
-            m_firmwareFromDevice.append(*m_readyReadBuffer);
+            m_firmwareFromDevice->append(*m_readyReadBuffer);
             m_readyReadBuffer->clear();
             Q_EMIT ToReadFirmwareAgain();
         }
@@ -116,9 +128,9 @@ void DataHandler::FlashFirmwareMessageAnalyze(const QByteArray &incomingMessage)
     }
 }
 
-bool DataHandler::isFullFArray() const
+bool DataHandler::IsArrayEndOfFirmware() const
 {
-    if ((*m_stopHexArray)==(*m_readyReadBuffer))
+    if ((*m_stopReadingFirmwareArray)==(*m_readyReadBuffer))
     {
         return true;
     }
@@ -126,4 +138,21 @@ bool DataHandler::isFullFArray() const
     {
         return false;
     }
+}
+
+void DataHandler::RemoveLastFBytesInFimware()
+{
+    int fBytesCount=0;
+    for (int i=m_firmwareFromDevice->count()-1; i>0; i--)
+    {
+        if(m_endOfFirmwareSymbol==m_firmwareFromDevice->at(i))
+        {
+            fBytesCount++;
+        }
+        else
+        {
+            break;
+        }
+    }
+    m_firmwareFromDevice->chop(fBytesCount);
 }

@@ -130,9 +130,9 @@ void FirmWareWidget::FillUI()
 
 void FirmWareWidget::ConnectObjects()
 {
-    connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToFlash, m_firmwarePresenter, &FirmwarePresenter::WhenFlash);
+    connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToFlash, m_firmwarePresenter, &FirmwarePresenter::OnFlash);
     connect(m_sendCommandButton, &QPushButton::clicked, this, &FirmWareWidget::OnUserCommandButtonClicked);
-    connect(m_firmwareReaderWidget, &FirmwareReaderWidget::StartReadingFirmWareFromDevice, m_firmwarePresenter, &FirmwarePresenter::WhenStartReadingFirmWareFromDevice);
+    connect(m_firmwareReaderWidget, &FirmwareReaderWidget::StartReadingFirmWareFromDevice, m_firmwarePresenter, &FirmwarePresenter::OnStartReadingFirmWareFromDevice);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToConsoleLog,  this, &FirmWareWidget::WhenConsoleLog);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarUpdate, m_firmwareReaderWidget, &FirmwareReaderWidget::WhenProgressBarUpdated);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToSetButtonsEnabled, this, &FirmWareWidget::SetButtonsEnabled);

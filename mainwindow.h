@@ -25,9 +25,9 @@ private:
     void FillUI();
     void ConnectObjects();
 private Q_SLOTS:
-    void WhenConnectToInternetMoxa(const QString &adress, const QString &port);
-    void WhenConnectToUsbMoxa(const QString &comPortName);
-    void WhenDisconnectFromMoxa();
+    void OnConnectToInternetMoxa(const QString &adress, const QString &port);
+    void OnConnectToUsbMoxa(const QString &comPortName);
+    void OnDisconnectFromMoxa();
 
 private:
     QStatusBar *m_statusBar;

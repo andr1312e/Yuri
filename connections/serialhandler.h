@@ -1,12 +1,9 @@
 #ifndef CONNECTIONS_SERIALHANDLER_H
 #define CONNECTIONS_SERIALHANDLER_H
 
-#include <QByteArray>
-#include <QObject>
 #include <QSerialPort>
 
 #include "connections/datahandler.h"
-#include "constantsandfunctions.h"
 
 class SerialHandler : public DataHandler
 {
@@ -19,17 +16,15 @@ private:
     virtual void ConnectObjects() override;
 
 private Q_SLOTS:
-    void WhenReadyRead();
-    void WhenErrorOccurred(QSerialPort::SerialPortError error);
+    void OnReadyRead();
+    void OnErrorOccurred(QSerialPort::SerialPortError error);
 
 public:
-    void ConnectToHost(const QString &comPortName);
+    void TryToConnectToHost(const QString &comPortName);
 public:
-    virtual void ClearBuffer() override;
-    virtual void SetConnectionState(quint8 state) override;
     virtual void WriteMessageToBuffer(const QByteArray &array) override;
     virtual void FlushBuffer() override;
-    virtual void DisconnectByUser() override;
+    virtual void FromHostDisconnect() override;
 private:
     QSerialPort *m_connectionPort;
 };

@@ -51,38 +51,38 @@ void MainWindow::InsertWidgetsIntoMainWindow()
 
 void MainWindow::FillUI()
 {
-    setWindowTitle(QStringLiteral("Настройка Юстировочного оборудования блок М14ХЛ2 Плата СЮИТ.687263.035"));
+    QString qtVersion=qVersion();
+    setWindowTitle( "Настройка Юстировочного оборудования блок М14ХЛ2 Плата СЮИТ.687263.035 Qt " +qtVersion + " Версия "+ APP_VERSION);
     m_statusBar->showMessage(QStringLiteral("Не подключено"));
 }
 
 void MainWindow::ConnectObjects()
 {
-    connect(m_connectionWidget, &ConnectionWidget::ToConsoleLog, m_stateWidget, &StateWidget::WhenConsoleLog);
+    connect(m_connectionWidget, &ConnectionWidget::ToConsoleLog, m_stateWidget, &StateWidget::OnConsoleLog);
     connect(m_connectionWidget, &ConnectionWidget::ToConsoleLog, m_firmwareWidget, &FirmWareWidget::WhenConsoleLog);
-    connect(m_connectionWidget, &ConnectionWidget::ToConnectEthernetMoxa, this, &MainWindow::WhenConnectToInternetMoxa );
-    connect(m_connectionWidget, &ConnectionWidget::ToConnectUsbMoxa, this, &MainWindow::WhenConnectToUsbMoxa);
-    connect(m_connectionWidget, &ConnectionWidget::ToDisconnectFromMoxa,this, &MainWindow::WhenDisconnectFromMoxa);
+    connect(m_connectionWidget, &ConnectionWidget::ToConnectEthernetMoxa, this, &MainWindow::OnConnectToInternetMoxa );
+    connect(m_connectionWidget, &ConnectionWidget::ToConnectUsbMoxa, this, &MainWindow::OnConnectToUsbMoxa);
+    connect(m_connectionWidget, &ConnectionWidget::ToDisconnectFromMoxa,this, &MainWindow::OnDisconnectFromMoxa);
 }
 
-void MainWindow::WhenConnectToInternetMoxa(const QString &adress, const QString &port)
+void MainWindow::OnConnectToInternetMoxa(const QString &adress, const QString &port)
 {
-    m_stateWidget->WhenConsoleLog("Попытка подключится... Адрес: " + adress  + " Порт: " + port);
+    m_stateWidget->OnConsoleLog("Попытка подключится по интернет кабелю... Адрес: " + adress  + " Порт: " + port);
     RegisterHadnler(m_tcpHandler);
-    m_tcpHandler->ConnectToMoxa(adress, port);
+    m_tcpHandler->TryToConnectToHost(adress, port);
 
 }
 
-void MainWindow::WhenConnectToUsbMoxa(const QString &comPortName)
+void MainWindow::OnConnectToUsbMoxa(const QString &comPortName)
 {
-    m_stateWidget->WhenConsoleLog("Попытка подключится... Имя порта: " + comPortName);
+    m_stateWidget->OnConsoleLog("Попытка подключится по USB... Имя порта: " + comPortName);
     RegisterHadnler(m_serialHandler);
-    m_serialHandler->ConnectToHost(comPortName);
+    m_serialHandler->TryToConnectToHost(comPortName);
 }
 
-void MainWindow::WhenDisconnectFromMoxa()
+void MainWindow::OnDisconnectFromMoxa()
 {
-    m_tcpHandler->WhenDisconnectByUserFromHost();
-    m_stateWidget->WhenConsoleLog(QStringLiteral("Отключились от мохи..."));
+    m_currentConnectionInterface->FromHostDisconnect();
     m_connectionWidget->SetButtonsEnabled(false);
     m_statusBar->showMessage(QStringLiteral("Не подключено"));
     DisconnectOldHander();
@@ -98,7 +98,7 @@ void MainWindow::DisconnectOldHander()
 {
     if (m_currentConnectionInterface!=Q_NULLPTR)
     {
-        m_currentConnectionInterface->DisconnectByUser();
+        m_currentConnectionInterface->FromHostDisconnected();
         disconnect(m_currentConnectionInterface, &DataHandler::ToButtonsEnabledChanging, m_connectionWidget, &ConnectionWidget::SetButtonsEnabled);
         m_stateWidget->DisconnectOldHander();
         m_firmwareWidget->DisconnectOldHander();

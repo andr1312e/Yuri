@@ -1,6 +1,4 @@
 #include "serialhandler.h"
-#include <QDebug>
-#include <QSerialPortInfo>
 
 SerialHandler::SerialHandler(QObject *parent)
     : DataHandler(parent)
@@ -25,11 +23,11 @@ void SerialHandler::CreateHander()
 
 void SerialHandler::ConnectObjects()
 {
-    connect(m_connectionPort, &QSerialPort::readyRead, this, &SerialHandler::WhenReadyRead);
-    connect(m_connectionPort, &QSerialPort::errorOccurred, this, &SerialHandler::WhenErrorOccurred);
+    connect(m_connectionPort, &QSerialPort::readyRead, this, &SerialHandler::OnReadyRead);
+    connect(m_connectionPort, &QSerialPort::errorOccurred, this, &SerialHandler::OnErrorOccurred);
 }
 
-void SerialHandler::WhenReadyRead()
+void SerialHandler::OnReadyRead()
 {
     switch (m_gettingMessageType) {
     case Normal:
@@ -50,8 +48,9 @@ void SerialHandler::WhenReadyRead()
     }
 }
 
-void SerialHandler::WhenErrorOccurred(QSerialPort::SerialPortError error)
+void SerialHandler::OnErrorOccurred(QSerialPort::SerialPortError error)
 {
+    FromHostDisconnect();
     switch (error) {
     case QSerialPort::NoError:
         break;
@@ -64,6 +63,7 @@ void SerialHandler::WhenErrorOccurred(QSerialPort::SerialPortError error)
     case QSerialPort::OpenError:
         Q_EMIT ToConsoleLog(QStringLiteral("Произошла ошибка при попытке открыть уже открытое устройство в этом объекте. "));
         break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     case QSerialPort::ParityError:
         Q_EMIT ToConsoleLog(QStringLiteral("Ошибка четности обнаружена оборудованием при чтении данных. "));
         break;
@@ -73,6 +73,7 @@ void SerialHandler::WhenErrorOccurred(QSerialPort::SerialPortError error)
     case QSerialPort::BreakConditionError:
         Q_EMIT ToConsoleLog(QStringLiteral("Обрыв, обнаруженный оборудованием на входной линии. "));
         break;
+#endif
     case QSerialPort::WriteError:
         Q_EMIT ToConsoleLog(QStringLiteral("Ошибка ввода-вывода при записи данных."));
         break;
@@ -89,34 +90,22 @@ void SerialHandler::WhenErrorOccurred(QSerialPort::SerialPortError error)
         Q_EMIT ToConsoleLog(QStringLiteral("Неизвестная ошибка"));
         break;
     case QSerialPort::TimeoutError:
-        Q_EMIT ToConsoleLog(QStringLiteral("Произошла ошибка тайм-аута. "));
+        Q_EMIT ToConsoleLog(QStringLiteral("Произошла ошибка тайм-аута."));
         break;
     case QSerialPort::NotOpenError:
-        Q_EMIT ToConsoleLog(QStringLiteral("Не подключено."));
+        Q_EMIT ToConsoleLog(QStringLiteral("Не подключено. Эта ошибка возникает при выполнении операции, которая может быть успешно выполнена только в том случае, если устройство доступно. Пытаемся соединится..."));
         break;
 
     }
 }
 
-void SerialHandler::ConnectToHost(const QString &comPortName)
+void SerialHandler::TryToConnectToHost(const QString &comPortName)
 {
     m_connectionPort->setPortName(comPortName);
     if(m_connectionPort->open(QIODevice::ReadWrite))
     {
-        Q_EMIT ToConsoleLog(QStringLiteral("Подключились"));
-        Q_EMIT ToButtonsEnabledChanging(true);
+        DataHandler::ToHostConnected();
     }
-}
-
-void SerialHandler::ClearBuffer()
-{
-    DataHandler::ClearBuffer();
-    m_connectionPort->flush();
-}
-
-void SerialHandler::SetConnectionState(quint8 state)
-{
-    m_gettingMessageType=static_cast<HandlerState>(state);
 }
 
 void SerialHandler::WriteMessageToBuffer(const QByteArray &array)
@@ -129,8 +118,10 @@ void SerialHandler::FlushBuffer()
     m_connectionPort->flush();
 }
 
-void SerialHandler::DisconnectByUser()
+void SerialHandler::FromHostDisconnect()
 {
-    m_connectionPort->close();
-    Q_EMIT ToConsoleLog(QStringLiteral("Отключено от сокета юзером"));
+    if(m_connectionPort->isOpen())
+    {
+        m_connectionPort->close();
+    }
 }

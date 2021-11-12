@@ -7,6 +7,7 @@
 #include <QString>
 #include <QTimer>
 #include <QByteArray>
+#include <QElapsedTimer>
 
 
 #ifdef Q_OS_WIN
@@ -43,15 +44,15 @@ Q_SIGNALS:
 
 
 public Q_SLOTS:
-    void WhenFlash(QByteArray *firmwareFromFile);
-    void WhenStartReadingFirmWareFromDevice();
-    void WhenFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevice);
+    void OnFlash(QByteArray *firmwareFromFile);
+    void OnStartReadingFirmWareFromDevice();
+    void OnFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevice);
 private Q_SLOTS:
-    void WhenTimerTimeout();
-    void WhenReadFirmwareAgain();
-    void WhenWritingTimerTimeOut();
-    void WhenErasingTimerTimeOut();
-    void WhenTakedHardwareState(quint8 state);
+    void OnTimerTimeout();
+    void OnReadFirmwareAgain();
+    void OnWritingTimerTimeOut();
+    void OnErasingTimerTimeOut();
+    void OnTakedHardwareState(quint8 state);
 
 public:
     void DisconnectOldHandler();
@@ -60,14 +61,15 @@ public:
     void SendMessageToQueue(quint8 command, quint32 adress, quint8 lenght);
 
 private:
-    void PrepareCommandsToFlash(QLinkedList<QByteArray> &pagesOfFirmware);
     void FillFullPageIntoBuffer(QByteArray *partOfFirmware);
     void FillLastPageIntoBuffer(QByteArray *partOfFirmware);
     const QByteArray GetPartOfFirmwareFromArray(quint32 currentIndex, QByteArray *firmwareFromFile) const;
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QLinkedList<QByteArray> GenerateFirmwarePages (QByteArray *firmwareFromFile);
+    void PrepareCommandsToFlash(QLinkedList<QByteArray> &pagesOfFirmware);
 #else
-    QList<QByteArray> GenerateFirmwarePages ();
+    QList<QByteArray> GenerateFirmwarePages (QByteArray *firmwareFromFile);
+    void PrepareCommandsToFlash(QList<QByteArray> &pagesOfFirmware);
 #endif
     void SleepMiliseconds(int ms);
 private:
@@ -104,6 +106,8 @@ private:
     quint32 m_firmwareSize;
 
     QQueue<QByteArray> *m_commandsQueue;
+
+//    QElapsedTimer m_elapsedTimer;
 
     bool m_isPcbBisy;
 };

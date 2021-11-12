@@ -92,12 +92,12 @@ void StatePresenter::SetStateToDevice(quint8 messageId, double firstParam, doubl
     }
     Q_EMIT ToUpdateHistoryFile();
     Q_EMIT ToConsoleLog("Отправляемое сообщeние " +message.toHex() + " его размер: " + QString::number(message.size()) + " байт сформировано");
-    m_dataHandler->SendMessageDevice(message);
+    m_dataHandler->SendMessageToDevice(message);
 }
 
 void StatePresenter::GetStateFromDevice(quint8 messageIdWantToGet)
 {
     m_dataHandler->SetHandlerState(HandlerState::Normal);
     QByteArray message(m_messageSetter->createSevenCommand(messageIdWantToGet));
-    m_dataHandler->SendMessageDevice(message);
+    m_dataHandler->SendMessageToDevice(message);
 }

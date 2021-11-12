@@ -255,7 +255,7 @@ void StateWidget::ConnectObjects()
     connect(m_speedLineEdit, &QLineEdit::textEdited, this, &StateWidget::ChangeDoplerLineEdit);
     connect(m_doplerFreqLineEdit, &QLineEdit::textEdited, this, &StateWidget::ChangeSpeedLineEdit);
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
-    connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::WhenConsoleLog);
+    connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::OnConsoleLog);
     connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::SetButtonEnabled);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(m_sendStateButtonsGroup, &QButtonGroup::idClicked, this, &StateWidget::SetStateButtonIdClicked);
@@ -284,7 +284,7 @@ void StateWidget::updateHistory()
 }
 
 
-void StateWidget::WhenConsoleLog(QString message)
+void StateWidget::OnConsoleLog(QString message)
 {
     QString time=QDateTime::currentDateTime().toString("hh:mm:ss");
     m_log->appendPlainText(time+ " "+ message);
@@ -296,7 +296,7 @@ void StateWidget::SetStateButtonIdClicked(int id)
     switch (id) {
     case 0:
     {
-        WhenConsoleLog("Высылаем сообщение пинга");
+        OnConsoleLog("Высылаем сообщение пинга");
         break;
     }
     case 1:
@@ -308,18 +308,18 @@ void StateWidget::SetStateButtonIdClicked(int id)
             if (isOk)
             {
                 firstValue=firstValue*1000000;
-                WhenConsoleLog("Высылаем первое сообщение: установка частоты RX fvco= " +QString::number(firstValue)+ " ГЦ");
+                OnConsoleLog("Высылаем первое сообщение: установка частоты RX fvco= " +QString::number(firstValue)+ " ГЦ");
                 break;
             }
             else
             {
-                WhenConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
+                OnConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
                 return;
             }
         }
         else
         {
-            WhenConsoleLog("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx");
+            OnConsoleLog("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx");
             return;
         }
     }
@@ -336,25 +336,25 @@ void StateWidget::SetStateButtonIdClicked(int id)
                 if (isOk2)
                 {
 
-                    WhenConsoleLog("Высылаем второе сообщение: установка частоты Tx fvco= " +QString::number(firstValue) + " ГЦ и доплер= "+ QString::number(secondValue, 'f')+ " ГЦ");
+                    OnConsoleLog("Высылаем второе сообщение: установка частоты Tx fvco= " +QString::number(firstValue) + " ГЦ и доплер= "+ QString::number(secondValue, 'f')+ " ГЦ");
                     break;
                 }
                 else
                 {
-                    WhenConsoleLog("Не смогли перевесли в число " + m_doplerFreqLineEdit->text());
-                    WhenConsoleLog("Высылаем сообщение fvco= "+QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
+                    OnConsoleLog("Не смогли перевесли в число " + m_doplerFreqLineEdit->text());
+                    OnConsoleLog("Высылаем сообщение fvco= "+QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
                     break;
                 }
             }
             else
             {
-                WhenConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
+                OnConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
                 return;
             }
         }
         else
         {
-            WhenConsoleLog("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx");
+            OnConsoleLog("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx");
             return;
         }
     }
@@ -366,18 +366,18 @@ void StateWidget::SetStateButtonIdClicked(int id)
             firstValue=m_rangeLineEdit->text().toDouble(&isOk);
             if (isOk)
             {
-                WhenConsoleLog("Высылаем третье сообщение: установка дальности ответного сигнала. Дистанция= " + QString::number(firstValue, 'f') );
+                OnConsoleLog("Высылаем третье сообщение: установка дальности ответного сигнала. Дистанция= " + QString::number(firstValue, 'f') );
                 break;
             }
             else
             {
-                WhenConsoleLog("Не смогли перевесли в число " + m_rangeLineEdit->text());
+                OnConsoleLog("Не смогли перевесли в число " + m_rangeLineEdit->text());
                 return;
             }
         }
         else
         {
-            WhenConsoleLog("Заполните пожалуйста поля: Дальность ответного сигнала: d");
+            OnConsoleLog("Заполните пожалуйста поля: Дальность ответного сигнала: d");
             return;
         }
     }
@@ -390,18 +390,18 @@ void StateWidget::SetStateButtonIdClicked(int id)
             secondValue=m_gainRXLineEdit->text().toDouble(&isOk2);
             if (isOk1&&isOk2)
             {
-                WhenConsoleLog("Высылаем четвертое сообщение: установка усиления");
+                OnConsoleLog("Высылаем четвертое сообщение: установка усиления");
                 break;
             }
             else
             {
-                WhenConsoleLog("Не смогли перевесли в число " + m_gainRXLineEdit->text() + " или  "+ m_gainTXLineEdit->text());
+                OnConsoleLog("Не смогли перевесли в число " + m_gainRXLineEdit->text() + " или  "+ m_gainTXLineEdit->text());
                 return;
             }
         }
         else
         {
-            WhenConsoleLog("Заполните пожалуйста поля: Усиление RX а так же Усиление TX");
+            OnConsoleLog("Заполните пожалуйста поля: Усиление RX а так же Усиление TX");
             return;
         }
     }
@@ -412,12 +412,12 @@ void StateWidget::SetStateButtonIdClicked(int id)
         if (isOk)
         {
 
-            WhenConsoleLog("Высылаем пятое сообщение: установка ослабления");
+            OnConsoleLog("Высылаем пятое сообщение: установка ослабления");
             break;
         }
         else
         {
-            WhenConsoleLog("Не смогли перевесли в число " + m_attenuatorComboBox->currentText());
+            OnConsoleLog("Не смогли перевесли в число " + m_attenuatorComboBox->currentText());
             return;
         }
     }
@@ -431,22 +431,22 @@ void StateWidget::SetStateButtonIdClicked(int id)
             if (isOk)
             {
 
-                WhenConsoleLog("Шестое сообщение: параметр равен: "+ m_noiseLineEdit->text());
+                OnConsoleLog("Шестое сообщение: параметр равен: "+ m_noiseLineEdit->text());
                 break;
             }
             else
             {
-                WhenConsoleLog("Не смогли перевесли в число: " + m_noiseLineEdit->text() + ".Берем значение 0");
+                OnConsoleLog("Не смогли перевесли в число: " + m_noiseLineEdit->text() + ".Берем значение 0");
                 secondValue=0.0;
                 break;
             }
         }
-        WhenConsoleLog("Высылаем шестое сообщение: установка шума");
+        OnConsoleLog("Высылаем шестое сообщение: установка шума");
         break;
     }
     default:
     {
-        WhenConsoleLog("Обработка не написана void CommandWidget::buttonIdClicked");
+        OnConsoleLog("Обработка не написана void CommandWidget::buttonIdClicked");
         return;
     }
     }
@@ -459,22 +459,22 @@ void StateWidget::GetStateButtonIdClicked(int id)
     switch (id) {
     case 1:
     {
-        WhenConsoleLog("Получаем частоты RX");
+        OnConsoleLog("Получаем частоты RX");
         break;
     }
     case 4:
     {
-        WhenConsoleLog("Получаем усиление");
+        OnConsoleLog("Получаем усиление");
         break;
     }
     case 5:
     {
-        WhenConsoleLog("Получаем ослабление");
+        OnConsoleLog("Получаем ослабление");
         break;
     }
     default:
     {
-        WhenConsoleLog("Обработка команды не реализована");
+        OnConsoleLog("Обработка команды не реализована");
         return;
     }
     }

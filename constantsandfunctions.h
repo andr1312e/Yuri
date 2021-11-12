@@ -4,9 +4,6 @@
 #include <QMap>
 #include <QVector>
 
-const quint8 pcbStateMessageBytesCount=1;
-const int maxMessageBytesCount=255;
-
 const double Fref=40000000.0;
 const double c=299792458.0;
 const double f=245000000.0;

@@ -1,7 +1,7 @@
 #ifndef CONNECTIONS_DATAHANDLER_H
 #define CONNECTIONS_DATAHANDLER_H
 #include <QObject>
-#include "constantsandfunctions.h"
+#include <QByteArray>
 
 enum HandlerState {Normal, ReadFirmware, Flash };
 
@@ -26,25 +26,31 @@ Q_SIGNALS:
     void ToFirmWareFormDeviceLoaded(QByteArray *firmwareFromDevice);
 public:
     void SetHandlerState(HandlerState state);
-    void SendMessageDevice(const QByteArray &array);
-    virtual void SetConnectionState(quint8 state)=0;
+    void SendMessageToDevice(const QByteArray &array);
+    void SetConnectionState(quint8 state);
     virtual void WriteMessageToBuffer(const QByteArray &bytes)=0;
     virtual void FlushBuffer()=0;
-    virtual void DisconnectByUser() = 0;
+    virtual void FromHostDisconnect()=0;
+    virtual void FromHostDisconnected();
 protected:
+    virtual void ToHostConnected();
     void NormalStateMessageAnalyze(const QByteArray &incomingByteArray);
     void ReadFirmwareMessageAnalyze(const QByteArray &incomingByteArray);
     void FlashFirmwareMessageAnalyze(const QByteArray &incomingMessage);
 private:
-    bool isFullFArray() const;
+    bool IsArrayEndOfFirmware() const;
+    void RemoveLastFBytesInFimware();
 protected:
-    const quint8 m_maxNumOfLinesToStop=6;
+    const quint8 m_maxNumOfLinesToStop;
+    const quint8 pcbStateMessageBytesCount;
+    const quint8 m_maxMessageBytesCount;
+    const char m_endOfFirmwareSymbol;
     HandlerState m_gettingMessageType;
-    QByteArray *m_readyReadBuffer;
     quint8 m_currentStopLineNumber;
+    QByteArray *m_readyReadBuffer;
 private:
-    const QByteArray *m_stopHexArray;
-    QByteArray m_firmwareFromDevice;
+    const QByteArray *m_stopReadingFirmwareArray;
+    QByteArray *m_firmwareFromDevice;
 };
 
 #endif // CONNECTIONS_DATAHANDLER_H

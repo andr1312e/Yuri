@@ -1,10 +1,14 @@
 #include "connectionwidget.h"
 #include <QDebug>
-#include <QSerialPortInfo>
+#include <chrono>
+
+using namespace std::chrono_literals;
 
 ConnectionWidget::ConnectionWidget(QWidget *parent)
     : QWidget(parent)
 {
+    CreateObjects();
+    InitObjects();
     CreateUI();
     InsertWidgetsIntoLayout();
     FillUI();
@@ -24,6 +28,19 @@ ConnectionWidget::~ConnectionWidget()
     delete m_comPortNameComboBox;
     delete m_connectButton;
     delete m_disconnectButton;
+}
+
+void ConnectionWidget::CreateObjects()
+{
+    m_checkSerialPortsTimer=new QTimer(this);
+}
+
+void ConnectionWidget::InitObjects()
+{
+    m_checkSerialPortsTimer->setTimerType(Qt::VeryCoarseTimer);
+    m_checkSerialPortsTimer->setInterval(2s);
+    m_checkSerialPortsTimer->setSingleShot(false);
+    m_checkSerialPortsTimer->start();
 }
 
 void ConnectionWidget::CreateUI()
@@ -61,9 +78,10 @@ void ConnectionWidget::InsertWidgetsIntoLayout()
 
 void ConnectionWidget::ConnectObjects()
 {
-    connect(m_connectionTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),  this, &ConnectionWidget::WhenCurrentIndexConnectionTypeComboBoxChanged);
-    connect(m_connectButton, &QPushButton::clicked, this, &ConnectionWidget::WhenConnectButtonClicked);
+    connect(m_connectionTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),  this, &ConnectionWidget::OnCurrentIndexConnectionTypeComboBoxChanged);
+    connect(m_connectButton, &QPushButton::clicked, this, &ConnectionWidget::OnConnectButtonClicked);
     connect(m_disconnectButton, &QPushButton::clicked, this, &ConnectionWidget::ToDisconnectFromMoxa);
+    connect(m_checkSerialPortsTimer, &QTimer::timeout, this, &ConnectionWidget::OnNewSerialPortsChecked);
 }
 
 void ConnectionWidget::FillUI()
@@ -79,17 +97,13 @@ void ConnectionWidget::FillUI()
     m_connectButton->setText(QStringLiteral("Подключится"));
     m_disconnectButton->setText(QStringLiteral("Отключится"));
     m_disconnectButton->setDisabled(true);
+    OnNewSerialPortsChecked();
 
-    QList<QSerialPortInfo> list(QSerialPortInfo::availablePorts());
-    for (QList<QSerialPortInfo>::const_iterator it=list.cbegin(); it!=list.cend(); ++it)
-    {
-        QString portState=it->isBusy() ? " Занят" : " Свободен";
-        m_comPortNameComboBox->addItem(it->portName()+ " " + it->description()+ " " + it->manufacturer() + portState);
-    }
+
     m_comPortNameComboBox->setDisabled(true);
 }
 
-void ConnectionWidget::WhenCurrentIndexConnectionTypeComboBoxChanged(int index)
+void ConnectionWidget::OnCurrentIndexConnectionTypeComboBoxChanged(int index)
 {
     if (index==0)
     {
@@ -105,10 +119,10 @@ void ConnectionWidget::WhenCurrentIndexConnectionTypeComboBoxChanged(int index)
     }
 }
 
-void ConnectionWidget::WhenConnectButtonClicked()
+void ConnectionWidget::OnConnectButtonClicked()
 {
-    int connectionType=m_connectionTypeComboBox->currentIndex();
-    if (connectionType==0)
+    int index=m_connectionTypeComboBox->currentIndex();
+    if (0==index)
     {
         Q_EMIT ToConnectEthernetMoxa(m_adressLineEdit->text(), m_portLineEdit->text());
     }
@@ -116,13 +130,27 @@ void ConnectionWidget::WhenConnectButtonClicked()
     {
         QString comPortName=m_comPortNameComboBox->currentText();
         comPortName=comPortName.left(m_comPortNameComboBox->currentText().indexOf(' '));
-        if (IsComPortValid(comPortName))
+        if (IsCurrentComPortBisy(comPortName))
         {
-            Q_EMIT ToConnectUsbMoxa(comPortName);
+            Q_EMIT ToConsoleLog("Com порт " +comPortName+ " не доступен для подключения, выберите другой");
         }
         else
         {
-            Q_EMIT ToConsoleLog("Com порт " +comPortName+ " не доступен для подключения, выберите другой");
+            Q_EMIT ToConnectUsbMoxa(comPortName);
+        }
+    }
+}
+
+void ConnectionWidget::OnNewSerialPortsChecked()
+{
+    QList<QSerialPortInfo> list(QSerialPortInfo::availablePorts());
+    if (m_comPortNameComboBox->count()!=list.count())
+    {
+        m_comPortNameComboBox->clear();
+        for (QList<QSerialPortInfo>::const_iterator it=list.cbegin(); it!=list.cend(); ++it)
+        {
+            QString portState=IsComPortBisy(&(*it)) ? QStringLiteral(" Занят") : QStringLiteral(" Свободен");
+            m_comPortNameComboBox->addItem(it->portName()+ " " + it->description()+ " " + it->manufacturer() + portState);
         }
     }
 }
@@ -133,16 +161,24 @@ void ConnectionWidget::SetButtonsEnabled(bool state)
     m_disconnectButton->setEnabled(state);
 }
 
-bool ConnectionWidget::IsComPortValid(QString &comPortName)
+bool ConnectionWidget::IsCurrentComPortBisy(QString &comPortName)
 {
     QList<QSerialPortInfo> list(QSerialPortInfo::availablePorts());
     for (QList<QSerialPortInfo>::const_iterator iterator=list.cbegin(); iterator!=list.cend(); ++iterator)
     {
-        qDebug()<< iterator->portName() << " " << iterator->isValid();
         if(iterator->portName()==comPortName)
         {
-
-            return iterator->isValid();
+            return IsComPortBisy(&(*iterator));
         }
     }
+    return true;
+}
+
+bool ConnectionWidget::IsComPortBisy(const QSerialPortInfo *info)
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    return info->isBusy();
+#else
+    return !info->isNull();
+#endif
 }

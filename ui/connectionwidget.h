@@ -7,6 +7,8 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QWidget>
+#include <QTimer>
+#include <QSerialPortInfo>
 
 class ConnectionWidget : public QWidget
 {
@@ -15,6 +17,8 @@ public:
     explicit ConnectionWidget(QWidget *parent);
     ~ConnectionWidget();
 private:
+    void CreateObjects();
+    void InitObjects();
     void CreateUI();
     void InsertWidgetsIntoLayout();
     void ConnectObjects();
@@ -25,12 +29,19 @@ Q_SIGNALS:
     void ToConnectUsbMoxa(const QString &comPortName);
     void ToDisconnectFromMoxa();
 
+    void checkSerialPortsTimerChanged();
+
 private Q_SLOTS:
-    void WhenCurrentIndexConnectionTypeComboBoxChanged(int index);
-    void WhenConnectButtonClicked();
+    void OnCurrentIndexConnectionTypeComboBoxChanged(int index);
+    void OnConnectButtonClicked();
+    void OnNewSerialPortsChecked();
 public:
     void SetButtonsEnabled(bool state);
-    bool IsComPortValid(QString &comboBoxText);
+    bool IsCurrentComPortBisy(QString &comboBoxText);
+    bool IsComPortBisy(const QSerialPortInfo *info);
+
+    QTimer *checkSerialPortsTimer() const;
+    void setCheckSerialPortsTimer(QTimer *newCheckSerialPortsTimer);
 
 private:
     QVBoxLayout *m_mainLayout;
@@ -44,6 +55,8 @@ private:
     QHBoxLayout *m_buttonsLayout;
     QPushButton *m_connectButton;
     QPushButton *m_disconnectButton;
+
+    QTimer *m_checkSerialPortsTimer;
 };
 
 #endif // UI_CONNECTIONWIDGET_H
