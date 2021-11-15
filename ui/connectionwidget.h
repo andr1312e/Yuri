@@ -29,7 +29,7 @@ Q_SIGNALS:
     void ToConnectUsbMoxa(const QString &comPortName);
     void ToDisconnectFromMoxa();
 
-    void checkSerialPortsTimerChanged();
+    void CheckSerialPortsTimerChanged();
 
 private Q_SLOTS:
     void OnCurrentIndexConnectionTypeComboBoxChanged(int index);

@@ -26,6 +26,7 @@ void DataHandler::ClearBuffer()
 {
     m_readyReadBuffer->clear();
     m_currentStopLineNumber=0;
+    m_firmwareFromDevice->clear();
 }
 
 void DataHandler::SetHandlerState(HandlerState state)
@@ -84,7 +85,6 @@ void DataHandler::NormalStateMessageAnalyze(const QByteArray &incomingByteArray)
 void DataHandler::ReadFirmwareMessageAnalyze(const QByteArray &incomingByteArray)
 {
     m_readyReadBuffer->append(incomingByteArray);
-    Q_EMIT ToConsoleLog(QString::number(m_readyReadBuffer->size())+" cчитали"  + QString::fromLatin1(m_readyReadBuffer->toHex()));
     if (m_readyReadBuffer->count()<m_maxMessageBytesCount)
     {
         return;
@@ -99,7 +99,6 @@ void DataHandler::ReadFirmwareMessageAnalyze(const QByteArray &incomingByteArray
         }
         else
         {
-            Q_EMIT ToConsoleLog("cчитали" + QString::fromLatin1(m_readyReadBuffer->toHex()));
             m_firmwareFromDevice->append(*m_readyReadBuffer);
             m_readyReadBuffer->clear();
             Q_EMIT ToReadFirmwareAgain();

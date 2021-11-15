@@ -239,11 +239,12 @@ void StateWidget::FillUI()
     m_noiseLineEdit->setText("0");
     m_gainTXLineEdit->setText("32");
     m_gainRXLineEdit->setText("0");
-    m_attenuatorComboBox->setCurrentIndex(8);
+
 
     m_fvcoComboBox->setEditable(true);
     m_fvcoComboBox->addItems(workPointsValues);
     m_attenuatorComboBox->addItems(m_attenuatorValues);
+    m_attenuatorComboBox->setCurrentIndex(8);
     m_noiseComboBox->addItems(m_noiseValues);
     m_noiseComboBox->setEditable(false);
 
@@ -251,7 +252,7 @@ void StateWidget::FillUI()
     m_log->appendPlainText("Не подключено к ответчику");
     m_logClearButton->setText("Консоль отчистить");
 
-//    OnSetButtonEnabled(false);
+    OnSetButtonEnabled(false);
 
 }
 

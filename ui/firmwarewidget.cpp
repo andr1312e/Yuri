@@ -2,8 +2,7 @@
 
 FirmWareWidget::FirmWareWidget(QWidget *parent)
     : QWidget(parent)
-    , m_actions(new QMap<QString, quint8>{{"Чтение буфера", 3}, {"Запись в буфер", 2}, {"Сделать доступной на запись", 6}, {"Сделать недоступной на запись", 4}, {"Cтирание(перед перепрошивкой)", 199}, {"Cтатус флешки(что работает)", 9}, {"Чтение регистра", 5}})
-    , m_firmwarePresenter(new FirmwarePresenter(m_actions, this))
+    , m_firmwarePresenter(new FirmwarePresenter(this))
 {
     CreateUI();
     InsertWidgetsIntoLayout();
@@ -13,92 +12,34 @@ FirmWareWidget::FirmWareWidget(QWidget *parent)
 
 FirmWareWidget::~FirmWareWidget()
 {
-    delete m_flashStateLayout;
-    delete m_actionsLayout;
-    delete m_commandsLayout;
+    delete m_firmwarePresenter;
 
     delete m_mainLayout;
 
-
-    delete m_actions;
-    delete m_firmwarePresenter;
-
-    delete m_registerLabel;
-    delete m_registerValue;
-    delete m_restarPushButton;
-    delete m_actionLabel;
-    delete m_actionComboBox;
-
-    delete m_adressForWriteLabel;
-    delete m_adressForWriteLineEdit;
-
-    delete m_numOfBytesLabel;
-    delete m_numOfBytesLineEdit;
-    delete m_sendCommandButton;
-    delete m_log;
-
     delete m_firmwareFlasherWidget;
+    delete m_firmwareLogWidget;
+    delete m_progressBar;
 
     delete m_splitter;
-    delete m_progressBar;
-}
 
-void FirmWareWidget::OnConsoleLog(const QString message)
-{
-    m_log->appendPlainText(message);
 }
 
 void FirmWareWidget::CreateUI()
 {
     m_mainLayout=new QVBoxLayout();
 
-    m_commandsLayout=new QVBoxLayout();
-    m_flashStateLayout=new QHBoxLayout();
-    m_actionsLayout=new QHBoxLayout();
 
     m_splitter=new QSplitter();
 
-
-    m_registerLabel=new QLabel();
-    m_registerValue=new QLabel();
-    m_restarPushButton=new QPushButton();
-    m_actionLabel=new QLabel();
-    m_actionComboBox=new QComboBox();
-
-    m_adressForWriteLabel=new QLabel();
-    m_adressForWriteLineEdit=new QLineEdit();
-
-    m_numOfBytesLabel=new QLabel();
-    m_numOfBytesLineEdit=new QLineEdit();
-    m_sendCommandButton=new QPushButton();
-    m_log=new QPlainTextEdit();
-
+    m_firmwareLogWidget=new FirmwareLogWidget(this);
     m_firmwareFlasherWidget=new FirmwareFlasherWidget(this);
-
-    m_progressBar=new QProgressBar();
+    m_progressBar=new QProgressBar(this);
 }
 
 void FirmWareWidget::InsertWidgetsIntoLayout()
 {
-    m_flashStateLayout->addWidget(m_registerLabel);
-    m_flashStateLayout->addWidget(m_registerValue);
-    m_flashStateLayout->addWidget(m_restarPushButton);
-
-    m_actionsLayout->addWidget(m_actionLabel);
-    m_actionsLayout->addWidget(m_actionComboBox);
-    m_actionsLayout->addWidget(m_adressForWriteLabel);
-    m_actionsLayout->addWidget(m_adressForWriteLineEdit);
-    m_actionsLayout->addWidget(m_numOfBytesLabel);
-    m_actionsLayout->addWidget(m_numOfBytesLineEdit);
-    m_actionsLayout->addWidget(m_sendCommandButton);
-
-    m_commandsLayout->addLayout(m_flashStateLayout);
-    m_commandsLayout->addLayout(m_actionsLayout);
-    m_commandsLayout->addWidget(m_log);
-
-    QWidget *widget=new QWidget();
-    widget->setLayout(m_commandsLayout);
-    m_splitter->addWidget(widget);
+    m_splitter->addWidget(m_firmwareLogWidget);
+    m_splitter->addWidget(m_firmwareFlasherWidget);
 
     m_mainLayout->addWidget(m_splitter);
     m_mainLayout->addWidget(m_progressBar);
@@ -110,47 +51,26 @@ void FirmWareWidget::FillUI()
 {
     m_progressBar->setRange(0, 100);
     m_splitter->addWidget(m_firmwareFlasherWidget);
-    m_adressForWriteLineEdit->setText(QStringLiteral("0"));
-    m_numOfBytesLineEdit->setText(QStringLiteral("15"));
-    m_registerLabel->setText("Значение регистров: ");
-    m_registerValue->setText("Недоступна для записи");
-    m_restarPushButton->setText("Перезагрузить");
-    m_actionComboBox->addItems(m_actions->keys());
-    m_actionComboBox->setEditable(false);
-    m_actionLabel->setText(QStringLiteral("Текущее действие:"));
-    m_adressForWriteLabel->setText(QStringLiteral("Адрес для записи:"));
-    m_numOfBytesLabel->setText(QStringLiteral("Колличество байт для записи"));
-    m_sendCommandButton->setText(QStringLiteral("Отправить"));
-    m_log->setReadOnly(true);
     //    SetButtonsEnabled(false);
 }
 
 void FirmWareWidget::ConnectObjects()
 {
+    connect(this, &FirmWareWidget::ToConsoleLog, m_firmwareLogWidget, &FirmwareLogWidget::OnConsoleLog);
     connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToFlash, m_firmwarePresenter, &FirmwarePresenter::OnFlash);
-    connect(m_sendCommandButton, &QPushButton::clicked, this, &FirmWareWidget::OnUserCommandButtonClicked);
-    connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::StartReadingFirmWareFromDevice, m_firmwarePresenter, &FirmwarePresenter::OnStartReadingFirmWareFromDevice);
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToConsoleLog,  this, &FirmWareWidget::OnConsoleLog);
+    connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToStartReadingFirmWareFromDevice, m_firmwarePresenter, &FirmwarePresenter::OnStartReadingFirmWareFromDevice);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToConsoleLog,  m_firmwareLogWidget, &FirmwareLogWidget::OnConsoleLog);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToSetButtonsEnabled, this, &FirmWareWidget::OnSetButtonsEnabled);
-    connect(m_restarPushButton, &QPushButton::clicked, [&](){m_firmwarePresenter->SendMessageToQueue(0, 0, 0);});
+    connect(m_firmwareLogWidget, &FirmwareLogWidget::ToRestartDevice, [&](){m_firmwarePresenter->SendMessageToQueue(0, 0, 0);});
     connect(m_firmwarePresenter, &FirmwarePresenter::ToSetMaximumCountOfPages, this, &FirmWareWidget::OnSetMaximumProgressBar);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarUpdate, m_progressBar, &QProgressBar::setValue);
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToWidgetsEnable, this, &FirmWareWidget::OnSetWidgetsEnable);
+    connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToSetFirmwareFromFileToPresenter, m_firmwarePresenter, &FirmwarePresenter::OnSetFirmwareFromFileToPresenter);
 }
 
-void FirmWareWidget::OnUserCommandButtonClicked()
+void FirmWareWidget::OnSetButtonsEnabled(bool state)
 {
-    const QString comboBoxValue(m_actionComboBox->currentText());
-    QString adress(m_adressForWriteLineEdit->text());
-    QString lenght(m_numOfBytesLineEdit->text());
-    m_firmwarePresenter->GetDataFromWidget(comboBoxValue, adress, lenght);
-}
-
-void FirmWareWidget::OnSetButtonsEnabled(int state)
-{
-    m_actionComboBox->setEnabled(state);
     m_firmwareFlasherWidget->setEnabled(state);
-    m_sendCommandButton->setEnabled(state);
+    m_firmwareLogWidget->setEnabled(state);
 }
 
 void FirmWareWidget::OnSetMaximumProgressBar(int top)
@@ -162,13 +82,6 @@ void FirmWareWidget::OnSetMaximumProgressBar(int top)
 void FirmWareWidget::OnUpdateProgressBar(int page)
 {
     m_progressBar->setValue(page);
-}
-
-void FirmWareWidget::OnSetWidgetsEnable(bool state)
-{
-    m_firmwareFlasherWidget->setEnabled(state);
-    m_sendCommandButton->setEnabled(state);
-    m_restarPushButton->setEnabled(state);
 }
 
 void FirmWareWidget::DisconnectOldHander()

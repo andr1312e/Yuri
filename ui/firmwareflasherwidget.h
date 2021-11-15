@@ -24,13 +24,17 @@ private:
     void InsertWidgetsIntoLayout();
     void FillUI();
     void ConnectObjects();
+
 Q_SIGNALS:
     void ToConsoleLog(QString message);
-    void ToFlash(QByteArray *firmware);
-    void StartReadingFirmWareFromDevice();
-
+    void ToSetFirmwareFromFileToPresenter(QByteArray &firmwareFromFile);
+    void ToFlash(bool isNeedToCheck, bool isNeedToRestartAfterSuccess);
+    void ToStartReadingFirmWareFromDevice();
 private Q_SLOTS:
     void OnAddNewFirmwareButtonClicked();
+
+private:
+    void SetButtonsEnabled(bool state);
 private:
     QVBoxLayout *m_mainLayout;
     QLabel *m_fileNameLabel;
@@ -42,7 +46,7 @@ private:
     QCheckBox *m_checkFirmwareCheckBox;
     QCheckBox *m_restartFirmwareCheckBox;
 private:
-    QByteArray m_firmwareFromFile;
+    const qsizetype m_notNeededSymbolsIndex;
 };
 
 #endif // UI_FIRMWAREFLASHERWIDGET_H
