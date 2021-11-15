@@ -28,6 +28,7 @@ private:
     void FillButtonGroup();
     void InsertWidgetsIntoLayout();
     void FillUI();
+    void AddButtonFromGroupToLayout(QList<QAbstractButton*>::const_iterator *setButtonIterator, QList<QAbstractButton*>::const_iterator *getButtonIterator, QBoxLayout *layout);
     void ConnectObjects();
 
 Q_SIGNALS:

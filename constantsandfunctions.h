@@ -2,7 +2,6 @@
 
 #include <QtGlobal>
 #include <QMap>
-#include <QVector>
 
 const double Fref=40000000.0;
 
@@ -21,16 +20,6 @@ const QMap<quint8, quint8> atteniatorTable { {0, 15},
                                              {24, 3},
                                              {27, 2},
                                              {30, 1},};
-const QVector<quint8> messagesIds={0,1,2,3,4,5,6,7,8};
 
-static bool calculateDIV_rx(double Fvco)
-{
-    if (Fvco>2750000000)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
-}
+
+

@@ -64,13 +64,8 @@ private:
     void FillFullPageIntoBuffer(QByteArray *partOfFirmware);
     void FillLastPageIntoBuffer(QByteArray *partOfFirmware);
     const QByteArray GetPartOfFirmwareFromArray(quint32 currentIndex, QByteArray *firmwareFromFile);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QLinkedList<QByteArray> GenerateFirmwarePages (QByteArray *firmwareFromFile);
-    void PrepareCommandsToFlash(QLinkedList<QByteArray> &pagesOfFirmware);
-#else
-    QList<QByteArray> GenerateFirmwarePages (QByteArray *firmwareFromFile);
-    void PrepareCommandsToFlash(QList<QByteArray> &pagesOfFirmware);
-#endif
+    std::list<QByteArray> GenerateFirmwarePages (QByteArray *firmwareFromFile);
+    void PrepareCommandsToFlash(std::list<QByteArray> &pagesOfFirmware);
     void SleepMiliseconds(int ms);
 private:
     DataHandler *m_dataHandler;
@@ -89,18 +84,11 @@ private:
     QTimer *m_erasingTimer;
 private:
     FirmwareMessageMaker *m_firmwareMessageMaker;
+    std::list<QByteArray> m_pagesOfFirmware;
+    std::list<QByteArray> *m_writinFirmwareCommandsList;
+    std::list<QByteArray>::iterator m_writingFirmwareCommandsListIterator;
+    std::list<QByteArray>::iterator m_endOfWritingFimrwareCommandsList;
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QLinkedList<QByteArray> m_pagesOfFirmware;
-    QLinkedList<QByteArray> *m_writinFirmwareCommandsList;
-    QLinkedList<QByteArray>::iterator m_writingFirmwareCommandsListIterator;
-    QLinkedList<QByteArray>::iterator m_endOfWritingFimrwareCommandsList;
-#else
-    QList<QByteArray> m_pagesOfFirmware;
-    QList<QByteArray> *m_writinFirmwareCommandsList;
-    QList<QByteArray>::iterator m_writingFirmwareCommandsListIterator;
-    QList<QByteArray>::iterator m_endOfWritingFimrwareCommandsList;
-#endif
     QByteArray *m_firmwareFromFile;
     QByteArray *m_firmwareFromDevice;
     quint32 m_firmwareSize;

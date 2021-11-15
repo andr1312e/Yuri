@@ -15,7 +15,7 @@ FirmwareMessageMaker::FirmwareMessageMaker()
     , m_makeReadOnlyBufferCommand(new QByteArray("\x0b\x04\x0a\x00", 4))
     , m_restartHardwareCommand(new QByteArray("\x0d\x5a", 2))
     , m_readToBufferCommand(new QByteArray("\x0b\x03\x0c\x00\x00\x00\x0a\x00", 8))
-    , m_commands(new QVector<quint8>({10, 11, 12, 13, 14}))
+    , m_commands(new std::array<quint8, 5>({10, 11, 12, 13, 14}))
 {
 
 }

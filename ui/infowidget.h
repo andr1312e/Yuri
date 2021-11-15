@@ -9,7 +9,7 @@ class InfoWidget : public QWidget
 public:
     explicit InfoWidget(QWidget *parent = nullptr);
 
-signals:
+Q_SIGNALS:
 
 };
 

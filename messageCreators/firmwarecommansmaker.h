@@ -29,7 +29,7 @@ private:
     QByteArray CreateAddressCommand(quint32 adress);
     QByteArray CreateNumberOfBytesLenghtCommand(quint16 numberOfBytes);
                                       // 0  1  2  3  4
-    const QVector<quint8> *m_commands;//0a 0b 0c 0d 0e
+    const std::array<quint8, 5> *m_commands;//0a 0b 0c 0d 0e
     quint8 m_significantBit=128; //10 00 00 00
 
 };

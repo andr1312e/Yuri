@@ -23,11 +23,13 @@ public:
 private:
     const double c=299792458.0;
     const double f=245000000.0;
+    const std::array<quint8, 9> messagesIds={0,1,2,3,4,5,6,7,8};
 private:
     quint16 calculateINT_Rx(double Fvco) const;
     quint32 calculateFRACT_Rx(double Fvco) const;
     quint8 calculateGAIN(quint8 gain) const;
     quint8 calculateAtteniator(quint16 atteniatorDb) const;
+    bool calculateDIV_rx(double Fvco) const;
 };
 
 #endif // MESSAGECREATORS_STATEMESSAGESENDER_H

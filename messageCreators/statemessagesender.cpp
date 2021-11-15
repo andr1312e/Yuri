@@ -169,3 +169,15 @@ quint8 StateMessageSender::calculateAtteniator(quint16 atteniatorDb) const
         qFatal("нет значения в таблице");
     }
 }
+
+bool StateMessageSender::calculateDIV_rx(double Fvco) const
+{
+    if (Fvco>2750000000)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}

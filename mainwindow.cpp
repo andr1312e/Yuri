@@ -13,8 +13,14 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    delete m_tcpHandler;
+    delete m_serialHandler;
+    delete m_statusBar;
+
     delete m_connectionWidget;
     delete m_stateWidget;
+    delete m_firmwareWidget;
+    delete m_tabWidget;
 }
 
 void MainWindow::CreateObjects()
@@ -31,15 +37,12 @@ void MainWindow::CreateUI()
 {
     m_statusBar=new QStatusBar();
     m_connectionWidget =new ConnectionWidget(this);
-    qDebug()<<"CreateUI_FIRST m_currentConnectionInterface" << &m_currentConnectionInterface;
     m_stateWidget=new StateWidget(this);
-    qDebug()<<"CreateUI_SECOND m_currentConnectionInterface" << &m_currentConnectionInterface;
     m_firmwareWidget=new FirmWareWidget(this);
-    qDebug()<<"CreateUI_THIRD m_currentConnectionInterface" << &m_currentConnectionInterface;
     m_tabWidget =new QTabWidget();
     m_tabWidget->addTab(m_stateWidget, QStringLiteral("Окно команд"));
-    m_tabWidget->addTab(m_firmwareWidget, QStringLiteral("Окно прошивки микросхемы памяти MX25L12835F"));
-    m_tabWidget->addTab(new QWidget(this), QStringLiteral("Окно прошивки"));
+    m_tabWidget->addTab(m_firmwareWidget, QStringLiteral("Окно прошивки"));
+    m_tabWidget->addTab(new QWidget(this), QStringLiteral("Окно информации"));
 }
 
 void MainWindow::InsertWidgetsIntoMainWindow()

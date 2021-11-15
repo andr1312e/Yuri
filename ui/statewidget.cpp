@@ -57,6 +57,7 @@ StateWidget::~StateWidget()
     delete m_noiseComboBox;
     delete m_noiseLabel;
 
+    qDeleteAll(m_sendStateButtonsGroup->buttons());
     delete m_sendStateButtonsGroup;
     delete m_getStateButtonGroup;
 
@@ -148,14 +149,14 @@ void StateWidget::CreateUI()
 
 void StateWidget::FillButtonGroup()
 {
-    m_sendStateButtonsGroup->addButton(new QPushButton("Пинг"), 0);
+
     m_sendStateButtonsGroup->addButton(new QPushButton("Установка частоты Rx"), 1);
     m_sendStateButtonsGroup->addButton(new QPushButton("Установка частоты Tx"), 2);
     m_sendStateButtonsGroup->addButton(new QPushButton("Установка дальности ответного сигнала"), 3);
 
     m_sendStateButtonsGroup->addButton(new QPushButton("Установка усиления Rx Tx"), 4);
     m_sendStateButtonsGroup->addButton(new QPushButton("Установка ослабления"), 5);
-    m_sendStateButtonsGroup->addButton(new QPushButton("Изменить режим работы"), 6);
+    m_sendStateButtonsGroup->addButton(new QPushButton("Пинг"), 0);
 
     m_getStateButtonGroup=new QButtonGroup();
     m_getStateButtonGroup->addButton(new QPushButton("Получаем частоты Rx"), 1);
@@ -165,41 +166,39 @@ void StateWidget::FillButtonGroup()
 
 void StateWidget::InsertWidgetsIntoLayout()
 {
+    QList<QAbstractButton*> sendStateButtonList=m_sendStateButtonsGroup->buttons();
+    QList<QAbstractButton*> getStateButtonList=m_getStateButtonGroup->buttons();
+    QList<QAbstractButton*>::const_iterator setStateButtonListInterator=sendStateButtonList.cbegin();
+    QList<QAbstractButton*>::const_iterator getStateButtonLIstIterator=getStateButtonList.cbegin();
+
+    m_workPointLineLayout->addWidget(m_fvcoLabel);
+    m_workPointLineLayout->addWidget(m_fvcoComboBox);
+    AddButtonFromGroupToLayout(&setStateButtonListInterator, &getStateButtonLIstIterator, m_workPointLineLayout);
+
     m_speedLayout->addWidget(m_DoplerFreqLabel);
     m_speedLayout->addWidget(m_doplerFreqLineEdit);
     m_speedLayout->addWidget(m_speedLabel);
     m_speedLayout->addWidget(m_speedLineEdit);
+    AddButtonFromGroupToLayout(&setStateButtonListInterator, nullptr, m_speedLayout);
 
     m_rangeLineLayout->addWidget(m_rangeLabel);
     m_rangeLineLayout->addWidget(m_rangeLineEdit);
-
-    m_workPointLineLayout->addWidget(m_fvcoLabel);
-    m_workPointLineLayout->addWidget(m_fvcoComboBox);
+    AddButtonFromGroupToLayout(&setStateButtonListInterator, nullptr, m_rangeLineLayout);
 
     m_gainLineLayout->addWidget(m_gainTXLabel);
     m_gainLineLayout->addWidget(m_gainTXLineEdit);
     m_gainLineLayout->addWidget(m_gainRXLabel);
     m_gainLineLayout->addWidget(m_gainRXLineEdit);
+    AddButtonFromGroupToLayout(&setStateButtonListInterator, &getStateButtonLIstIterator, m_gainLineLayout);
 
     m_attenuatorLineLayout->addWidget(m_attenuatorLabel);
     m_attenuatorLineLayout->addWidget(m_attenuatorComboBox);
+    AddButtonFromGroupToLayout(&setStateButtonListInterator, &getStateButtonLIstIterator, m_attenuatorLineLayout);
 
     m_noiseLineLayout->addWidget(m_noiseValueLabel);
     m_noiseLineLayout->addWidget(m_noiseLineEdit);
     m_noiseLineLayout->addWidget(m_noiseLabel);
     m_noiseLineLayout->addWidget(m_noiseComboBox);
-
-    QList<QAbstractButton*> sendStateButtonList=m_sendStateButtonsGroup->buttons();
-    for (QList<QAbstractButton*>::const_iterator it=sendStateButtonList.cbegin(); it!=sendStateButtonList.cend(); ++it)
-    {
-        m_messageSendButtonsLayout->addWidget(*it);
-    }
-
-    QList<QAbstractButton*> getStateButtonList=m_getStateButtonGroup->buttons();
-    for (QList<QAbstractButton*>::const_iterator it=getStateButtonList.cbegin(); it!=getStateButtonList.cend(); ++it)
-    {
-        m_messageGetButtonsLayout->addWidget(*it);
-    }
 
     m_mainLayout->addLayout(m_workPointLineLayout);
     m_mainLayout->addLayout(m_speedLayout);
@@ -210,6 +209,7 @@ void StateWidget::InsertWidgetsIntoLayout()
     m_mainLayout->addLayout(m_messageSendButtonsLayout);
     m_mainLayout->addLayout(m_messageGetButtonsLayout);
 
+    m_mainLayout->addWidget(*setStateButtonListInterator);
     m_mainLayout->addWidget(m_logClearButton);
     m_mainLayout->addWidget(m_log);
     setLayout(m_mainLayout);
@@ -234,7 +234,12 @@ void StateWidget::FillUI()
     m_gainRXLineEdit->setValidator(m_gainValidator);
 
     m_doplerFreqLineEdit->setText("0");
+    m_speedLineEdit->setText("0");
+    m_rangeLineEdit->setText("0");
     m_noiseLineEdit->setText("0");
+    m_gainTXLineEdit->setText("32");
+    m_gainRXLineEdit->setText("0");
+    m_attenuatorComboBox->setCurrentIndex(8);
 
     m_fvcoComboBox->setEditable(true);
     m_fvcoComboBox->addItems(workPointsValues);
@@ -246,8 +251,19 @@ void StateWidget::FillUI()
     m_log->appendPlainText("Не подключено к ответчику");
     m_logClearButton->setText("Консоль отчистить");
 
-    OnSetButtonEnabled(false);
+//    OnSetButtonEnabled(false);
 
+}
+
+void StateWidget::AddButtonFromGroupToLayout(QList<QAbstractButton*>::const_iterator *setButtonIterator, QList<QAbstractButton*>::const_iterator *getButtonIterator, QBoxLayout *layout)
+{
+    layout->addWidget(**setButtonIterator);
+    setButtonIterator->operator++();
+    if (getButtonIterator!=nullptr)
+    {
+        layout->addWidget(**getButtonIterator);
+        getButtonIterator->operator++();
+    }
 }
 
 void StateWidget::ConnectObjects()
@@ -258,12 +274,13 @@ void StateWidget::ConnectObjects()
     connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::OnConsoleLog);
     connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::OnSetButtonEnabled);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    connect(m_sendStateButtonsGroup, &QButtonGroup::idClicked, this, &StateWidget::SetStateButtonIdClicked);
-    connect(m_getStateButtonGroup, &QButtonGroup::idClicked, this, &StateWidget::GetStateButtonIdClicked);
+    connect(m_sendStateButtonsGroup, &QButtonGroup::idClicked, this, &StateWidget::OnSetStateButtonIdClicked);
+    connect(m_getStateButtonGroup, &QButtonGroup::idClicked, this, &StateWidget::OnGetStateButtonIdClicked);
 #else
     connect(m_sendStateButtonsGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::OnSetStateButtonIdClicked);
     connect(m_getStateButtonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::OnGetStateButtonIdClicked);
 #endif
+    connect(m_noiseComboBox, &QComboBox::currentIndexChanged, [&](){this->OnSetStateButtonIdClicked(6);});
 }
 
 void StateWidget::UpdateHistoryFile()
@@ -390,7 +407,7 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
             secondValue=m_gainRXLineEdit->text().toDouble(&isOk2);
             if (isOk1&&isOk2)
             {
-                OnConsoleLog("Высылаем четвертое сообщение: установка усиления");
+                OnConsoleLog("Высылаем четвертое сообщение: установка усиления. Tx= " + QString::number(firstValue, 'f') + " Rx= " + QString::number(secondValue, 'f'));
                 break;
             }
             else
