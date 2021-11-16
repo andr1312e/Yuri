@@ -1,23 +1,23 @@
 #include "statepresenter.h"
 #include <QDebug>
 #include <QByteArray>
+#include <QWeakPointer>
 
-StatePresenter::StatePresenter()
-    :m_dataHandler(Q_NULLPTR)
+StatePresenter::StatePresenter(QObject *parent)
+    :  QObject(parent)
+    ,  m_dataHandler(Q_NULLPTR)
 {
     CreateObjects();
 }
 
 StatePresenter::~StatePresenter()
 {
-    delete m_messageGetter;
-    delete m_messageSetter;
 }
 
 void StatePresenter::CreateObjects()
 {
-    m_messageSetter=new StateMessageSender();
-    m_messageGetter=new StateMessageGetter();
+    m_messageSetter.operator=(QSharedPointer<StateMessageSender>(new StateMessageSender()));
+    m_messageGetter.operator=(QSharedPointer<StateMessageGetter>(new StateMessageGetter()));
 }
 
 void StatePresenter::OnGetMessageWithState(QByteArray &messageFromDevice)

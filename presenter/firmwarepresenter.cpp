@@ -228,7 +228,7 @@ void FirmwarePresenter::OnSetFirmwareFromFileToPresenter(QByteArray &firmwareFro
 void FirmwarePresenter::OnReadFirmwareAgain()
 {
     Q_EMIT ToConsoleLog("Считываем страницу: " + QString::number(m_currentPage));
-    Q_EMIT ToProgressBarUpdate(m_currentPage);
+    Q_EMIT ToProgressBarSetValue(m_currentPage);
     m_currentPage++;
     m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->ReadToBufferCommand(m_currentAdress, m_maxMessageSize-1));
     SleepMiliseconds(3);
@@ -276,7 +276,7 @@ void FirmwarePresenter::OnWritingTimerTimeOut()
         }
         Q_EMIT ToConsoleLog("Записана страница "+ QString::number(m_currentPage));
         ++m_currentPage;
-        Q_EMIT ToProgressBarUpdate(m_currentPage);
+        Q_EMIT ToProgressBarSetValue(m_currentPage);
     }
 }
 
@@ -335,7 +335,7 @@ void FirmwarePresenter::ConnectHander(DataHandler *dataHandler)
     connect(m_dataHandler, &DataHandler::ToFirmWareFormDeviceLoaded, this, &FirmwarePresenter::OnFirmwareFromDeviceLoaded);
 }
 
-const QByteArray FirmwarePresenter::GetPartOfFirmwareFromArray(quint32 currentIndex, QByteArray &firmwareFromFile) const
+const QByteArray FirmwarePresenter::MidPartOfFirmware(quint32 currentIndex, QByteArray &firmwareFromFile) const
 {
     if (currentIndex+m_maxMessageSize<m_firmwareSize)
     {
@@ -353,7 +353,7 @@ const std::list<QByteArray> FirmwarePresenter::GenerateFirmwarePages(QByteArray 
     quint32 currentAdress=0;
     while(true)
     {
-        const QByteArray partOfPage=GetPartOfFirmwareFromArray(currentAdress, firmwareFromFile);
+        const QByteArray partOfPage=MidPartOfFirmware(currentAdress, firmwareFromFile);
         if(partOfPage.isEmpty())
         {
             break;
@@ -388,7 +388,7 @@ void FirmwarePresenter::PrepareCommandsToFlash(const std::list<QByteArray> &page
     m_writingFirmwareCommandsListIterator=m_writinFirmwareCommandsList->begin();
     Q_EMIT ToConsoleLog(QStringLiteral("Вычисляем колличество страниц в прошивке"));
     m_totalCountOfPages=pagesOfFirmware.size();
-    Q_EMIT ToSetMaximumCountOfPages(m_totalCountOfPages);
+    Q_EMIT ToSetMaximumProgressBar(m_totalCountOfPages);
     Q_EMIT ToConsoleLog("Страниц в прошивке: "+ QString::number(m_totalCountOfPages));
 }
 

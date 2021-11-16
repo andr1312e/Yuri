@@ -62,8 +62,8 @@ void FirmWareWidget::ConnectObjects()
     connect(m_firmwarePresenter, &FirmwarePresenter::ToConsoleLog,  m_firmwareLogWidget, &FirmwareLogWidget::OnConsoleLog);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToSetButtonsEnabled, this, &FirmWareWidget::OnSetButtonsEnabled);
     connect(m_firmwareLogWidget, &FirmwareLogWidget::ToRestartDevice, [&](){m_firmwarePresenter->SendMessageToQueue(0, 0, 0);});
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToSetMaximumCountOfPages, this, &FirmWareWidget::OnSetMaximumProgressBar);
-    connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarUpdate, m_progressBar, &QProgressBar::setValue);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToSetMaximumProgressBar, this, &FirmWareWidget::OnSetMaximumProgressBar);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarSetValue, m_progressBar, &QProgressBar::setValue);
     connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToSetFirmwareFromFileToPresenter, m_firmwarePresenter, &FirmwarePresenter::OnSetFirmwareFromFileToPresenter);
 }
 

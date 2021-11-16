@@ -17,6 +17,7 @@ StateWidget::StateWidget(QWidget *parent)
 StateWidget::~StateWidget()
 {
     m_file->close();
+    delete m_statePresenter;
 
     delete m_file;
     delete m_intValidator;
@@ -78,7 +79,7 @@ void StateWidget::ConnectHander(DataHandler *dataHandler)
 
 void StateWidget::CreateObjects()
 {
-    m_statePresenter=new StatePresenter();
+    m_statePresenter=new StatePresenter(this);
     m_file=new QFile(QDir::currentPath()+"/история запросов.txt");
     m_intValidator=new QIntValidator();
     m_gainValidator=new QIntValidator(0, 64);
@@ -150,18 +151,18 @@ void StateWidget::CreateUI()
 void StateWidget::FillButtonGroup()
 {
 
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установка частоты Rx"), 1);
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установка частоты Tx"), 2);
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установка дальности ответного сигнала"), 3);
+    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 1);
+    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 2);
+    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 3);
 
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установка усиления Rx Tx"), 4);
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установка ослабления"), 5);
+    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 4);
+    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 5);
     m_sendStateButtonsGroup->addButton(new QPushButton("Пинг"), 0);
 
     m_getStateButtonGroup=new QButtonGroup();
-    m_getStateButtonGroup->addButton(new QPushButton("Получаем частоты Rx"), 1);
-    m_getStateButtonGroup->addButton(new QPushButton("Получаем усиление TX и РХ"), 4);
-    m_getStateButtonGroup->addButton(new QPushButton("Получаем ослабление"), 5);
+    m_getStateButtonGroup->addButton(new QPushButton("Запросить"), 1);
+    m_getStateButtonGroup->addButton(new QPushButton("Запросить"), 4);
+    m_getStateButtonGroup->addButton(new QPushButton("Запросить"), 5);
 }
 
 void StateWidget::InsertWidgetsIntoLayout()
@@ -281,7 +282,11 @@ void StateWidget::ConnectObjects()
     connect(m_sendStateButtonsGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::OnSetStateButtonIdClicked);
     connect(m_getStateButtonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::OnGetStateButtonIdClicked);
 #endif
-    connect(m_noiseComboBox, &QComboBox::currentIndexChanged, [&](){this->OnSetStateButtonIdClicked(6);});
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    connect(m_noiseComboBox, &QComboBox::currentIndexChanged, [&](int index){this->OnSetStateButtonIdClicked(6);});
+#else
+    connect(m_noiseComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [&](int index){this->OnSetStateButtonIdClicked(6);});
+#endif
 }
 
 void StateWidget::UpdateHistoryFile()
@@ -477,7 +482,7 @@ void StateWidget::OnGetStateButtonIdClicked(int id)
     switch (id) {
     case 1:
     {
-        OnConsoleLog("Получаем частоты RX");
+        OnConsoleLog("Получаем рабочую точку");
         break;
     }
     case 4:

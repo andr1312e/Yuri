@@ -1,7 +1,7 @@
 QT       += core network widgets serialport
 
 CONFIG += c++latest
-VERSION = 3.3.1
+VERSION = 3.3.3
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 TARGET = "YUstirovojchnyj_komplekt"
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -43,10 +43,3 @@ HEADERS += \
     ui/firmwarewidget.h \
     ui/infowidget.h \
     ui/statewidget.h
-
-# Default rules for deployment.
-#qnx: target.path = /tmp/$${TARGET}/bin
-#else: unix:!android: target.path = /opt/$${TARGET}/bin
-#!isEmpty(target.path): INSTALLS += target
-
-#DISTFILES +=

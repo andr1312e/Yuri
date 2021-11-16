@@ -29,8 +29,8 @@ private:
 Q_SIGNALS:
     void ToSetButtonsEnabled(bool state);
     void ToConsoleLog(QString errorMessage);
-    void ToSetMaximumCountOfPages(int pageNum);
-    void ToProgressBarUpdate(int pageNum);
+    void ToSetMaximumProgressBar(int maxPageNum);
+    void ToProgressBarSetValue(int pageNum);
 public Q_SLOTS:
     void OnSetFirmwareFromFileToPresenter(QByteArray &firmwareFromFile);
     void OnFlash(bool isNeedToCheck, bool isNeedToRestartAfterSuccess);
@@ -48,7 +48,7 @@ public:
     void ConnectHander(DataHandler *dataHandler);
     void SendMessageToQueue(quint8 command, quint32 adress, quint8 lenght);
 private:
-    const QByteArray GetPartOfFirmwareFromArray(quint32 currentIndex, QByteArray &firmwareFromFile) const;
+    const QByteArray MidPartOfFirmware(quint32 currentIndex, QByteArray &firmwareFromFile) const;
     const std::list<QByteArray> GenerateFirmwarePages(QByteArray &firmwareFromFile) const;
 
     void FillFullPageIntoBuffer(const QByteArray *partOfFirmware);

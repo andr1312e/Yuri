@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QtGlobal>
+#include <QScopedPointer>
+#include <QSharedPointer>
 #include "connections/datahandler.h"
 #include <messageCreators/statemessagegetter.h>
 #include <messageCreators/statemessagesender.h>
@@ -11,17 +13,17 @@ class StatePresenter :public QObject
 {
     Q_OBJECT
 public:
-    explicit StatePresenter();
+    explicit StatePresenter(QObject *parent);
     ~StatePresenter();
 private:
     void CreateObjects();
 
-private Q_SLOTS:
-    void OnGetMessageWithState(QByteArray &messageFromDevice);
 Q_SIGNALS:
     void ToSetButtonsEnabled(int state);
     void ToConsoleLog(QString message);
     void ToUpdateHistoryFile();
+private Q_SLOTS:
+    void OnGetMessageWithState(QByteArray &messageFromDevice);
 
 public:
     void DisconnectOldHandler();
@@ -31,8 +33,9 @@ public:
 
 private:
     DataHandler *m_dataHandler;
-    StateMessageSender *m_messageSetter;
-    StateMessageGetter *m_messageGetter;
+
+    QSharedPointer <StateMessageSender> m_messageSetter;
+    QSharedPointer <StateMessageGetter> m_messageGetter;
 };
 
 #endif // PRESENTER_STATEPRESENTER_H

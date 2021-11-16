@@ -33,6 +33,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void OnCurrentIndexConnectionTypeComboBoxChanged(int index);
+    void OnAdressLineEditChange(const QString &newAdress);
+    void OnPortLineEditChange(const QString &port);
     void OnConnectButtonClicked();
     void OnNewSerialPortsChecked();
 public:
