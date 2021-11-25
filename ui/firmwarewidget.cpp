@@ -51,7 +51,7 @@ void FirmWareWidget::FillUI()
 {
     m_progressBar->setRange(0, 100);
     m_splitter->addWidget(m_firmwareFlasherWidget);
-    //    SetButtonsEnabled(false);
+    OnSetButtonsEnabled(false);
 }
 
 void FirmWareWidget::ConnectObjects()

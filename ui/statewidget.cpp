@@ -222,10 +222,10 @@ void StateWidget::FillUI()
     m_DoplerFreqLabel->setText("Частота Доплера (по желанию) для частоты Tx: ГЕРЦЫ");
     m_speedLabel->setText("Скорость может быть <0: метры/секунду ");
     m_rangeLabel->setText("Дальность ответного сигнала d: метры");
-    m_gainTXLabel->setText("Усиление TX GAIN_TX: децибелы");
+    m_gainTXLabel->setText(QStringLiteral("Усиление TX GAIN_TX: децибелы"));
     m_gainRXLabel->setText("Усиление RX GAIN_RX: децибелы");
     m_attenuatorLabel->setText("Установка ослабления Attenuator_RX: децибелы");
-    m_noiseValueLabel->setText("Значения для синуса и м сигнала");
+    m_noiseValueLabel->setText(QStringLiteral("Значения для синуса и м сигнала"));
     m_noiseLabel->setText("Режимы работы:");
 
     m_speedLineEdit->setValidator(m_intValidator);
@@ -253,7 +253,7 @@ void StateWidget::FillUI()
     m_log->appendPlainText("Не подключено к ответчику");
     m_logClearButton->setText("Консоль отчистить");
 
-    OnSetButtonEnabled(false);
+//    OnSetButtonEnabled(false);
 
 }
 

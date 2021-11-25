@@ -1,5 +1,5 @@
 #include "statemessagesender.h"
-
+#include <QtDebug>
 StateMessageSender::StateMessageSender()
 {
 
@@ -25,20 +25,20 @@ QByteArray StateMessageSender::createFirstCommand(double Fvco)
     qint32 FRACT_Rx=calculateFRACT_Rx(Fvco);//МГЦ
     bool DivRx=calculateDIV_rx(Fvco);
 
+    QByteArray lastThreeBytes;
+    QDataStream threeBytesStream(&lastThreeBytes, QIODevice::WriteOnly);
+    threeBytesStream << FRACT_Rx;
 
-    quint8 FRACT_RxFirst=(FRACT_Rx >> (8*0)) & 0xff;
-    quint8 FRACT_RxSecond=(FRACT_Rx >> (8*1)) & 0xff;
-    quint8 FRACT_RxThird=(FRACT_Rx >> (8*2)) & 0xff;
 
     QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);
     streamMain << id;
     streamMain << INT_Rx;
-    streamMain << FRACT_RxThird;
-    streamMain << FRACT_RxSecond;
-    streamMain << FRACT_RxFirst;
+    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-3);
+    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-2);
+    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-1);
     streamMain << DivRx;
-//    qDebug()<< command.toHex();
+    qDebug()<< command.toHex();
     return command;
 }
 
@@ -139,9 +139,9 @@ quint32 StateMessageSender::calculateFRACT_Rx(double Fvco) const
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
     quint32 FRACT_Rx=(pow(2,20));
-    double FirstValue=2.0*Fvco;
-    double FirstValueDiv=Fref*pow(2, DIV_Rx);
-    FirstValue=FirstValue/FirstValueDiv;
+    double RealFvco=Fvco/*-3000000.0*/;//здесь вычитать не надо
+    double FirstValue=RealFvco*2.0;
+    FirstValue=FirstValue/Fref/pow(2, DIV_Rx);
     double SecondValue=(qint32)FirstValue;
     FRACT_Rx=FRACT_Rx*(FirstValue-SecondValue);
     return FRACT_Rx;

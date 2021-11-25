@@ -19,7 +19,7 @@ StateMessageGetter::~StateMessageGetter()
 
 const QString StateMessageGetter::getDataFromMessage(const QByteArray &message) const
 {
-//    qDebug()<< "GET"<<message.toHex();
+    //    qDebug()<< "GET"<<message.toHex();
     quint8 sendedMessageId=message.at(m_indexOfGettingMessageId);
     switch (sendedMessageId) {
     case 1:
@@ -37,21 +37,37 @@ const QString StateMessageGetter::getFvcoFromFirstMessage(const QByteArray &mess
 {
     if(message.count()==8)
     {
+        QByteArray arrayINTRX;
+        arrayINTRX.append(message.at(2));
+        arrayINTRX.append(message.at(3));
+        QDataStream IntDataStream(arrayINTRX);
+        quint16 INT_RX;
+        IntDataStream >> INT_RX;
+
+        QByteArray arrayFRACTRX;
+        arrayFRACTRX.append(static_cast<char>(0x00));//иначе будет 0 нужно 4 байта
+        arrayFRACTRX.append(message.at(4));
+        arrayFRACTRX.append(message.at(5));
+        arrayFRACTRX.append(message.at(6));
+
+        QDataStream fractDataStream(arrayFRACTRX);
+        quint32 FRACT_RX;
+        fractDataStream >> FRACT_RX;
+
         bool DIV_RX=message.at(7);
-        QByteArray arrayINTRX(2, ' ');
-        arrayINTRX[0] = message.at(2);
-        arrayINTRX[1] = message.at(3);
-        QDataStream ds(arrayINTRX);
-        quint16 INT_RX=0;
-        ds >> INT_RX;
-        quint64 INT_RX_BIG=INT_RX;
-        INT_RX_BIG=INT_RX_BIG+4;
-        INT_RX_BIG=INT_RX_BIG*Fref;
-        INT_RX_BIG=INT_RX_BIG*qPow(2,DIV_RX);
-        INT_RX_BIG=INT_RX_BIG/2;
-        INT_RX_BIG=INT_RX_BIG+3000000.0;
-        INT_RX_BIG=INT_RX_BIG/1000000;
-        const QString result= QStringLiteral("Рабочая точка равна Fvco= %1 Мегагерц").arg(INT_RX_BIG);
+
+        //Значение сидит только здесь, первую парсить не нужно
+
+        double FRACT_RX_BIG=FRACT_RX;
+        FRACT_RX_BIG=FRACT_RX_BIG/qPow(2, 20);
+        FRACT_RX_BIG=FRACT_RX_BIG+INT_RX+4;
+        FRACT_RX_BIG=FRACT_RX_BIG/2.0;
+        FRACT_RX_BIG=FRACT_RX_BIG*Fref*qPow(2, DIV_RX);
+
+        FRACT_RX=(quint32)qCeil(FRACT_RX_BIG/1000000);
+
+
+        const QString result= QStringLiteral("Рабочая точка равна Fvco= %1 Мегагерц").arg(FRACT_RX);
         return result;
     }
     return QLatin1String();

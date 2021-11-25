@@ -62,10 +62,11 @@ void ConnectionWidget::CreateUI()
 void ConnectionWidget::InsertWidgetsIntoLayout()
 {
     m_adressAndPortLayout->addWidget(m_connectionTypeComboBox);
+    m_adressAndPortLayout->addWidget(m_comPortNameComboBox);
     m_adressAndPortLayout->addWidget(m_adressAndPortLabel);
     m_adressAndPortLayout->addWidget(m_adressLineEdit);
     m_adressAndPortLayout->addWidget(m_portLineEdit);
-    m_adressAndPortLayout->addWidget(m_comPortNameComboBox);
+
 
     m_buttonsLayout->addWidget(m_connectButton);
     m_buttonsLayout->addWidget(m_disconnectButton);
@@ -90,7 +91,7 @@ void ConnectionWidget::FillUI()
 {
 
     m_connectionTypeComboBox->addItem(QStringLiteral("Ethernet Moxa NPort-5450I"));
-    m_connectionTypeComboBox->addItem(QStringLiteral("Usb Moxa UPort 1150"));
+    m_connectionTypeComboBox->addItem(QStringLiteral("Usb Moxa UPort 1150. Выбери порт"));
     m_connectionTypeComboBox->setEditable(false);
     m_adressAndPortLabel->setText(QStringLiteral("Введите адрес и порт подключения"));
     m_adressLineEdit->setInputMask(QStringLiteral("000.000.000.000;_"));
@@ -104,10 +105,11 @@ void ConnectionWidget::FillUI()
     m_connectButton->setText(QStringLiteral("Подключится"));
     m_disconnectButton->setText(QStringLiteral("Отключится"));
     m_disconnectButton->setDisabled(true);
-    OnNewSerialPortsChecked();
+//    OnNewSerialPortsChecked();
 
 
     m_comPortNameComboBox->setDisabled(true);
+    m_comPortNameComboBox->setMinimumWidth(200);
 }
 
 void ConnectionWidget::OnCurrentIndexConnectionTypeComboBoxChanged(int index)

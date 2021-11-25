@@ -216,7 +216,7 @@ void FirmwarePresenter::OnTimerTimeout()
     {
         QByteArray commandToExecute(m_commandsQueue->dequeue());
         Q_EMIT ToConsoleLog("Выслали команду  "+QString::fromLatin1(commandToExecute.toHex()));
-        //        m_dataHandler->SendMessageToDevice(commandToExecute);
+        m_dataHandler->SendMessageToDevice(commandToExecute);
     }
 }
 
@@ -243,7 +243,7 @@ void FirmwarePresenter::OnWritingTimerTimeOut()
         m_writingFirmwareTimer->stop();
         if(m_needToCheck)
         {
-            Q_EMIT ToConsoleLog("Записаны все страницы. Проверяемся");
+            Q_EMIT ToConsoleLog(QStringLiteral("Записаны все страницы. Проверяемся"));
             m_needToCheck=false;
             OnStartReadingFirmWareFromDevice();
         }
@@ -285,7 +285,6 @@ void FirmwarePresenter::OnErasingTimerTimeOut()
     Q_EMIT ToConsoleLog(QStringLiteral("Проверяем состояние регистров после форматирования:"));
     if (m_isPcbBisy)
     {
-        //        m_isPcbBisy=false;
         Q_EMIT ToConsoleLog(QStringLiteral("Занят. Форматируется еще..."));
         Q_EMIT ToConsoleLog(QStringLiteral("Высылаем еще раз запрос на проверку состояния"));
         m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->m_readRegisterStatusCommand);
