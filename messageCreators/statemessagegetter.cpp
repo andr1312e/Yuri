@@ -17,26 +17,27 @@ StateMessageGetter::~StateMessageGetter()
 
 }
 
-const QString StateMessageGetter::getDataFromMessage(const QByteArray &message) const
+const QString StateMessageGetter::GetDataFromMessage(const QByteArray &message) const
 {
     //    qDebug()<< "GET"<<message.toHex();
     quint8 sendedMessageId=message.at(m_indexOfGettingMessageId);
     switch (sendedMessageId) {
     case 1:
-        return getFvcoFromFirstMessage(message);
+        return GetFvcoFromFirstMessage(message);
     case 4:
-        return getGainTxGainRXFromFourthMessage(message);
+        return GetGainTxGainRXFromFourthMessage(message);
     case 5:
-        return getAttenuatorRXFromFiveMessage(message);
+        return GetAttenuatorRXFromFiveMessage(message);
     default:
         return QStringLiteral(" StateMessageGetter::getDataFromMessage ничего");
     }
 }
 
-const QString StateMessageGetter::getFvcoFromFirstMessage(const QByteArray &message) const
+const QString StateMessageGetter::GetFvcoFromFirstMessage(const QByteArray &message) const
 {
     if(message.count()==8)
     {
+        qDebug()<< QStringLiteral("Приняли ") << message.toHex();
         QByteArray arrayINTRX;
         arrayINTRX.append(message.at(2));
         arrayINTRX.append(message.at(3));
@@ -59,21 +60,23 @@ const QString StateMessageGetter::getFvcoFromFirstMessage(const QByteArray &mess
         //Значение сидит только здесь, первую парсить не нужно
 
         double FRACT_RX_BIG=FRACT_RX;
-        FRACT_RX_BIG=FRACT_RX_BIG/qPow(2, 20);
-        FRACT_RX_BIG=FRACT_RX_BIG+INT_RX+4;
+        double pow=qPow(2, 20);
+        FRACT_RX_BIG=FRACT_RX_BIG/pow;
+        FRACT_RX_BIG=FRACT_RX_BIG+INT_RX+4.0;
         FRACT_RX_BIG=FRACT_RX_BIG/2.0;
         FRACT_RX_BIG=FRACT_RX_BIG*Fref*qPow(2, DIV_RX);
 
-        FRACT_RX=(quint32)qCeil(FRACT_RX_BIG/1000000);
+        quint32 FRACT_RX_RETURNED=(quint32)qCeil(FRACT_RX_BIG/1000000.0);
+        FRACT_RX_RETURNED=FRACT_RX_RETURNED+3;
 
 
-        const QString result= QStringLiteral("Рабочая точка равна Fvco= %1 Мегагерц").arg(FRACT_RX);
+        const QString result= QStringLiteral("Рабочая точка равна Fvco= %1 Мегагерц").arg(FRACT_RX_RETURNED);
         return result;
     }
     return QLatin1String();
 }
 
-const QString StateMessageGetter::getGainTxGainRXFromFourthMessage(const QByteArray &message) const
+const QString StateMessageGetter::GetGainTxGainRXFromFourthMessage(const QByteArray &message) const
 {
 
     if (message.count()==4)
@@ -86,7 +89,7 @@ const QString StateMessageGetter::getGainTxGainRXFromFourthMessage(const QByteAr
     return QLatin1String();
 }
 
-const QString StateMessageGetter::getAttenuatorRXFromFiveMessage(const QByteArray &message) const
+const QString StateMessageGetter::GetAttenuatorRXFromFiveMessage(const QByteArray &message) const
 {
     if (message.count()==3)
     {

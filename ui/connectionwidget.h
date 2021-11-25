@@ -8,6 +8,8 @@
 #include <QComboBox>
 #include <QWidget>
 #include <QTimer>
+#include <QDebug>
+#include <QSettings>
 #include <QSerialPortInfo>
 
 class ConnectionWidget : public QWidget
@@ -24,7 +26,7 @@ private:
     void ConnectObjects();
     void FillUI();
 Q_SIGNALS:
-    void ToConsoleLog(QString message);
+    void ToConsoleLog(const QString &message);
     void ToConnectEthernetMoxa(const QString &adress, const QString &port);
     void ToConnectUsbMoxa(const QString &comPortName);
     void ToDisconnectFromMoxa();

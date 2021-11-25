@@ -28,7 +28,7 @@ private:
     void FillUI();
     void ConnectObjects();
 Q_SIGNALS:
-    void ToConsoleLog(QString message);
+    void ToConsoleLog(const QString &message);
     void ToSetStateButtonIdClicked(int id);
     void ToDataHanderChanged();
 

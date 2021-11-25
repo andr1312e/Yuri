@@ -22,7 +22,7 @@ void StatePresenter::CreateObjects()
 
 void StatePresenter::OnGetMessageWithState(QByteArray &messageFromDevice)
 {
-    QString currentValue=m_messageGetter->getDataFromMessage(messageFromDevice);
+    QString currentValue=m_messageGetter->GetDataFromMessage(messageFromDevice);
     Q_EMIT ToConsoleLog(currentValue);
 }
 

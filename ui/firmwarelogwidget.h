@@ -1,6 +1,6 @@
 #ifndef UI_FIRMWARELOGWIDGET_H
 #define UI_FIRMWARELOGWIDGET_H
-
+#include <QDateTime>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -21,7 +21,7 @@ private:
 Q_SIGNALS:
     void ToRestartDevice();
 public Q_SLOTS:
-    void OnConsoleLog(QString message);
+    void OnConsoleLog(const QString &message);
 private:
     QVBoxLayout *m_mainLayout;
 

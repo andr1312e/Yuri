@@ -143,7 +143,7 @@ void StateWidget::CreateUI()
     m_logClearButton=new QPushButton();
 
     m_log=new QPlainTextEdit();
-    m_log->setStyleSheet("color: white; background-color: black;");
+    m_log->setStyleSheet(QStringLiteral("color: white; background-color: black;"));
 
 
 }
@@ -151,18 +151,19 @@ void StateWidget::CreateUI()
 void StateWidget::FillButtonGroup()
 {
 
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 1);
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 2);
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 3);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить RX")), 1);
+//    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить RX и ТХ")), 21);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить TX")), 2);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить")), 3);
 
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 4);
-    m_sendStateButtonsGroup->addButton(new QPushButton("Установить"), 5);
-    m_sendStateButtonsGroup->addButton(new QPushButton("Пинг"), 0);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить")), 4);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить")), 5);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Пинг")), 0);
 
     m_getStateButtonGroup=new QButtonGroup();
-    m_getStateButtonGroup->addButton(new QPushButton("Запросить"), 1);
-    m_getStateButtonGroup->addButton(new QPushButton("Запросить"), 4);
-    m_getStateButtonGroup->addButton(new QPushButton("Запросить"), 5);
+    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 1);
+    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 4);
+    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 5);
 }
 
 void StateWidget::InsertWidgetsIntoLayout()
@@ -218,15 +219,15 @@ void StateWidget::InsertWidgetsIntoLayout()
 
 void StateWidget::FillUI()
 {
-    m_fvcoLabel->setText("Рабочая точка Fvco для частот Tx и Rx: МЕГАгерцы");
-    m_DoplerFreqLabel->setText("Частота Доплера (по желанию) для частоты Tx: ГЕРЦЫ");
-    m_speedLabel->setText("Скорость может быть <0: метры/секунду ");
-    m_rangeLabel->setText("Дальность ответного сигнала d: метры");
+    m_fvcoLabel->setText(QStringLiteral("Рабочая точка Fvco для частот Tx и Rx: МЕГАгерцы"));
+    m_DoplerFreqLabel->setText(QStringLiteral("Частота Доплера (по желанию) для частоты Tx: ГЕРЦЫ"));
+    m_speedLabel->setText(QStringLiteral("Скорость может быть <0: метры/секунду "));
+    m_rangeLabel->setText(QStringLiteral("Дальность ответного сигнала d: метры"));
     m_gainTXLabel->setText(QStringLiteral("Усиление TX GAIN_TX: децибелы"));
-    m_gainRXLabel->setText("Усиление RX GAIN_RX: децибелы");
-    m_attenuatorLabel->setText("Установка ослабления Attenuator_RX: децибелы");
+    m_gainRXLabel->setText(QStringLiteral("Усиление RX GAIN_RX: децибелы"));
+    m_attenuatorLabel->setText(QStringLiteral("Установка ослабления Attenuator_RX: децибелы"));
     m_noiseValueLabel->setText(QStringLiteral("Значения для синуса и м сигнала"));
-    m_noiseLabel->setText("Режимы работы:");
+    m_noiseLabel->setText(QStringLiteral("Режимы работы:"));
 
     m_speedLineEdit->setValidator(m_intValidator);
     m_doplerFreqLineEdit->setValidator(m_intValidator);
@@ -234,12 +235,12 @@ void StateWidget::FillUI()
     m_gainTXLineEdit->setValidator(m_gainValidator);
     m_gainRXLineEdit->setValidator(m_gainValidator);
 
-    m_doplerFreqLineEdit->setText("0");
-    m_speedLineEdit->setText("0");
-    m_rangeLineEdit->setText("0");
-    m_noiseLineEdit->setText("0");
-    m_gainTXLineEdit->setText("32");
-    m_gainRXLineEdit->setText("0");
+    m_doplerFreqLineEdit->setText(QStringLiteral("0"));
+    m_speedLineEdit->setText(QStringLiteral("0"));
+    m_rangeLineEdit->setText(QStringLiteral("0"));
+    m_noiseLineEdit->setText(QStringLiteral("0"));
+    m_gainTXLineEdit->setText(QStringLiteral("32"));
+    m_gainRXLineEdit->setText(QStringLiteral("0"));
 
 
     m_fvcoComboBox->setEditable(true);
@@ -250,8 +251,8 @@ void StateWidget::FillUI()
     m_noiseComboBox->setEditable(false);
 
     m_log->setReadOnly(true);
-    m_log->appendPlainText("Не подключено к ответчику");
-    m_logClearButton->setText("Консоль отчистить");
+    m_log->appendPlainText(QStringLiteral("Не подключено к ответчику"));
+    m_logClearButton->setText(QStringLiteral("Консоль отчистить"));
 
 //    OnSetButtonEnabled(false);
 
@@ -291,7 +292,7 @@ void StateWidget::ConnectObjects()
 
 void StateWidget::UpdateHistoryFile()
 {
-    QString time="\n"+QDateTime::currentDateTime().toString("hh:mm:ss");
+    QString time="\n"+QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
     int space=5;
     QString fvco=m_fvcoComboBox->currentText().leftJustified(space, ' ');
     QString dopler =m_doplerFreqLineEdit->text().leftJustified(space, ' ');
@@ -307,9 +308,9 @@ void StateWidget::UpdateHistoryFile()
 }
 
 
-void StateWidget::OnConsoleLog(QString message)
+void StateWidget::OnConsoleLog(const QString &message)
 {
-    QString time=QDateTime::currentDateTime().toString("hh:mm:ss");
+    QString time=QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
     m_log->appendPlainText(time+ " "+ message);
 }
 

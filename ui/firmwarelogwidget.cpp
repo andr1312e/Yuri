@@ -1,6 +1,6 @@
 #include "firmwarelogwidget.h"
 
-#include <QDateTime>
+
 
 FirmwareLogWidget::FirmwareLogWidget(QWidget *parent)
     : QWidget(parent)
@@ -38,8 +38,8 @@ void FirmwareLogWidget::InsertWidgetsIntoLayout()
 
 void FirmwareLogWidget::FillUI()
 {
-    m_restarPushButton->setText("Перезагрузить устройство");
-    m_logClearButton->setText("Отчистить консоль");
+    m_restarPushButton->setText(QStringLiteral("Перезагрузить устройство"));
+    m_logClearButton->setText(QStringLiteral("Отчистить консоль"));
     m_log->setReadOnly(true);
 }
 
@@ -49,8 +49,8 @@ void FirmwareLogWidget::ConnectObjects()
     connect(m_restarPushButton, &QPushButton::clicked, this, &FirmwareLogWidget::ToRestartDevice);
 }
 
-void FirmwareLogWidget::OnConsoleLog(QString message)
+void FirmwareLogWidget::OnConsoleLog(const QString &message)
 {
-    QString time=QDateTime::currentDateTime().toString("hh:mm:ss");
+    QString time=QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
     m_log->appendPlainText(time+ " "+ message);
 }

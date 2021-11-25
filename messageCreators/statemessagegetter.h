@@ -10,11 +10,11 @@ class StateMessageGetter
 public:
     StateMessageGetter();
     ~StateMessageGetter();
-    const QString getDataFromMessage(const QByteArray &message) const;
+    const QString GetDataFromMessage(const QByteArray &message) const;
 private:
-    const QString getFvcoFromFirstMessage(const QByteArray &message) const;
-    const QString getGainTxGainRXFromFourthMessage(const QByteArray &message) const;
-    const QString getAttenuatorRXFromFiveMessage(const QByteArray &message) const;
+    const QString GetFvcoFromFirstMessage(const QByteArray &message) const;
+    const QString GetGainTxGainRXFromFourthMessage(const QByteArray &message) const;
+    const QString GetAttenuatorRXFromFiveMessage(const QByteArray &message) const;
 private:
     const int m_indexOfGettingMessageId;
 };

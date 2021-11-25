@@ -1,6 +1,4 @@
 #include "connectionwidget.h"
-#include <QDebug>
-#include <QSettings>
 
 ConnectionWidget::ConnectionWidget(QWidget *parent)
     : QWidget(parent)
@@ -97,19 +95,18 @@ void ConnectionWidget::FillUI()
     m_adressLineEdit->setInputMask(QStringLiteral("000.000.000.000;_"));
     m_portLineEdit->setInputMask(QStringLiteral("00000;_"));
 
-    QSettings settings("ipSettings.ini", QSettings::IniFormat);
+    QSettings settings(QStringLiteral("ipSettings.ini"), QSettings::IniFormat);
 
 
-    m_adressLineEdit->setText(settings.value("ip", "192.168.127.254").toString());
-    m_portLineEdit->setText(settings.value("port", "4004").toString());
+    m_adressLineEdit->setText(settings.value(QStringLiteral("ip"), "192.168.127.254").toString());
+    m_portLineEdit->setText(settings.value(QStringLiteral("port"), "4004").toString());
     m_connectButton->setText(QStringLiteral("Подключится"));
     m_disconnectButton->setText(QStringLiteral("Отключится"));
     m_disconnectButton->setDisabled(true);
-//    OnNewSerialPortsChecked();
 
 
     m_comPortNameComboBox->setDisabled(true);
-    m_comPortNameComboBox->setMinimumWidth(200);
+    m_comPortNameComboBox->setMinimumWidth(300);
 }
 
 void ConnectionWidget::OnCurrentIndexConnectionTypeComboBoxChanged(int index)

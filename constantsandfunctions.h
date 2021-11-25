@@ -21,5 +21,10 @@ const QMap<quint8, quint8> atteniatorTable { {0, 15},
                                              {27, 2},
                                              {30, 1},};
 
+static int BarinovRounding(double value)
+{
+    return (int)(value+0.5);
+}
+
 
 

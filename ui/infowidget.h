@@ -7,8 +7,8 @@ class InfoWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit InfoWidget(QWidget *parent = nullptr);
-
+    explicit InfoWidget(QWidget *parent);
+    ~InfoWidget();
 Q_SIGNALS:
 
 };

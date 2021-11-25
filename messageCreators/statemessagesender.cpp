@@ -1,5 +1,7 @@
 #include "statemessagesender.h"
 #include <QtDebug>
+#include <QtMath>
+
 StateMessageSender::StateMessageSender()
 {
 
@@ -34,11 +36,11 @@ QByteArray StateMessageSender::createFirstCommand(double Fvco)
     QDataStream streamMain(&command, QIODevice::WriteOnly);
     streamMain << id;
     streamMain << INT_Rx;
-    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-3);
-    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-2);
-    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-1);
+    streamMain << (quint8)lastThreeBytes.at(1);
+    streamMain << (quint8)lastThreeBytes.at(2);
+    streamMain << (quint8)lastThreeBytes.at(3);
     streamMain << DivRx;
-    qDebug()<< command.toHex();
+    qDebug()<< QStringLiteral(" Выслали ") << command.toHex();
     return command;
 }
 
@@ -58,10 +60,10 @@ QByteArray StateMessageSender::createSecondCommand(double Fvco, double doplerFre
     QDataStream streamMain(&command, QIODevice::WriteOnly);
     streamMain << messagesIds.at(2);
     streamMain << INT_Tx;
-    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-3);
-    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-2);
-    streamMain << (quint8)lastThreeBytes.at(lastThreeBytes.count()-1);
-    streamMain <<DivTx;
+    streamMain << (quint8)lastThreeBytes.at(1);
+    streamMain << (quint8)lastThreeBytes.at(2);
+    streamMain << (quint8)lastThreeBytes.at(3);
+    streamMain << DivTx;
 
     return command;
 }
@@ -130,7 +132,7 @@ quint16 StateMessageSender::calculateINT_Rx(double Fvco) const
     INT_RxDouble=INT_RxDouble*2.0;
     INT_RxDouble=INT_RxDouble/pow(2,DIV_Rx);
     INT_RxDouble=(INT_RxDouble/Fref);
-    quint16 INT_Rx=(quint16)(INT_RxDouble);
+    quint16 INT_Rx=(quint16)qFloor(INT_RxDouble);
     INT_Rx-=4;
     return INT_Rx;
 }
@@ -138,12 +140,13 @@ quint16 StateMessageSender::calculateINT_Rx(double Fvco) const
 quint32 StateMessageSender::calculateFRACT_Rx(double Fvco) const
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
-    quint32 FRACT_Rx=(pow(2,20));
-    double RealFvco=Fvco/*-3000000.0*/;//здесь вычитать не надо
+    double povValue=(qPow(2,20));
+    double RealFvco=Fvco-3000000.0;//здесь вычитать не надо
     double FirstValue=RealFvco*2.0;
-    FirstValue=FirstValue/Fref/pow(2, DIV_Rx);
+    FirstValue=FirstValue/Fref/qPow(2, DIV_Rx);
     double SecondValue=(qint32)FirstValue;
-    FRACT_Rx=FRACT_Rx*(FirstValue-SecondValue);
+    double difference=FirstValue-SecondValue;
+    quint32 FRACT_Rx=(quint32)qFloor(povValue*difference);
     return FRACT_Rx;
 }
 
