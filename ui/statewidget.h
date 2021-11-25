@@ -11,6 +11,8 @@
 #include <QDir>
 #include <QButtonGroup>
 
+#include "constantsandfunctions.h"
+
 #include "connections/datahandler.h"
 #include "presenter/statepresenter.h"
 
@@ -93,7 +95,6 @@ private:
     QFile *m_file;
     QStringList workPointsValues;
     QStringList m_attenuatorValues;
-    QStringList m_noiseValues;
     QIntValidator *m_intValidator;
     QIntValidator *m_gainValidator;
 private Q_SLOTS:

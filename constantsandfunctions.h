@@ -26,5 +26,7 @@ static int BarinovRounding(double value)
     return (int)(value+0.5);
 }
 
+const QStringList noiseValues={"все Отключено", "ответчик ВКЛЮЧЕН", "шумогенератор ВКЛЮЧЕН", "Синус ВКЛЮЧЕН", "М-сигнал ВКЛЮЧЕН"};
+
 
 
