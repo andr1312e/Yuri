@@ -38,9 +38,9 @@ void DataHandler::SetHandlerState(HandlerState state)
 
 void DataHandler::SendMessageToDevice(const QByteArray &array)
 {
-    Q_EMIT ToConsoleLog(QString::number(array.size())+" начинаем высылать "  + QString::fromLatin1(array.toHex()));
+    Q_EMIT ToConsoleLog("Размер " + QString::number(array.size())+" начинаем высылать "  + QString::fromLatin1(array.toHex()));
     WriteMessageToBuffer(array);
-    Q_EMIT ToConsoleLog(QString::number(array.size())+" выслали "  + QString::fromLatin1(array.toHex()));
+    Q_EMIT ToConsoleLog("Размер " + QString::number(array.size())+" выслали "  + QString::fromLatin1(array.toHex()));
     FlushBuffer();
 }
 

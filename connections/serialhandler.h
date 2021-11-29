@@ -2,6 +2,7 @@
 #define CONNECTIONS_SERIALHANDLER_H
 
 #include <QSerialPort>
+#include <QDebug>
 
 #include "connections/datahandler.h"
 

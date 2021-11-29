@@ -107,13 +107,16 @@ QByteArray StateMessageSender::createSixCommand(double noiseType, double noiseVa
     QByteArray command;
     command.append(messagesIds.at(6));
     command.append(quint8(noiseType));
-    quint32 noiseVal=(quint32)noiseValue;
-    quint8 first=(noiseVal >> (8*0)) & 0xff;
-    quint8 second=(noiseVal >> (8*1)) & 0xff;
-    quint8 third=(noiseVal >> (8*2)) & 0xff;
-    command.append(third);
-    command.append(second);
-    command.append(first);
+    if (noiseType>2)
+    {
+        quint32 noiseVal=(quint32)noiseValue;
+        quint8 first=(noiseVal >> (8*0)) & 0xff;
+        quint8 second=(noiseVal >> (8*1)) & 0xff;
+        quint8 third=(noiseVal >> (8*2)) & 0xff;
+        command.append(third);
+        command.append(second);
+        command.append(first);
+    }
     return command;
 }
 

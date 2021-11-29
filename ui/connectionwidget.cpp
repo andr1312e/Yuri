@@ -127,14 +127,14 @@ void ConnectionWidget::OnCurrentIndexConnectionTypeComboBoxChanged(int index)
 
 void ConnectionWidget::OnAdressLineEditChange(const QString &newAdress)
 {
-    QSettings settings("ipSettings.ini", QSettings::IniFormat);
-    settings.setValue("ip", newAdress);
+    QSettings settings(QStringLiteral("ipSettings.ini"), QSettings::IniFormat);
+    settings.setValue(QStringLiteral("ip"), newAdress);
     settings.sync();
 }
 
 void ConnectionWidget::OnPortLineEditChange(const QString &port)
 {
-    QSettings settings("ipSettings.ini", QSettings::IniFormat);
+    QSettings settings(QStringLiteral("ipSettings.ini"), QSettings::IniFormat);
     settings.setValue(QStringLiteral("port"), port);
     settings.sync();
 }

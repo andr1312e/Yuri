@@ -259,7 +259,7 @@ void StateWidget::FillUI()
     m_log->appendPlainText(QStringLiteral("Не подключено к ответчику"));
     m_logClearButton->setText(QStringLiteral("Консоль отчистить"));
 
-        OnSetButtonEnabled(false);
+//        OnSetButtonEnabled(false);
 
 }
 
@@ -291,7 +291,7 @@ void StateWidget::ConnectObjects()
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     connect(m_noiseComboBox, &QComboBox::currentIndexChanged, [&](int index){this->OnSetStateButtonIdClicked(6);});
 #else
-    connect(m_noiseComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [&](int index){this->OnSetStateButtonIdClicked(6);});
+    connect(m_noiseComboBox, QOverload<int>::of(&QComboBox::activated), [&](int index){this->OnSetStateButtonIdClicked(6);});
 #endif
 }
 
@@ -450,6 +450,7 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
     }
     case 6:
     {
+        OnConsoleLog("Шестое сообщение высылаем" + m_noiseComboBox->currentText());
         firstValue=m_noiseComboBox->currentIndex();
         if (firstValue==4 || firstValue==3)
         {
@@ -491,7 +492,7 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
                     OnConsoleLog("Высылаем второе и первое сообщения: fvco= "+QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
                 }
                 id=1;
-                QTimer::singleShot(7, [&](){    m_statePresenter->SetStateToDevice(2, firstValue, secondValue);});
+                QTimer::singleShot(7, [&](){    m_statePresenter->SetStateToDevice(2, m_fvcoComboBox->currentText().toDouble()*1000000, m_doplerFreqLineEdit->text().toDouble());});
             }
             else
             {

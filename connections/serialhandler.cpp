@@ -111,11 +111,13 @@ void SerialHandler::TryToConnectToHost(const QString &comPortName)
 
 void SerialHandler::WriteMessageToBuffer(const QByteArray &array)
 {
+    qDebug()<<"WriteMessageToBuffer()";
     m_connectionPort->write(array);
 }
 
 void SerialHandler::FlushBuffer()
 {
+    qDebug()<<"FlushBuffer()";
     m_connectionPort->flush();
 }
 
