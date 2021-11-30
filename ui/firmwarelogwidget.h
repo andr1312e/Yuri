@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QLabel>
 
 class FirmwareLogWidget : public QWidget
 {
@@ -22,12 +23,14 @@ Q_SIGNALS:
     void ToRestartDevice();
 public Q_SLOTS:
     void OnConsoleLog(const QString &message);
+    void OnResultLabelSetText(const QString &message);
 private:
     QVBoxLayout *m_mainLayout;
 
     QPushButton *m_restarPushButton;
     QPushButton *m_logClearButton;
     QPlainTextEdit *m_log;
+    QLabel *m_resultLabel;
 };
 
 #endif // UI_FIRMWARELOGWIDGET_H

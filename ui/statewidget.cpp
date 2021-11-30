@@ -259,7 +259,7 @@ void StateWidget::FillUI()
     m_log->appendPlainText(QStringLiteral("Не подключено к ответчику"));
     m_logClearButton->setText(QStringLiteral("Консоль отчистить"));
 
-//        OnSetButtonEnabled(false);
+    OnSetButtonEnabled(false);
 
 }
 
@@ -529,7 +529,7 @@ void StateWidget::OnGetStateButtonIdClicked(int id)
     {
         OnConsoleLog(QStringLiteral("Получаем доплера точку"));
         id=1;
-         QTimer::singleShot(7, [&](){    m_statePresenter->GetStateFromDevice(2);});
+        QTimer::singleShot(7, [&](){    m_statePresenter->GetStateFromDevice(2);});
         break;
     }
     case 3:

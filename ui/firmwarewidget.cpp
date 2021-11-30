@@ -65,6 +65,7 @@ void FirmWareWidget::ConnectObjects()
     connect(m_firmwarePresenter, &FirmwarePresenter::ToSetMaximumProgressBar, this, &FirmWareWidget::OnSetMaximumProgressBar);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarSetValue, m_progressBar, &QProgressBar::setValue);
     connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToSetFirmwareFromFileToPresenter, m_firmwarePresenter, &FirmwarePresenter::OnSetFirmwareFromFileToPresenter);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToResultLabelSetText, m_firmwareLogWidget, &FirmwareLogWidget::OnResultLabelSetText);
 }
 
 void FirmWareWidget::OnSetButtonsEnabled(bool state)

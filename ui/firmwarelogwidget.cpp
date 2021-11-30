@@ -18,6 +18,7 @@ FirmwareLogWidget::~FirmwareLogWidget()
     delete m_restarPushButton;
     delete m_logClearButton;
     delete m_log;
+    delete m_resultLabel;
 }
 
 void FirmwareLogWidget::CreateUI()
@@ -26,6 +27,7 @@ void FirmwareLogWidget::CreateUI()
     m_restarPushButton=new QPushButton();
     m_logClearButton=new QPushButton();
     m_log=new QPlainTextEdit();
+    m_resultLabel=new QLabel();
 }
 
 void FirmwareLogWidget::InsertWidgetsIntoLayout()
@@ -33,6 +35,7 @@ void FirmwareLogWidget::InsertWidgetsIntoLayout()
     m_mainLayout->addWidget(m_restarPushButton);
     m_mainLayout->addWidget(m_logClearButton);
     m_mainLayout->addWidget(m_log);
+    m_mainLayout->addWidget(m_resultLabel);
     setLayout(m_mainLayout);
 }
 
@@ -53,4 +56,9 @@ void FirmwareLogWidget::OnConsoleLog(const QString &message)
 {
     QString time=QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
     m_log->appendPlainText(time+ " "+ message);
+}
+
+void FirmwareLogWidget::OnResultLabelSetText(const QString &message)
+{
+    m_resultLabel->setText(message);
 }

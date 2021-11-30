@@ -194,7 +194,7 @@ void FirmwarePresenter::OnFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevic
 {
     if ((m_firmwareFromFile)==(*firmwareFromDevice))
     {
-        Q_EMIT ToConsoleLog(QStringLiteral("Верификация файла прошла успешно, прошивки совпадают"));
+        Q_EMIT ToResultLabelSetText(QStringLiteral("Верификация файла прошла успешно, прошивки совпадают"));
 
         if (m_isNeedToRestartAfterSuccess)
         {
@@ -204,7 +204,7 @@ void FirmwarePresenter::OnFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevic
     }
     else
     {
-        Q_EMIT ToConsoleLog(QStringLiteral("Верификация файла прошла не успешно. Надо перешится."));
+        Q_EMIT ToResultLabelSetText(QStringLiteral("Верификация файла прошла не успешно. Надо перешится."));
     }
     m_timer->start();
     Q_EMIT ToSetButtonsEnabled(true);

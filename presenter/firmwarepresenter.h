@@ -31,6 +31,7 @@ Q_SIGNALS:
     void ToConsoleLog(QString errorMessage);
     void ToSetMaximumProgressBar(int maxPageNum);
     void ToProgressBarSetValue(int pageNum);
+    void ToResultLabelSetText(const QString &text);
 public Q_SLOTS:
     void OnSetFirmwareFromFileToPresenter(QByteArray &firmwareFromFile);
     void OnFlash(bool isNeedToCheck, bool isNeedToRestartAfterSuccess);
