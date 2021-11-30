@@ -22,7 +22,8 @@ public:
     QByteArray createSevenCommand(quint8 param);
 private:
     const double c=299792458.0;
-    const double f=245000000.0;
+
+    const double f=32650000.0;
     const std::array<quint8, 9> messagesIds={0,1,2,3,4,5,6,7,8};
 private:
 

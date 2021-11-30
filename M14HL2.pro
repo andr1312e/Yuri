@@ -1,7 +1,7 @@
 QT       += core network widgets serialport
 
 CONFIG += c++latest
-VERSION = 3.3.9.1
+VERSION = 3.3.9.2
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 TARGET = "YUstirovojchnyj_komplekt"
 # You can make your code fail to compile if it uses deprecated APIs.
