@@ -8,7 +8,7 @@
 class StateMessageGetter
 {
 public:
-    StateMessageGetter();
+    StateMessageGetter(const double f, const double fref, const quint32 distanseToAnswerer);
     ~StateMessageGetter();
     const QString GetDataFromMessage(const QByteArray &message);
 private:
@@ -19,8 +19,13 @@ private:
     const QString GetAttenuatorRXFromFiveMessage(const QByteArray &message);
     const QString GetWorkModeFromSixMessage(const QByteArray &message);
 private:
-    quint64 m_currentFvco;
     const int m_indexOfGettingMessageId;
+    const double f;
+    const double Fref;
+    const quint32 distanseToAnswerer;
+private:
+    quint64 m_currentFvco;
+
 };
 
 #endif // MESSAGECREATORS_STATEMESSAGEGETTER_H

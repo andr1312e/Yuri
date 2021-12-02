@@ -3,7 +3,7 @@
 #include <QElapsedTimer>
 
 
-FirmwarePresenter::FirmwarePresenter(QObject *parent)
+FirmwarePresenter::FirmwarePresenter(QSharedPointer<SettingFileService> &settingFileService, QObject *parent)
     : QObject(parent)
     , m_dataHandler(Q_NULLPTR)
     , m_maxMessageSize(256)
@@ -14,6 +14,7 @@ FirmwarePresenter::FirmwarePresenter(QObject *parent)
     , m_totalCountOfPages(0)
     , m_currentPage(0)
     , m_currentAdress(0)
+    , m_settingFileService(settingFileService)
 {
     CreateObjects();
     InitObjects();
@@ -194,6 +195,7 @@ void FirmwarePresenter::OnFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevic
 {
     if ((m_firmwareFromFile)==(*firmwareFromDevice))
     {
+        m_settingFileService->SetAttribute(m_lastFirmwareAttribute, "dateAndState",   QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss")) + " flashed successfully");
         Q_EMIT ToResultLabelSetText(QStringLiteral("Верификация файла прошла успешно, прошивки совпадают"));
 
         if (m_isNeedToRestartAfterSuccess)
@@ -204,6 +206,7 @@ void FirmwarePresenter::OnFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevic
     }
     else
     {
+        m_settingFileService->SetAttribute(m_lastFirmwareAttribute, "dateAndState",   QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss")) + " flashed NOT successfully");
         Q_EMIT ToResultLabelSetText(QStringLiteral("Верификация файла прошла не успешно. Надо перешится."));
     }
     m_timer->start();

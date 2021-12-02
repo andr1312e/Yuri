@@ -4,6 +4,8 @@
 #include <QStatusBar>
 #include <QSerialPortInfo>
 
+#include "services/settingfileservice.h"
+
 #include "connections/tcphandler.h"
 #include "connections/serialhandler.h"
 
@@ -30,6 +32,7 @@ private Q_SLOTS:
     void OnDisconnectFromMoxa();
 
 private:
+
     QStatusBar *m_statusBar;
     ConnectionWidget *m_connectionWidget;
     QTabWidget *m_tabWidget;
@@ -40,6 +43,7 @@ private:
     DataHandler *m_currentConnectionInterface;
     TcpHandler *m_tcpHandler;
     SerialHandler *m_serialHandler;
+    QSharedPointer<SettingFileService> m_settingFileService;
 
 private:
     void RegisterHadnler(DataHandler *dataHandler);

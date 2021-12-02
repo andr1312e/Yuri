@@ -3,8 +3,9 @@
 #include <QDebug>
 #include <QTimer>
 
-StateWidget::StateWidget(QWidget *parent)
+StateWidget::StateWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent)
     : QWidget(parent)
+    , m_settingFileService(settingFileService)
     , m_attenuatorValues({"0", "1", "2", "3", "4", "5", "6", "9", "12", "15", "18", "21", "24", "27", "30"})
 {
     CreateObjects();
@@ -79,7 +80,7 @@ void StateWidget::ConnectHander(DataHandler *dataHandler)
 
 void StateWidget::CreateObjects()
 {
-    m_statePresenter=new StatePresenter(this);
+    m_statePresenter=new StatePresenter(m_settingFileService, this);
     m_file=new QFile(QDir::currentPath()+"/история запросов.txt");
     m_intValidator=new QIntValidator();
     m_gainValidator=new QIntValidator(0, 64);
@@ -139,11 +140,10 @@ void StateWidget::CreateUI()
     m_sendStateButtonsGroup=new QButtonGroup();
     FillButtonGroup();
 
-    //"Адрес: адрес мохи с 1 в конце или 192.168.111.1 на РЛС ТИ. Порт: через  ЛК Operation Settings. Посмотреть http://192.168.127.254/ снизу мохи адрес Лог:Пасс admin:moxa"
     m_logClearButton=new QPushButton();
 
     m_log=new QPlainTextEdit();
-    m_log->setStyleSheet(QStringLiteral("color: white; background-color: black;"));
+//    m_log->setStyleSheet(QStringLiteral("color: white; background-color: black;"));
 
 
 }
@@ -240,16 +240,18 @@ void StateWidget::FillUI()
     m_gainTXLineEdit->setValidator(m_gainValidator);
     m_gainRXLineEdit->setValidator(m_gainValidator);
 
-    m_doplerFreqLineEdit->setText(QStringLiteral("0"));
-    m_speedLineEdit->setText(QStringLiteral("0"));
-    m_rangeLineEdit->setText(QStringLiteral("0"));
-    m_noiseLineEdit->setText(QStringLiteral("0"));
-    m_gainTXLineEdit->setText(QStringLiteral("32"));
-    m_gainRXLineEdit->setText(QStringLiteral("0"));
-
-
     m_fvcoComboBox->setEditable(true);
     m_fvcoComboBox->addItems(workPointsValues);
+    m_fvcoComboBox->setCurrentText(m_settingFileService->GetAttribute(m_settingsAtribute, "fvco", workPointsValues.at(0)));
+
+    m_doplerFreqLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "dopler", "0"));
+    OnChangeDoplerLineEdit(m_settingFileService->GetAttribute(m_settingsAtribute, "dopler", "0"));
+    m_rangeLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "range", "0"));
+    m_noiseLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "noise", "0"));
+    m_gainTXLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "gainTx", "32"));
+    m_gainRXLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "gainRx", "0"));
+    m_noiseLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "noise", "0"));
+
     m_attenuatorComboBox->addItems(m_attenuatorValues);
     m_attenuatorComboBox->setCurrentIndex(8);
     m_noiseComboBox->addItems(noiseValues);
@@ -259,7 +261,8 @@ void StateWidget::FillUI()
     m_log->appendPlainText(QStringLiteral("Не подключено к ответчику"));
     m_logClearButton->setText(QStringLiteral("Консоль отчистить"));
 
-    OnSetButtonEnabled(false);
+    bool val=m_settingFileService->GetAttribute(m_settingsAtribute, "uiEnabled", "0").toInt();
+    OnSetButtonEnabled(val);
 
 }
 
@@ -276,8 +279,14 @@ void StateWidget::AddButtonFromGroupToLayout(QList<QAbstractButton*>::const_iter
 
 void StateWidget::ConnectObjects()
 {
-    connect(m_speedLineEdit, &QLineEdit::textEdited, this, &StateWidget::ChangeDoplerLineEdit);
-    connect(m_doplerFreqLineEdit, &QLineEdit::textEdited, this, &StateWidget::ChangeSpeedLineEdit);
+    connect(m_fvcoComboBox, &QComboBox::currentTextChanged, this, &StateWidget::OnChangeFvcoComboBoxValue);
+    connect(m_speedLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeSpeedLineEdit);
+    connect(m_doplerFreqLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeDoplerLineEdit);
+    connect(m_rangeLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeRangeLineEdit);
+    connect(m_gainRXLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeGainRxLineEdit);
+    connect(m_gainTXLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeGainTxLineEdit);
+    connect(m_noiseLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeNoiseLineEdit);
+
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
     connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::OnConsoleLog);
     connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::OnSetButtonEnabled);
@@ -575,17 +584,49 @@ void StateWidget::OnSetButtonEnabled(bool state)
     }
 }
 
-void StateWidget::ChangeSpeedLineEdit(const QString &doplerText)
+void StateWidget::OnChangeDoplerLineEdit(const QString &doplerText)
 {
     double dopler=doplerText.toDouble();
     double speed=dopler*c/(2.0*m_fvcoComboBox->currentText().toDouble()*1000000.0);
     m_speedLineEdit->setText(QString::number(speed, 'f'));
+    m_settingFileService->SetAttribute(m_settingsAtribute, "dopler", doplerText);
 }
 
-void StateWidget::ChangeDoplerLineEdit(const QString &speedText)
+void StateWidget::OnChangeSpeedLineEdit(const QString &speedText)
 {
     double speed=speedText.toDouble();
     double dopler1=speed*m_fvcoComboBox->currentText().toDouble()*1000000.0*2.0;
     double dopler=dopler1/c;
     m_doplerFreqLineEdit->setText(QString::number(dopler, 'f'));
+    m_settingFileService->SetAttribute(m_settingsAtribute, "dopler", QString::number(dopler));
+}
+
+void StateWidget::OnChangeFvcoComboBoxValue(const QString &fvco)
+{
+    m_settingFileService->SetAttribute(m_settingsAtribute, "fvco", fvco);
+}
+
+void StateWidget::OnChangeRangeLineEdit(const QString &range)
+{
+    m_settingFileService->SetAttribute(m_settingsAtribute, "range", range);
+}
+
+void StateWidget::OnChangeGainTxLineEdit(const QString &gainTx)
+{
+    m_settingFileService->SetAttribute(m_settingsAtribute, "gainTx", gainTx);
+}
+
+void StateWidget::OnChangeGainRxLineEdit(const QString &gainRx)
+{
+    m_settingFileService->SetAttribute(m_settingsAtribute, "gainRx", gainRx);
+}
+
+void StateWidget::OnChangeNoiseLineEdit(const QString &noise)
+{
+    m_settingFileService->SetAttribute(m_settingsAtribute, "noise", noise);
+}
+
+void StateWidget::OnChangeSinusLineEdit(const QString &sinus)
+{
+    m_settingFileService->SetAttribute(m_settingsAtribute, "sinus", sinus);
 }

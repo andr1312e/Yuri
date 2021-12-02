@@ -7,11 +7,13 @@
 #include <QWidget>
 #include <QLabel>
 
+#include "services/settingfileservice.h"
+
 class FirmwareLogWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit FirmwareLogWidget(QWidget *parent);
+    explicit FirmwareLogWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent);
     ~FirmwareLogWidget();
 private:
     void CreateUI();
@@ -24,6 +26,8 @@ Q_SIGNALS:
 public Q_SLOTS:
     void OnConsoleLog(const QString &message);
     void OnResultLabelSetText(const QString &message);
+public:
+    void SetWidgetEnabled(bool state);
 private:
     QVBoxLayout *m_mainLayout;
 
@@ -31,6 +35,8 @@ private:
     QPushButton *m_logClearButton;
     QPlainTextEdit *m_log;
     QLabel *m_resultLabel;
+
+    const QSharedPointer<SettingFileService> m_settingFileService;
 };
 
 #endif // UI_FIRMWARELOGWIDGET_H

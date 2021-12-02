@@ -10,7 +10,7 @@
 class StateMessageSender
 {
 public:
-    explicit StateMessageSender();
+    explicit StateMessageSender(const double f, const double fref, const quint32 distanfeToAnswerer);
     ~StateMessageSender();
     const QByteArray createZeroCommand();
     QByteArray createFirstCommand(double Fvco);
@@ -23,7 +23,9 @@ public:
 private:
     const double c=299792458.0;
 
-    const double f=32650000.0;
+    const double f;
+    const double Fref;
+    const quint32 distanseToAnswerer;
     const std::array<quint8, 9> messagesIds={0,1,2,3,4,5,6,7,8};
 private:
 

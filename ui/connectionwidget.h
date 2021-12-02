@@ -10,13 +10,17 @@
 #include <QTimer>
 #include <QDebug>
 #include <QSettings>
+#include <QFile>
 #include <QSerialPortInfo>
+#include <QDomDocument>
+
+#include "services/settingfileservice.h"
 
 class ConnectionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ConnectionWidget(QWidget *parent);
+    explicit ConnectionWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent);
     ~ConnectionWidget();
 private:
     void CreateObjects();
@@ -36,7 +40,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void OnCurrentIndexConnectionTypeComboBoxChanged(int index);
     void OnAdressLineEditChange(const QString &newAdress);
-    void OnPortLineEditChange(const QString &port);
+    void OnPortLineEditChange(const QString &newPort);
     void OnConnectButtonClicked();
     void OnNewSerialPortsChecked();
 public:
@@ -61,6 +65,7 @@ private:
     QPushButton *m_disconnectButton;
 
     QTimer *m_checkSerialPortsTimer;
+    const QSharedPointer<SettingFileService> m_settingFileService;
 };
 
 #endif // UI_CONNECTIONWIDGET_H

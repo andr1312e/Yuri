@@ -3,7 +3,7 @@
 #include <QtGlobal>
 #include <QMap>
 
-const double Fref=40000000.0;
+
 
 const QMap<quint8, quint8> atteniatorTable { {0, 15},
                                              {1, 14},
@@ -20,11 +20,6 @@ const QMap<quint8, quint8> atteniatorTable { {0, 15},
                                              {24, 3},
                                              {27, 2},
                                              {30, 1},};
-
-static int BarinovRounding(double value)
-{
-    return (int)(value+0.5);
-}
 
 const QStringList noiseValues={"все Отключено", "ответчик ВКЛЮЧЕН", "шумогенератор ВКЛЮЧЕН", "Синус ВКЛЮЧЕН", "М-сигнал ВКЛЮЧЕН"};
 

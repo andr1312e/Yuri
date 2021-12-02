@@ -6,8 +6,11 @@
 #include <QDebug>
 #include <QtMath>
 
-StateMessageGetter::StateMessageGetter()
+StateMessageGetter::StateMessageGetter(const double f, const double fref, const quint32 distanseToAnswerer)
     : m_indexOfGettingMessageId(1)
+    , f(f)
+    , Fref(fref)
+    , distanseToAnswerer(distanseToAnswerer)
     , m_currentFvco(0)
 {
 

@@ -28,17 +28,18 @@ void MainWindow::CreateObjects()
     m_tcpHandler=new TcpHandler(this);
     m_tcpHandler->setObjectName(QStringLiteral("TcpHandler"));
     m_serialHandler=new SerialHandler(this);
-    m_serialHandler->setObjectName("SerialHandler");
+    m_serialHandler->setObjectName(QStringLiteral("SerialHandler"));
     qDebug()<< "FIRST m_currentConnectionInterface" << &m_currentConnectionInterface;
     m_currentConnectionInterface=Q_NULLPTR;
+    m_settingFileService=QSharedPointer<SettingFileService>(new SettingFileService(QStringLiteral("setting.xml")));
 }
 
 void MainWindow::CreateUI()
 {
     m_statusBar=new QStatusBar();
-    m_connectionWidget =new ConnectionWidget(this);
-    m_stateWidget=new StateWidget(this);
-    m_firmwareWidget=new FirmWareWidget(this);
+    m_connectionWidget =new ConnectionWidget(m_settingFileService, this);
+    m_stateWidget=new StateWidget(m_settingFileService, this);
+    m_firmwareWidget=new FirmWareWidget(m_settingFileService, this);
     m_tabWidget =new QTabWidget();
     m_tabWidget->addTab(m_stateWidget, QStringLiteral("Окно команд"));
     m_tabWidget->addTab(m_firmwareWidget, QStringLiteral("Окно прошивки"));
@@ -66,6 +67,7 @@ void MainWindow::ConnectObjects()
     connect(m_connectionWidget, &ConnectionWidget::ToConnectEthernetMoxa, this, &MainWindow::OnConnectToInternetMoxa );
     connect(m_connectionWidget, &ConnectionWidget::ToConnectUsbMoxa, this, &MainWindow::OnConnectToUsbMoxa);
     connect(m_connectionWidget, &ConnectionWidget::ToDisconnectFromMoxa,this, &MainWindow::OnDisconnectFromMoxa);
+    connect(m_firmwareWidget, &FirmWareWidget::ToSetButtonsEnabled, m_stateWidget, &StateWidget::OnSetButtonEnabled);
 }
 
 void MainWindow::OnConnectToInternetMoxa(const QString &adress, const QString &port)

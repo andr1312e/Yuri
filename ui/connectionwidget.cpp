@@ -1,7 +1,8 @@
 #include "connectionwidget.h"
 
-ConnectionWidget::ConnectionWidget(QWidget *parent)
+ConnectionWidget::ConnectionWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent)
     : QWidget(parent)
+    , m_settingFileService(settingFileService)
 {
     CreateObjects();
     InitObjects();
@@ -82,12 +83,11 @@ void ConnectionWidget::ConnectObjects()
     connect(m_disconnectButton, &QPushButton::clicked, this, &ConnectionWidget::ToDisconnectFromMoxa);
     connect(m_checkSerialPortsTimer, &QTimer::timeout, this, &ConnectionWidget::OnNewSerialPortsChecked);
     connect(m_portLineEdit, &QLineEdit::textChanged, this, &ConnectionWidget::OnPortLineEditChange);
-    connect(m_adressLineEdit, &QLineEdit::textChanged, this, &ConnectionWidget::OnPortLineEditChange);
+    connect(m_adressLineEdit, &QLineEdit::textChanged, this, &ConnectionWidget::OnAdressLineEditChange);
 }
 
 void ConnectionWidget::FillUI()
 {
-
     m_connectionTypeComboBox->addItem(QStringLiteral("Ethernet Moxa NPort-5450I"));
     m_connectionTypeComboBox->addItem(QStringLiteral("Usb Moxa UPort 1150. Выбери порт"));
     m_connectionTypeComboBox->setEditable(false);
@@ -95,11 +95,9 @@ void ConnectionWidget::FillUI()
     m_adressLineEdit->setInputMask(QStringLiteral("000.000.000.000;_"));
     m_portLineEdit->setInputMask(QStringLiteral("00000;_"));
 
-    QSettings settings(QStringLiteral("ipSettings.ini"), QSettings::IniFormat);
+    m_adressLineEdit->setText(m_settingFileService->GetAttribute("connection", "ip", "192.168.127.111"));
+    m_portLineEdit->setText(m_settingFileService->GetAttribute("connection", "port", "4004"));
 
-
-    m_adressLineEdit->setText(settings.value(QStringLiteral("ip"), "192.168.127.254").toString());
-    m_portLineEdit->setText(settings.value(QStringLiteral("port"), "4004").toString());
     m_connectButton->setText(QStringLiteral("Подключится"));
     m_disconnectButton->setText(QStringLiteral("Отключится"));
     m_disconnectButton->setDisabled(true);
@@ -127,16 +125,12 @@ void ConnectionWidget::OnCurrentIndexConnectionTypeComboBoxChanged(int index)
 
 void ConnectionWidget::OnAdressLineEditChange(const QString &newAdress)
 {
-    QSettings settings(QStringLiteral("ipSettings.ini"), QSettings::IniFormat);
-    settings.setValue(QStringLiteral("ip"), newAdress);
-    settings.sync();
+    m_settingFileService->SetAttribute("connection", "ip", newAdress);
 }
 
-void ConnectionWidget::OnPortLineEditChange(const QString &port)
+void ConnectionWidget::OnPortLineEditChange(const QString &newPort)
 {
-    QSettings settings(QStringLiteral("ipSettings.ini"), QSettings::IniFormat);
-    settings.setValue(QStringLiteral("port"), port);
-    settings.sync();
+    m_settingFileService->SetAttribute("connection", "port", newPort);
 }
 
 void ConnectionWidget::OnConnectButtonClicked()

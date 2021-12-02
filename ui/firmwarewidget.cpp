@@ -1,9 +1,11 @@
 #include "firmwarewidget.h"
 
-FirmWareWidget::FirmWareWidget(QWidget *parent)
+FirmWareWidget::FirmWareWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent)
     : QWidget(parent)
-    , m_firmwarePresenter(new FirmwarePresenter(this))
+    , m_settingFileService(settingFileService)
+
 {
+    CreateObjects();
     CreateUI();
     InsertWidgetsIntoLayout();
     FillUI();
@@ -24,6 +26,11 @@ FirmWareWidget::~FirmWareWidget()
 
 }
 
+void FirmWareWidget::CreateObjects()
+{
+    m_firmwarePresenter=new FirmwarePresenter(m_settingFileService, this);
+}
+
 void FirmWareWidget::CreateUI()
 {
     m_mainLayout=new QVBoxLayout();
@@ -31,7 +38,7 @@ void FirmWareWidget::CreateUI()
 
     m_splitter=new QSplitter();
 
-    m_firmwareLogWidget=new FirmwareLogWidget(this);
+    m_firmwareLogWidget=new FirmwareLogWidget(m_settingFileService, this);
     m_firmwareFlasherWidget=new FirmwareFlasherWidget(this);
     m_progressBar=new QProgressBar(this);
 }
@@ -66,12 +73,13 @@ void FirmWareWidget::ConnectObjects()
     connect(m_firmwarePresenter, &FirmwarePresenter::ToProgressBarSetValue, m_progressBar, &QProgressBar::setValue);
     connect(m_firmwareFlasherWidget, &FirmwareFlasherWidget::ToSetFirmwareFromFileToPresenter, m_firmwarePresenter, &FirmwarePresenter::OnSetFirmwareFromFileToPresenter);
     connect(m_firmwarePresenter, &FirmwarePresenter::ToResultLabelSetText, m_firmwareLogWidget, &FirmwareLogWidget::OnResultLabelSetText);
+    connect(m_firmwarePresenter, &FirmwarePresenter::ToSetButtonsEnabled, this, &FirmWareWidget::ToSetButtonsEnabled);
 }
 
 void FirmWareWidget::OnSetButtonsEnabled(bool state)
 {
     m_firmwareFlasherWidget->setEnabled(state);
-    m_firmwareLogWidget->setEnabled(state);
+    m_firmwareLogWidget->SetWidgetEnabled(state);
 }
 
 void FirmWareWidget::OnSetMaximumProgressBar(int top)

@@ -3,8 +3,9 @@
 #include <QByteArray>
 #include <QWeakPointer>
 
-StatePresenter::StatePresenter(QObject *parent)
+StatePresenter::StatePresenter(QSharedPointer<SettingFileService> &settingFileService, QObject *parent)
     :  QObject(parent)
+    ,  m_settingFileService(settingFileService)
     ,  m_dataHandler(Q_NULLPTR)
 {
     CreateObjects();
@@ -16,8 +17,24 @@ StatePresenter::~StatePresenter()
 
 void StatePresenter::CreateObjects()
 {
-    m_messageSetter.operator=(QSharedPointer<StateMessageSender>(new StateMessageSender()));
-    m_messageGetter.operator=(QSharedPointer<StateMessageGetter>(new StateMessageGetter()));
+    bool ok;
+    double f=m_settingFileService->GetAttribute("const", "f", "32650000").toDouble(&ok);
+    if(!ok||f<=0)
+    {
+        f=32650000;
+    }
+    double fref=m_settingFileService->GetAttribute("const", "fref", "40000000").toDouble(&ok);
+    if(!ok||fref<=0)
+    {
+        f=40000000;
+    }
+    quint32 distanseToAnswerer=m_settingFileService->GetAttribute("const", "distanfeToAnswerer", "350").toUInt(&ok);
+    if(!ok)
+    {
+        distanseToAnswerer=350;
+    }
+    m_messageSetter.operator=(QSharedPointer<StateMessageSender>(new StateMessageSender(f, fref, distanseToAnswerer)));
+    m_messageGetter.operator=(QSharedPointer<StateMessageGetter>(new StateMessageGetter(f, fref, distanseToAnswerer)));
 }
 
 void StatePresenter::OnGetMessageWithState(QByteArray &messageFromDevice)

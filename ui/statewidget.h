@@ -11,6 +11,8 @@
 #include <QDir>
 #include <QButtonGroup>
 
+#include "services/settingfileservice.h"
+
 #include "constantsandfunctions.h"
 
 #include "connections/datahandler.h"
@@ -20,7 +22,7 @@ class StateWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StateWidget(QWidget *parent);
+    explicit StateWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent);
     ~StateWidget();
     void DisconnectOldHander();
     void ConnectHander(DataHandler *dataHandler);
@@ -36,7 +38,15 @@ private:
 Q_SIGNALS:
     void SetStateMessage(quint8 messageId, double fistParam=0.0, double SecondParam=0.0);
     void ToDataHanderChanged();
-
+private Q_SLOTS:
+    void OnChangeDoplerLineEdit(const QString &doplerText);
+    void OnChangeSpeedLineEdit(const QString &speedText);
+    void OnChangeFvcoComboBoxValue(const QString &fvco);
+    void OnChangeRangeLineEdit(const QString &range);
+    void OnChangeGainTxLineEdit(const QString &gainTx);
+    void OnChangeGainRxLineEdit(const QString &gainRx);
+    void OnChangeNoiseLineEdit(const QString &noise);
+    void OnChangeSinusLineEdit(const QString &sinus);
 
 public Q_SLOTS:
     void OnSetStateButtonIdClicked(int id);
@@ -90,6 +100,7 @@ private:
 
     QPlainTextEdit *m_log;
 private:
+    QSharedPointer<SettingFileService> m_settingFileService;
     StatePresenter *m_statePresenter;
     const quint32 c=299792458;
     QFile *m_file;
@@ -97,9 +108,10 @@ private:
     QStringList m_attenuatorValues;
     QIntValidator *m_intValidator;
     QIntValidator *m_gainValidator;
-private Q_SLOTS:
-    void ChangeSpeedLineEdit(const QString &doplerText);
-    void ChangeDoplerLineEdit(const QString &speedText);
+
+private:
+    const QString m_settingsAtribute="state";
+
 };
 
 #endif // UI_STATEWIDGET_H

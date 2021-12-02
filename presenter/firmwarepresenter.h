@@ -6,10 +6,13 @@
 #include <QString>
 #include <QTimer>
 #include <QByteArray>
+#include <QDateTime>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
+
+#include "services/settingfileservice.h"
 
 #include "connections/datahandler.h"
 
@@ -19,7 +22,7 @@ class FirmwarePresenter :public QObject
 {
     Q_OBJECT
 public:
-    FirmwarePresenter(QObject *parent);
+    FirmwarePresenter(QSharedPointer<SettingFileService> &settingFileService, QObject *parent);
     ~FirmwarePresenter();
 private:
     void CreateObjects();
@@ -74,6 +77,8 @@ private:
     QTimer *m_writingFirmwareTimer;
     QTimer *m_erasingTimer;
 private:
+    QSharedPointer<SettingFileService> m_settingFileService;
+    const QString m_lastFirmwareAttribute="lastFirmware";
     FirmwareMessageMaker *m_firmwareMessageMaker;
 
     std::list<QByteArray> *m_writinFirmwareCommandsList;

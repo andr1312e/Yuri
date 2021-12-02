@@ -2,7 +2,10 @@
 #include <QtDebug>
 #include <QtMath>
 
-StateMessageSender::StateMessageSender()
+StateMessageSender::StateMessageSender(const double f, const double fref, const quint32 distanseToAnswerer)
+    : f(f)
+    , Fref(fref)
+    , distanseToAnswerer(distanseToAnswerer)
 {
 
 }
@@ -71,7 +74,7 @@ QByteArray StateMessageSender::createSecondCommand(double Fvco, double doplerFre
 QByteArray StateMessageSender::createThirdCommand(double distance)
 {
     double secondVal=f/c;
-    quint16 DISTANCE=distance*secondVal+1.0;
+    quint16 DISTANCE=distance*secondVal+1.0-distanseToAnswerer;
 
     QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);
@@ -144,7 +147,7 @@ quint32 StateMessageSender::calculateFRACT_Rx(double Fvco) const
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
     double povValue=(qPow(2,20));
-    double RealFvco=Fvco-3000000.0;//здесь вычитать не надо
+    double RealFvco=Fvco-3000000.0;
     double FirstValue=RealFvco*2.0;
     FirstValue=FirstValue/Fref/qPow(2, DIV_Rx);
     double SecondValue=(qint32)FirstValue;

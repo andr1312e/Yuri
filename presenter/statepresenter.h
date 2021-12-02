@@ -6,6 +6,9 @@
 #include <QScopedPointer>
 #include <QSharedPointer>
 #include "connections/datahandler.h"
+
+#include "services/settingfileservice.h"
+
 #include <messageCreators/statemessagegetter.h>
 #include <messageCreators/statemessagesender.h>
 
@@ -13,7 +16,7 @@ class StatePresenter :public QObject
 {
     Q_OBJECT
 public:
-    explicit StatePresenter(QObject *parent);
+    explicit StatePresenter(QSharedPointer<SettingFileService> &settingFileService, QObject *parent);
     ~StatePresenter();
 private:
     void CreateObjects();
@@ -32,6 +35,7 @@ public:
     void GetStateFromDevice(quint8 messageIdWantToGet);
 
 private:
+    QSharedPointer<SettingFileService> m_settingFileService;
     DataHandler *m_dataHandler;
 
     QSharedPointer <StateMessageSender> m_messageSetter;

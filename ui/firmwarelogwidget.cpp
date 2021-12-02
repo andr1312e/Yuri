@@ -2,8 +2,9 @@
 
 
 
-FirmwareLogWidget::FirmwareLogWidget(QWidget *parent)
+FirmwareLogWidget::FirmwareLogWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent)
     : QWidget(parent)
+    , m_settingFileService(settingFileService)
 {
     CreateUI();
     InsertWidgetsIntoLayout();
@@ -44,6 +45,7 @@ void FirmwareLogWidget::FillUI()
     m_restarPushButton->setText(QStringLiteral("Перезагрузить устройство"));
     m_logClearButton->setText(QStringLiteral("Отчистить консоль"));
     m_log->setReadOnly(true);
+    m_resultLabel->setText(m_settingFileService->GetAttribute("lastFirmware", "dateAndState", QStringLiteral("Do not flashed")));
 }
 
 void FirmwareLogWidget::ConnectObjects()
@@ -61,4 +63,9 @@ void FirmwareLogWidget::OnConsoleLog(const QString &message)
 void FirmwareLogWidget::OnResultLabelSetText(const QString &message)
 {
     m_resultLabel->setText(message);
+}
+
+void FirmwareLogWidget::SetWidgetEnabled(bool state)
+{
+    m_restarPushButton->setEnabled(state);
 }
