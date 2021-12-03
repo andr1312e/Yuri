@@ -195,7 +195,7 @@ void FirmwarePresenter::OnFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevic
 {
     if ((m_firmwareFromFile)==(*firmwareFromDevice))
     {
-        m_settingFileService->SetAttribute(m_lastFirmwareAttribute, "dateAndState",   QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss")) + " flashed successfully");
+        m_settingFileService->SetAttribute(m_lastFirmwareAttribute, "dateAndState",   QDateTime::currentDateTime().toString(QStringLiteral("ddd MMMM d yy hh:mm:ss")) + " успешно");
         Q_EMIT ToResultLabelSetText(QStringLiteral("Верификация файла прошла успешно, прошивки совпадают"));
 
         if (m_isNeedToRestartAfterSuccess)
@@ -206,7 +206,7 @@ void FirmwarePresenter::OnFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevic
     }
     else
     {
-        m_settingFileService->SetAttribute(m_lastFirmwareAttribute, "dateAndState",   QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss")) + " flashed NOT successfully");
+        m_settingFileService->SetAttribute(m_lastFirmwareAttribute, "dateAndState",   QDateTime::currentDateTime().toString(QStringLiteral("ddd MMMM d yy hh:mm:ss")) + " не успешно");
         Q_EMIT ToResultLabelSetText(QStringLiteral("Верификация файла прошла не успешно. Надо перешится."));
     }
     m_timer->start();

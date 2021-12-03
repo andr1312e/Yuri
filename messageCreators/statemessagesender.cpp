@@ -74,7 +74,8 @@ QByteArray StateMessageSender::createSecondCommand(double Fvco, double doplerFre
 QByteArray StateMessageSender::createThirdCommand(double distance)
 {
     double secondVal=f/c;
-    quint16 DISTANCE=distance*secondVal+1.0-distanseToAnswerer;
+    double distanceDouble=qAbs(distance-distanseToAnswerer)*secondVal+1.0;
+    quint16 DISTANCE=distanceDouble;
 
     QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);

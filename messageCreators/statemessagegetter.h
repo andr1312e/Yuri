@@ -21,6 +21,7 @@ private:
 private:
     const int m_indexOfGettingMessageId;
     const double f;
+    const double c=299792458.0;
     const double Fref;
     const quint32 distanseToAnswerer;
 private:

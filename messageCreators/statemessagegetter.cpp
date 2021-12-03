@@ -136,6 +136,20 @@ const QString StateMessageGetter::GetDoplerFromSecondMessage(const QByteArray &m
 
 const QString StateMessageGetter::GetDistanceFromThirdMessage(const QByteArray &message)
 {
+    if(message.count()==4)
+    {
+        QByteArray distance;
+        distance.append(message.at(2));
+        distance.append(message.at(3));
+        QDataStream IntDataStream(distance);
+        quint16 distance_INT;
+        IntDataStream >>distance_INT;
+        double realDistance=distance_INT;
+        realDistance=realDistance/f*c;
+        realDistance=realDistance+distanseToAnswerer;
+        const QString result= QStringLiteral("Дистанция = %1 метров").arg(realDistance);
+        return result;
+    }
     return QLatin1String();
 }
 
