@@ -49,9 +49,11 @@ StateWidget::~StateWidget()
     delete m_fvcoComboBox;
 
     delete m_gainTXLabel;
-    delete m_gainTXLineEdit;
+    delete m_gainTXSlider;
+    delete m_gainTxValue;
     delete m_gainRXLabel;
-    delete m_gainRXLineEdit;
+    delete m_gainRXSlider;
+    delete m_gainRxValue;
 
     delete m_attenuatorLabel;
     delete m_attenuatorComboBox;
@@ -121,11 +123,13 @@ void StateWidget::CreateUI()
 
 
     m_gainTXLabel=new QLabel();
-    m_gainTXLineEdit=new QLineEdit();
+    m_gainTXSlider=new DoubleSlider(this);
+    m_gainTxValue=new QLabel();
 
 
     m_gainRXLabel=new QLabel();
-    m_gainRXLineEdit=new QLineEdit();
+    m_gainRXSlider=new DoubleSlider(this);
+    m_gainRxValue=new QLabel();
 
 
     m_attenuatorLabel=new QLabel();
@@ -143,7 +147,7 @@ void StateWidget::CreateUI()
     m_logClearButton=new QPushButton();
 
     m_log=new QPlainTextEdit();
-//    m_log->setStyleSheet(QStringLiteral("color: white; background-color: black;"));
+    //    m_log->setStyleSheet(QStringLiteral("color: white; background-color: black;"));
 
 
 }
@@ -192,9 +196,11 @@ void StateWidget::InsertWidgetsIntoLayout()
     AddButtonFromGroupToLayout(&setStateButtonListInterator, &getStateButtonLIstIterator, m_rangeLineLayout);
 
     m_gainLineLayout->addWidget(m_gainTXLabel);
-    m_gainLineLayout->addWidget(m_gainTXLineEdit);
+    m_gainLineLayout->addWidget(m_gainTXSlider);
+    m_gainLineLayout->addWidget(m_gainTxValue);
     m_gainLineLayout->addWidget(m_gainRXLabel);
-    m_gainLineLayout->addWidget(m_gainRXLineEdit);
+    m_gainLineLayout->addWidget(m_gainRXSlider);
+    m_gainLineLayout->addWidget(m_gainRxValue);
     AddButtonFromGroupToLayout(&setStateButtonListInterator, &getStateButtonLIstIterator, m_gainLineLayout);
 
     m_attenuatorLineLayout->addWidget(m_attenuatorLabel);
@@ -230,6 +236,8 @@ void StateWidget::FillUI()
     m_rangeLabel->setText(QStringLiteral("Дальность ответного сигнала d: метры"));
     m_gainTXLabel->setText(QStringLiteral("Усиление TX GAIN_TX: децибелы"));
     m_gainRXLabel->setText(QStringLiteral("Усиление RX GAIN_RX: децибелы"));
+    m_gainTxValue->setText("0");
+    m_gainRxValue->setText("0");
     m_attenuatorLabel->setText(QStringLiteral("Установка ослабления Attenuator_RX: децибелы"));
     m_noiseValueLabel->setText(QStringLiteral("Значения для синуса и м сигнала"));
     m_noiseLabel->setText(QStringLiteral("Режимы работы:"));
@@ -237,8 +245,6 @@ void StateWidget::FillUI()
     m_speedLineEdit->setValidator(m_intValidator);
     m_doplerFreqLineEdit->setValidator(m_intValidator);
     m_rangeLineEdit->setValidator(m_intValidator);
-    m_gainTXLineEdit->setValidator(m_gainValidator);
-    m_gainRXLineEdit->setValidator(m_gainValidator);
 
     m_fvcoComboBox->setEditable(true);
     m_fvcoComboBox->addItems(workPointsValues);
@@ -248,8 +254,8 @@ void StateWidget::FillUI()
     OnChangeDoplerLineEdit(m_settingFileService->GetAttribute(m_settingsAtribute, "dopler", "0"));
     m_rangeLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "range", "0"));
     m_noiseLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "noise", "0"));
-    m_gainTXLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "gainTx", "32"));
-    m_gainRXLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "gainRx", "0"));
+    m_gainTXSlider->SetDoubleRange(0, 31.5);
+    m_gainRXSlider->SetDoubleRange(0, 31.5);
     m_noiseLineEdit->setText(m_settingFileService->GetAttribute(m_settingsAtribute, "noise", "0"));
 
     m_attenuatorComboBox->addItems(m_attenuatorValues);
@@ -283,8 +289,8 @@ void StateWidget::ConnectObjects()
     connect(m_speedLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeSpeedLineEdit);
     connect(m_doplerFreqLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeDoplerLineEdit);
     connect(m_rangeLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeRangeLineEdit);
-    connect(m_gainRXLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeGainRxLineEdit);
-    connect(m_gainTXLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeGainTxLineEdit);
+    connect(m_gainRXSlider, &DoubleSlider::ToValueChanged, this, &StateWidget::OnChangeGainRxLineEdit);
+    connect(m_gainTXSlider, &DoubleSlider::ToValueChanged, this, &StateWidget::OnChangeGainTxLineEdit);
     connect(m_noiseLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeNoiseLineEdit);
 
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
@@ -312,8 +318,8 @@ void StateWidget::UpdateHistoryFile()
     QString dopler =m_doplerFreqLineEdit->text().leftJustified(space, ' ');
     QString speed = m_speedLineEdit->text().leftJustified(space, ' ');
     QString range= m_rangeLineEdit->text().leftJustified(space, ' ');
-    QString gaintTx = m_gainTXLineEdit->text().leftJustified(space, ' ');
-    QString gaintRx = m_gainRXLineEdit->text().leftJustified(space, ' ');
+    QString gaintTx = QString::number(m_gainTXSlider->GetCurrentDoubleRangeValue(), 'f', 3);
+    QString gaintRx = QString::number(m_gainRXSlider->GetCurrentDoubleRangeValue(), 'f', 3);
     QString attenuator =m_attenuatorComboBox->currentText();
     QString noise=m_noiseComboBox->currentText();
     QString message=time + "|Fvco(МПЦ)= "+fvco+" |Доплер(ГЦ)= "+dopler+ " |Скорость(М/С)= "+speed+ " |Дистанция(М)= "+range+ " |gainTx= "+gaintTx+ " |gainRx= "+gaintRx+ " |Ослабление= "+attenuator + " |"+ noise;
@@ -421,27 +427,10 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
     }
     case 4:
     {
-        if (!m_gainTXLineEdit->text().isEmpty() &&!m_gainRXLineEdit->text().isEmpty())
-        {
-            bool isOk1, isOk2;
-            firstValue=m_gainTXLineEdit->text().toDouble(&isOk1);
-            secondValue=m_gainRXLineEdit->text().toDouble(&isOk2);
-            if (isOk1&&isOk2)
-            {
-                OnConsoleLog("Высылаем четвертое сообщение: установка усиления. Tx= " + QString::number(firstValue, 'f') + " Rx= " + QString::number(secondValue, 'f'));
-                break;
-            }
-            else
-            {
-                OnConsoleLog("Не смогли перевесли в число " + m_gainRXLineEdit->text() + " или  "+ m_gainTXLineEdit->text());
-                return;
-            }
-        }
-        else
-        {
-            OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Усиление RX а так же Усиление TX"));
-            return;
-        }
+        firstValue=m_gainTXSlider->GetCurrentDoubleRangeValue();
+        secondValue=m_gainRXSlider->GetCurrentDoubleRangeValue();
+        OnConsoleLog("Высылаем четвертое сообщение: установка усиления. Tx= " + QString::number(firstValue, 'f') + " Rx= " + QString::number(secondValue, 'f'));
+        break;
     }
     case 5:
     {
@@ -574,13 +563,13 @@ void StateWidget::OnSetButtonEnabled(bool state)
 {
     m_attenuatorComboBox->setEnabled(state);
     m_noiseComboBox->setEnabled(state);
-    QList<QAbstractButton*> buttonsSetState=m_sendStateButtonsGroup->buttons();
-    for (auto iter=buttonsSetState.begin(); iter!=buttonsSetState.end();++iter ) {
-        (*iter)->setEnabled(state);
+    const QList<QAbstractButton*> buttonsSetState=m_sendStateButtonsGroup->buttons();
+    for (QAbstractButton* button: buttonsSetState  ) {
+        button->setEnabled(state);
     }
-    QList<QAbstractButton*> buttonsGetState=m_getStateButtonGroup->buttons();
-    for (auto iter=buttonsGetState.begin(); iter!=buttonsGetState.end();++iter ) {
-        (*iter)->setEnabled(state);
+    const QList<QAbstractButton*> buttonsGetState=m_getStateButtonGroup->buttons();
+    for (QAbstractButton* button: buttonsGetState ) {
+        button->setEnabled(state);
     }
 }
 
@@ -611,14 +600,18 @@ void StateWidget::OnChangeRangeLineEdit(const QString &range)
     m_settingFileService->SetAttribute(m_settingsAtribute, "range", range);
 }
 
-void StateWidget::OnChangeGainTxLineEdit(const QString &gainTx)
+void StateWidget::OnChangeGainTxLineEdit(double gainTx)
 {
-    m_settingFileService->SetAttribute(m_settingsAtribute, "gainTx", gainTx);
+    const QString gainTxString=QString::number(gainTx, 'f', 1);
+    m_gainTxValue->setText(gainTxString);
+    m_settingFileService->SetAttribute(m_settingsAtribute, "gainTx", gainTxString);
 }
 
-void StateWidget::OnChangeGainRxLineEdit(const QString &gainRx)
+void StateWidget::OnChangeGainRxLineEdit(double gainRx)
 {
-    m_settingFileService->SetAttribute(m_settingsAtribute, "gainRx", gainRx);
+    const QString gainRxString=QString::number(gainRx, 'f', 1);
+    m_gainRxValue->setText(gainRxString);
+    m_settingFileService->SetAttribute(m_settingsAtribute, "gainRx", gainRxString);
 }
 
 void StateWidget::OnChangeNoiseLineEdit(const QString &noise)

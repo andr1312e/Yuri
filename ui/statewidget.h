@@ -18,6 +18,8 @@
 #include "connections/datahandler.h"
 #include "presenter/statepresenter.h"
 
+#include "ui/doubleslider.h"
+
 class StateWidget : public QWidget
 {
     Q_OBJECT
@@ -43,8 +45,8 @@ private Q_SLOTS:
     void OnChangeSpeedLineEdit(const QString &speedText);
     void OnChangeFvcoComboBoxValue(const QString &fvco);
     void OnChangeRangeLineEdit(const QString &range);
-    void OnChangeGainTxLineEdit(const QString &gainTx);
-    void OnChangeGainRxLineEdit(const QString &gainRx);
+    void OnChangeGainTxLineEdit(double gainTx);
+    void OnChangeGainRxLineEdit(double gainRx);
     void OnChangeNoiseLineEdit(const QString &noise);
     void OnChangeSinusLineEdit(const QString &sinus);
 
@@ -74,9 +76,11 @@ private:
 
     QHBoxLayout *m_gainLineLayout;
     QLabel *m_gainTXLabel;
-    QLineEdit *m_gainTXLineEdit;
+    DoubleSlider *m_gainTXSlider;
+    QLabel *m_gainTxValue;
     QLabel *m_gainRXLabel;
-    QLineEdit *m_gainRXLineEdit;
+    DoubleSlider *m_gainRXSlider;
+    QLabel *m_gainRxValue;
 
     QHBoxLayout *m_attenuatorLineLayout;
     QLabel *m_attenuatorLabel;

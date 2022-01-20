@@ -157,13 +157,13 @@ quint32 StateMessageSender::calculateFRACT_Rx(double Fvco) const
     return FRACT_Rx;
 }
 
-quint8 StateMessageSender::calculateGAIN(quint8 gain) const
+quint8 StateMessageSender::calculateGAIN(double gain) const
 {
-    if (gain>(63))
+    if (gain>(31.5))
     {
-        gain=63;
+        gain=31.5;
     }
-    quint8 GAIN_X=gain/2.0;
+    quint8 GAIN_X=gain*2.0;
     return GAIN_X;
 }
 

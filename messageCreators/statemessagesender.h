@@ -31,7 +31,7 @@ private:
 
     quint16 calculateINT_Rx(double Fvco) const;
     quint32 calculateFRACT_Rx(double Fvco) const;
-    quint8 calculateGAIN(quint8 gain) const;
+    quint8 calculateGAIN(double gain) const;
     quint8 calculateAtteniator(quint16 atteniatorDb) const;
     bool calculateDIV_rx(double Fvco) const;
 };

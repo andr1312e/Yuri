@@ -101,7 +101,7 @@ void MainWindow::RegisterHadnler(DataHandler *dataHandler)
 
 void MainWindow::DisconnectOldHander()
 {
-    if (m_currentConnectionInterface!=Q_NULLPTR)
+    if (Q_NULLPTR!=m_currentConnectionInterface)
     {
         m_currentConnectionInterface->FromHostDisconnected();
         disconnect(m_currentConnectionInterface, &DataHandler::ToButtonsEnabledChanging, m_connectionWidget, &ConnectionWidget::SetButtonsEnabled);
