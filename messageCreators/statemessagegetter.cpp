@@ -158,8 +158,8 @@ const QString StateMessageGetter::GetGainTxGainRXFromFourthMessage(const QByteAr
 
     if (message.count()==4)
     {
-        quint8 GAIN_TX=message.at(2)*2.0;
-        quint8 GAIN_RX=message.at(3)*2.0;
+        double GAIN_TX=message.at(2)/2.0;
+        double GAIN_RX=message.at(3)/2.0;
         const QString result= QStringLiteral("Усиление TX= %1 децибел Усиление RX= %2 децибел").arg(GAIN_TX).arg(GAIN_RX);
         return result;
     }
@@ -182,7 +182,7 @@ const QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &me
 {
     if (message.count()==3)
     {
-        quint8 WorkModeIndex=quint8(message.at(2));
+        const quint8 WorkModeIndex=quint8(message.at(2));
         if(WorkModeIndex<noiseValues.count())
         {
             const QString result= "Рабочий режим: "+ noiseValues.at(WorkModeIndex);

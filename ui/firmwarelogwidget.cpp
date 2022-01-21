@@ -56,7 +56,7 @@ void FirmwareLogWidget::ConnectObjects()
 
 void FirmwareLogWidget::OnConsoleLog(const QString &message)
 {
-    QString time=QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
+    const QString time=QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
     m_log->appendPlainText(time+ " "+ message);
 }
 

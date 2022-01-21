@@ -10,6 +10,7 @@ class DoubleSlider : public QSlider
     Q_OBJECT
 public:
     DoubleSlider(QWidget *parent);
+    ~DoubleSlider();
 Q_SIGNALS:
     void ToValueChanged(double value);
 private Q_SLOTS:

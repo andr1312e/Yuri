@@ -12,7 +12,6 @@
 #include <QSettings>
 #include <QFile>
 #include <QSerialPortInfo>
-#include <QDomDocument>
 
 #include "services/settingfileservice.h"
 

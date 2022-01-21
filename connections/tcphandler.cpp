@@ -16,7 +16,6 @@ TcpHandler::~TcpHandler()
 void TcpHandler::CreateHander()
 {
     m_connectionPort=new QTcpSocket(this);
-//    m_connectionPort->setProxy(QNetworkProxy::NoProxy);
 }
 
 void TcpHandler::ConnectObjects()

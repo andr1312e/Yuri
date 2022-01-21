@@ -135,7 +135,7 @@ void ConnectionWidget::OnPortLineEditChange(const QString &newPort)
 
 void ConnectionWidget::OnConnectButtonClicked()
 {
-    int index=m_connectionTypeComboBox->currentIndex();
+    const int index=m_connectionTypeComboBox->currentIndex();
     if (0==index)
     {
         Q_EMIT ToConnectEthernetMoxa(m_adressLineEdit->text(), m_portLineEdit->text());
@@ -157,14 +157,14 @@ void ConnectionWidget::OnConnectButtonClicked()
 
 void ConnectionWidget::OnNewSerialPortsChecked()
 {
-    QList<QSerialPortInfo> list(QSerialPortInfo::availablePorts());
-    if (m_comPortNameComboBox->count()!=list.count())
+    const QList<QSerialPortInfo> serialPortInfoList(QSerialPortInfo::availablePorts());
+    if (m_comPortNameComboBox->count()!=serialPortInfoList.count())
     {
         m_comPortNameComboBox->clear();
-        for (QList<QSerialPortInfo>::const_iterator it=list.cbegin(); it!=list.cend(); ++it)
+        for (const QSerialPortInfo &serialPortInto: serialPortInfoList)
         {
-            QString portState=IsComPortBisy(&(*it)) ? QStringLiteral(" Занят") : QStringLiteral(" Свободен");
-            m_comPortNameComboBox->addItem(it->portName()+ " " + it->description()+ " " + it->manufacturer() + portState);
+            const QString portState=IsComPortBisy(&(serialPortInto)) ? QStringLiteral(" Занят") : QStringLiteral(" Свободен");
+            m_comPortNameComboBox->addItem(serialPortInto.portName()+ " " + serialPortInto.description()+ " " + serialPortInto.manufacturer() + portState);
         }
     }
 }
@@ -177,12 +177,12 @@ void ConnectionWidget::SetButtonsEnabled(bool state)
 
 bool ConnectionWidget::IsCurrentComPortBisy(QString &comPortName)
 {
-    QList<QSerialPortInfo> list(QSerialPortInfo::availablePorts());
-    for (QList<QSerialPortInfo>::const_iterator iterator=list.cbegin(); iterator!=list.cend(); ++iterator)
+    const QList<QSerialPortInfo> serialPortInfoList(QSerialPortInfo::availablePorts());
+    for (const QSerialPortInfo &serialPortInfo: serialPortInfoList)
     {
-        if(iterator->portName()==comPortName)
+        if(serialPortInfo.portName()==comPortName)
         {
-            return IsComPortBisy(&(*iterator));
+            return IsComPortBisy(&(serialPortInfo));
         }
     }
     return true;

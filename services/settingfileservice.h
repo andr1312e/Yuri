@@ -18,7 +18,7 @@ private:
     void WriteSettingsDocument();
 private:
     const QString m_fileName;
-    QDomDocument *m_document=NULL;
+    QDomDocument* const m_document;
 };
 
 #endif // SETTINGFILESERVICE_H

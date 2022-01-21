@@ -8,6 +8,11 @@ DoubleSlider::DoubleSlider(QWidget *parent)
     QSlider::setOrientation(Qt::Horizontal);
 }
 
+DoubleSlider::~DoubleSlider()
+{
+
+}
+
 void DoubleSlider::OnValueChanged(int intValue)
 {
     double doubleValue = intValue / 10.0;
