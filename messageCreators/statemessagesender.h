@@ -12,14 +12,14 @@ class StateMessageSender
 public:
     explicit StateMessageSender(const double f, const double fref, const quint32 distanfeToAnswerer);
     ~StateMessageSender();
-    const QByteArray createZeroCommand();
-    QByteArray createFirstCommand(double Fvco);
-    QByteArray createSecondCommand(double Fvco, double doplerFreq);
-    QByteArray createThirdCommand(double distance);
-    QByteArray createFourthCommand(double gainTX, double gainRX);
-    QByteArray createFiveCommand(double AttenuatorDb);
-    QByteArray createSixCommand(double noiseType, double noiseValue);
-    QByteArray createSevenCommand(quint8 param);
+    const QByteArray CreateZeroCommand();
+    QByteArray CreateFirstCommand(double Fvco);
+    QByteArray CreateSecondCommand(double Fvco, double doplerFreq);
+    QByteArray CreateThirdCommand(double distance);
+    QByteArray CreateFourthCommand(double gainTX, double gainRX);
+    QByteArray CreateFiveCommand(double AttenuatorDb);
+    QByteArray CreateSixCommand(double noiseType, double noiseValue);
+    QByteArray CreateSevenCommand(quint8 param);
 private:
     const double c=299792458.0;
 
@@ -30,7 +30,8 @@ private:
 private:
 
     quint16 calculateINT_Rx(double Fvco) const;
-    quint32 calculateFRACT_Rx(double Fvco) const;
+    quint32 calculateFRACT_RxOld(double Fvco) const;
+    quint32 calculateFRACT_RxNew(double Fvco) const;
     quint8 calculateGAIN(double gain) const;
     quint8 calculateAtteniator(quint16 atteniatorDb) const;
     bool calculateDIV_rx(double Fvco) const;

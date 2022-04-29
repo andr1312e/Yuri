@@ -34,11 +34,11 @@ private:
     void FillButtonGroup();
     void InsertWidgetsIntoLayout();
     void FillUI();
-    void AddButtonFromGroupToLayout(QList<QAbstractButton*>::const_iterator *setButtonIterator, QList<QAbstractButton*>::const_iterator *getButtonIterator, QBoxLayout *layout);
+    void AddButtonFromGroupToLayout(QList<QAbstractButton *>::const_iterator *setButtonIterator, QList<QAbstractButton *>::const_iterator *getButtonIterator, QBoxLayout *layout);
     void ConnectObjects();
 
 Q_SIGNALS:
-    void SetStateMessage(quint8 messageId, double fistParam=0.0, double SecondParam=0.0);
+    void SetStateMessage(quint8 messageId, double fistParam = 0.0, double SecondParam = 0.0);
     void ToDataHanderChanged();
 private Q_SLOTS:
     void OnChangeDoplerLineEdit(const QString &doplerText);
@@ -49,9 +49,11 @@ private Q_SLOTS:
     void OnChangeGainRxLineEdit(double gainRx);
     void OnChangeNoiseLineEdit(const QString &noise);
     void OnChangeSinusLineEdit(const QString &sinus);
-
+    void OnChangeHexInput(const QString &hexMessage);
 public Q_SLOTS:
     void OnSetStateButtonIdClicked(int id);
+    void OnRestartDevice();
+    void OnSendRawHexMessage();
     void OnGetStateButtonIdClicked(int messageWantToGet);
     void OnSetButtonEnabled(bool state);
     void OnConsoleLog(const QString &message);
@@ -101,12 +103,18 @@ private:
 
     QHBoxLayout *m_stateLayout;
     QPushButton *m_logClearButton;
+    QPushButton *m_restartDevice;
+
+    QHBoxLayout *m_rawHexLayout;
+    QLineEdit *m_rawHexInputEdit;
+    QLabel *m_hexLabel;
+    QPushButton *m_sendRawHexButton;
 
     QPlainTextEdit *m_log;
 private:
     QSharedPointer<SettingFileService> m_settingFileService;
     StatePresenter *m_statePresenter;
-    const quint32 c=299792458;
+    const quint32 c = 299792458;
     QFile *m_file;
     QStringList workPointsValues;
     QStringList m_attenuatorValues;
@@ -114,7 +122,7 @@ private:
     QIntValidator *m_gainValidator;
 
 private:
-    const QString m_settingsAtribute="state";
+    const QString m_settingsAtribute = "state";
 
 };
 

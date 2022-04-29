@@ -88,7 +88,7 @@ void MainWindow::OnConnectToUsbMoxa(const QString &comPortName)
 void MainWindow::OnDisconnectFromMoxa()
 {
     m_currentConnectionInterface->FromHostDisconnect();
-    m_connectionWidget->SetButtonsEnabled(false);
+    m_connectionWidget->SetButtonsEnabled(true);
     m_statusBar->showMessage(QStringLiteral("Не подключено"));
     DisconnectOldHander();
 }

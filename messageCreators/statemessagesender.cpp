@@ -15,7 +15,7 @@ StateMessageSender::~StateMessageSender()
 
 }
 
-const QByteArray StateMessageSender::createZeroCommand()
+const QByteArray StateMessageSender::CreateZeroCommand()
 {
     QByteArray command={};
     command.append(messagesIds.at(0));
@@ -23,11 +23,11 @@ const QByteArray StateMessageSender::createZeroCommand()
     return command;
 }
 
-QByteArray StateMessageSender::createFirstCommand(double Fvco)
+QByteArray StateMessageSender::CreateFirstCommand(double Fvco)
 {
     quint8 id=messagesIds.at(1);
     qint16 INT_Rx=calculateINT_Rx(Fvco);//МГЦ
-    qint32 FRACT_Rx=calculateFRACT_Rx(Fvco);//МГЦ
+    qint32 FRACT_Rx=calculateFRACT_RxNew(Fvco);//МГЦ
     bool DivRx=calculateDIV_rx(Fvco);
 
     QByteArray lastThreeBytes;
@@ -44,14 +44,14 @@ QByteArray StateMessageSender::createFirstCommand(double Fvco)
     streamMain << (quint8)lastThreeBytes.at(3);
     streamMain << DivRx;
     qDebug()<< QStringLiteral(" Выслали ") << command.toHex();
-    return command;
+                                                      return command;
 }
 
-QByteArray StateMessageSender::createSecondCommand(double Fvco, double doplerFreq)
+QByteArray StateMessageSender::CreateSecondCommand(double Fvco, double doplerFreq)
 {
     double ResultFreq=Fvco+doplerFreq;
     qint16 INT_Tx=calculateINT_Rx(ResultFreq);
-    qint32 FRACT_Tx=calculateFRACT_Rx(ResultFreq);
+    qint32 FRACT_Tx=calculateFRACT_RxOld(ResultFreq);
     bool DivTx=calculateDIV_rx(ResultFreq);
 
 
@@ -66,12 +66,15 @@ QByteArray StateMessageSender::createSecondCommand(double Fvco, double doplerFre
     streamMain << (quint8)lastThreeBytes.at(1);
     streamMain << (quint8)lastThreeBytes.at(2);
     streamMain << (quint8)lastThreeBytes.at(3);
+    //    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-3);
+    //    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-2);
+    //    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-1);
     streamMain << DivTx;
 
     return command;
 }
 
-QByteArray StateMessageSender::createThirdCommand(double distance)
+QByteArray StateMessageSender::CreateThirdCommand(double distance)
 {
     double secondVal=f/c;
     double distanceDouble=qAbs(distance-distanseToAnswerer)*secondVal+1.0;
@@ -84,7 +87,7 @@ QByteArray StateMessageSender::createThirdCommand(double distance)
     return command;
 }
 
-QByteArray StateMessageSender::createFourthCommand(double gainTX, double gainRX)
+QByteArray StateMessageSender::CreateFourthCommand(double gainTX, double gainRX)
 {
     quint8 GAIN_TX=calculateGAIN(gainTX);
     quint8 GAIN_RX=calculateGAIN(gainRX);
@@ -96,7 +99,7 @@ QByteArray StateMessageSender::createFourthCommand(double gainTX, double gainRX)
     return command;
 }
 
-QByteArray StateMessageSender::createFiveCommand(double AttenuatorDb)
+QByteArray StateMessageSender::CreateFiveCommand(double AttenuatorDb)
 {
     quint8 attenuator=calculateAtteniator(AttenuatorDb);
 
@@ -106,25 +109,22 @@ QByteArray StateMessageSender::createFiveCommand(double AttenuatorDb)
     return command;
 }
 
-QByteArray StateMessageSender::createSixCommand(double noiseType, double noiseValue)
+QByteArray StateMessageSender::CreateSixCommand(double noiseType, double noiseValue)
 {
     QByteArray command;
     command.append(messagesIds.at(6));
     command.append(quint8(noiseType));
-    if (noiseType>2)
-    {
-        quint32 noiseVal=(quint32)noiseValue;
-        quint8 first=(noiseVal >> (8*0)) & 0xff;
-        quint8 second=(noiseVal >> (8*1)) & 0xff;
-        quint8 third=(noiseVal >> (8*2)) & 0xff;
-        command.append(third);
-        command.append(second);
-        command.append(first);
-    }
+    quint32 noiseVal=(quint32)noiseValue;
+    quint8 first=(noiseVal >> (8*0)) & 0xff;
+    quint8 second=(noiseVal >> (8*1)) & 0xff;
+    quint8 third=(noiseVal >> (8*2)) & 0xff;
+    command.append(third);
+    command.append(second);
+    command.append(first);
     return command;
 }
 
-QByteArray StateMessageSender::createSevenCommand(quint8 param)
+QByteArray StateMessageSender::CreateSevenCommand(quint8 param)
 {
     QByteArray command;
     command.append(messagesIds.at(7));
@@ -144,7 +144,20 @@ quint16 StateMessageSender::calculateINT_Rx(double Fvco) const
     return INT_Rx;
 }
 
-quint32 StateMessageSender::calculateFRACT_Rx(double Fvco) const
+quint32 StateMessageSender::calculateFRACT_RxOld(double Fvco) const
+{
+    bool DIV_Rx=calculateDIV_rx(Fvco);
+    double povValue=(pow(2,20));
+    double FirstValue=2.0*Fvco;
+    double FirstValueDiv=Fref*pow(2, DIV_Rx);
+    FirstValue=FirstValue/FirstValueDiv;
+    double SecondValue=(qint32)FirstValue;
+    double difference=FirstValue-SecondValue;
+    quint32 FRACT_Rx=(quint32)qFloor(povValue*difference);
+    return FRACT_Rx;
+}
+
+quint32 StateMessageSender::calculateFRACT_RxNew(double Fvco) const
 {
     bool DIV_Rx=calculateDIV_rx(Fvco);
     double povValue=(qPow(2,20));

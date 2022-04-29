@@ -1,6 +1,7 @@
 #include "statewidget.h"
 #include "qdatetime.h"
 #include <QDebug>
+#include <QRegularExpression>
 #include <QTimer>
 
 StateWidget::StateWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent)
@@ -66,6 +67,7 @@ StateWidget::~StateWidget()
     delete m_getStateButtonGroup;
 
     delete m_logClearButton;
+    delete m_restartDevice;
 
     delete m_log;
 }
@@ -82,71 +84,77 @@ void StateWidget::ConnectHander(DataHandler *dataHandler)
 
 void StateWidget::CreateObjects()
 {
-    m_statePresenter=new StatePresenter(m_settingFileService, this);
-    m_file=new QFile(QDir::currentPath()+"/история запросов.txt");
-    m_intValidator=new QIntValidator();
-    m_gainValidator=new QIntValidator(0, 64);
+    m_statePresenter = new StatePresenter(m_settingFileService, this);
+    m_file = new QFile(QDir::currentPath() + "/история запросов.txt");
+    m_intValidator = new QIntValidator();
+    m_gainValidator = new QIntValidator(0, 64);
     m_file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
-    long long minWorkPointValue=2695;
-    for (int i=0; i<30; i++)
+    long long minWorkPointValue = 2695;
+    for (int i = 0; i < 30; i++)
     {
         workPointsValues.append(QString::number(minWorkPointValue));
-        minWorkPointValue=minWorkPointValue+10;
+        minWorkPointValue = minWorkPointValue + 10;
     }
 }
 
 
 void StateWidget::CreateUI()
 {
-    m_mainLayout=new QVBoxLayout();
-    m_speedLayout=new QHBoxLayout();
-    m_rangeLineLayout=new QHBoxLayout();
-    m_workPointLineLayout=new QHBoxLayout();
-    m_gainLineLayout=new QHBoxLayout();
-    m_attenuatorLineLayout=new QHBoxLayout();
-    m_messageSendButtonsLayout=new QHBoxLayout();
-    m_messageGetButtonsLayout=new QHBoxLayout();
-    m_stateLayout=new QHBoxLayout();
-    m_noiseLineLayout=new QHBoxLayout();
+    m_mainLayout = new QVBoxLayout();
+    m_speedLayout = new QHBoxLayout();
+    m_rangeLineLayout = new QHBoxLayout();
+    m_workPointLineLayout = new QHBoxLayout();
+    m_gainLineLayout = new QHBoxLayout();
+    m_attenuatorLineLayout = new QHBoxLayout();
+    m_messageSendButtonsLayout = new QHBoxLayout();
+    m_messageGetButtonsLayout = new QHBoxLayout();
+    m_stateLayout = new QHBoxLayout();
+    m_noiseLineLayout = new QHBoxLayout();
 
-    m_fvcoLabel=new QLabel();
-    m_fvcoComboBox=new QComboBox();
+    m_fvcoLabel = new QLabel();
+    m_fvcoComboBox = new QComboBox();
 
-    m_DoplerFreqLabel=new QLabel();
-    m_doplerFreqLineEdit=new QLineEdit();
+    m_DoplerFreqLabel = new QLabel();
+    m_doplerFreqLineEdit = new QLineEdit();
 
-    m_speedLabel=new QLabel();
-    m_speedLineEdit=new QLineEdit();
+    m_speedLabel = new QLabel();
+    m_speedLineEdit = new QLineEdit();
 
-    m_rangeLabel=new QLabel();
-    m_rangeLineEdit=new QLineEdit();
-
-
-    m_gainTXLabel=new QLabel();
-    m_gainTXSlider=new DoubleSlider(this);
-    m_gainTxValue=new QLabel();
+    m_rangeLabel = new QLabel();
+    m_rangeLineEdit = new QLineEdit();
 
 
-    m_gainRXLabel=new QLabel();
-    m_gainRXSlider=new DoubleSlider(this);
-    m_gainRxValue=new QLabel();
+    m_gainTXLabel = new QLabel();
+    m_gainTXSlider = new DoubleSlider(this);
+    m_gainTxValue = new QLabel();
 
 
-    m_attenuatorLabel=new QLabel();
-    m_attenuatorComboBox=new QComboBox();
+    m_gainRXLabel = new QLabel();
+    m_gainRXSlider = new DoubleSlider(this);
+    m_gainRxValue = new QLabel();
 
 
-    m_noiseLabel=new QLabel();
-    m_noiseValueLabel=new QLabel();
-    m_noiseLineEdit=new QLineEdit();
-    m_noiseComboBox=new QComboBox();
+    m_attenuatorLabel = new QLabel();
+    m_attenuatorComboBox = new QComboBox();
 
-    m_sendStateButtonsGroup=new QButtonGroup();
+
+    m_noiseLabel = new QLabel();
+    m_noiseValueLabel = new QLabel();
+    m_noiseLineEdit = new QLineEdit();
+    m_noiseComboBox = new QComboBox();
+
+    m_sendStateButtonsGroup = new QButtonGroup();
     FillButtonGroup();
 
-    m_logClearButton=new QPushButton();
+    m_logClearButton = new QPushButton();
+    m_restartDevice = new QPushButton();
 
-    m_log=new QPlainTextEdit();
+    m_rawHexLayout = new QHBoxLayout();
+    m_rawHexInputEdit = new QLineEdit();
+    m_hexLabel = new QLabel();
+    m_sendRawHexButton = new QPushButton();
+
+    m_log = new QPlainTextEdit();
     //    m_log->setStyleSheet(QStringLiteral("color: white; background-color: black;"));
 
 
@@ -156,7 +164,7 @@ void StateWidget::FillButtonGroup()
 {
 
     m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить RX")), 1);
-    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить RX и ТХ")), 21);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить RX и ТХ")), 12);
     m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить TX")), 2);
     m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить")), 3);
 
@@ -164,9 +172,9 @@ void StateWidget::FillButtonGroup()
     m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить")), 5);
     m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Пинг")), 0);
 
-    m_getStateButtonGroup=new QButtonGroup();
+    m_getStateButtonGroup = new QButtonGroup();
     m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 1);
-    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 21);
+    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 12);
     m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 3);
     m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 4);
     m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 5);
@@ -175,10 +183,10 @@ void StateWidget::FillButtonGroup()
 
 void StateWidget::InsertWidgetsIntoLayout()
 {
-    QList<QAbstractButton*> sendStateButtonList=m_sendStateButtonsGroup->buttons();
-    QList<QAbstractButton*> getStateButtonList=m_getStateButtonGroup->buttons();
-    QList<QAbstractButton*>::const_iterator setStateButtonListInterator=sendStateButtonList.cbegin();
-    QList<QAbstractButton*>::const_iterator getStateButtonLIstIterator=getStateButtonList.cbegin();
+    QList<QAbstractButton *> sendStateButtonList = m_sendStateButtonsGroup->buttons();
+    QList<QAbstractButton *> getStateButtonList = m_getStateButtonGroup->buttons();
+    QList<QAbstractButton *>::const_iterator setStateButtonListInterator = sendStateButtonList.cbegin();
+    QList<QAbstractButton *>::const_iterator getStateButtonLIstIterator = getStateButtonList.cbegin();
 
     m_workPointLineLayout->addWidget(m_fvcoLabel);
     m_workPointLineLayout->addWidget(m_fvcoComboBox);
@@ -223,8 +231,17 @@ void StateWidget::InsertWidgetsIntoLayout()
     m_mainLayout->addLayout(m_messageGetButtonsLayout);
 
     AddButtonFromGroupToLayout(&setStateButtonListInterator, nullptr, m_mainLayout);
+    m_mainLayout->addWidget(m_restartDevice);
+    m_rawHexLayout->addWidget(m_rawHexInputEdit);
+    m_rawHexLayout->addWidget(m_hexLabel);
+    m_rawHexLayout->addWidget(m_sendRawHexButton);
+
+    m_mainLayout->addLayout(m_rawHexLayout);
     m_mainLayout->addWidget(m_logClearButton);
     m_mainLayout->addWidget(m_log);
+
+
+
     setLayout(m_mainLayout);
 }
 
@@ -262,21 +279,24 @@ void StateWidget::FillUI()
     m_attenuatorComboBox->setCurrentIndex(8);
     m_noiseComboBox->addItems(noiseValues);
     m_noiseComboBox->setEditable(false);
-
+    m_restartDevice->setText(QStringLiteral("Перезагрузить устройство"));
+    m_rawHexInputEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("^[0-9a-fA-F]*"), this));
+    m_sendRawHexButton->setText(QStringLiteral("Отправить hex сообщение"));
+    m_logClearButton->setText(QStringLiteral("Консоль отчистить"));
     m_log->setReadOnly(true);
     m_log->appendPlainText(QStringLiteral("Не подключено к ответчику"));
-    m_logClearButton->setText(QStringLiteral("Консоль отчистить"));
 
-    bool val=m_settingFileService->GetAttribute(m_settingsAtribute, "uiEnabled", "0").toInt();
-    OnSetButtonEnabled(val);
+
+//    bool val=m_settingFileService->GetAttribute(m_settingsAtribute, "uiEnabled", "0").toInt();
+    OnSetButtonEnabled(true);
 
 }
 
-void StateWidget::AddButtonFromGroupToLayout(QList<QAbstractButton*>::const_iterator *setButtonIterator, QList<QAbstractButton*>::const_iterator *getButtonIterator, QBoxLayout *layout)
+void StateWidget::AddButtonFromGroupToLayout(QList<QAbstractButton *>::const_iterator *setButtonIterator, QList<QAbstractButton *>::const_iterator *getButtonIterator, QBoxLayout *layout)
 {
     layout->addWidget(**setButtonIterator);
     setButtonIterator->operator++();
-    if (getButtonIterator!=nullptr)
+    if (getButtonIterator != nullptr)
     {
         layout->addWidget(**getButtonIterator);
         getButtonIterator->operator++();
@@ -294,6 +314,9 @@ void StateWidget::ConnectObjects()
     connect(m_noiseLineEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeNoiseLineEdit);
 
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
+    connect(m_restartDevice, &QPushButton::clicked, this, &StateWidget::OnRestartDevice);
+    connect(m_rawHexInputEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeHexInput);
+    connect(m_sendRawHexButton, &QPushButton::clicked, this, &StateWidget::OnSendRawHexMessage);
     connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::OnConsoleLog);
     connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::OnSetButtonEnabled);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
@@ -304,25 +327,31 @@ void StateWidget::ConnectObjects()
     connect(m_getStateButtonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::OnGetStateButtonIdClicked);
 #endif
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    connect(m_noiseComboBox, &QComboBox::currentIndexChanged, [&](int index){this->OnSetStateButtonIdClicked(6);});
+    connect(m_noiseComboBox, &QComboBox::currentIndexChanged, [&](int index)
+    {
+        this->OnSetStateButtonIdClicked(6);
+    });
 #else
-    connect(m_noiseComboBox, QOverload<int>::of(&QComboBox::activated), [&](int index){this->OnSetStateButtonIdClicked(6);});
+    connect(m_noiseComboBox, QOverload<int>::of(&QComboBox::activated), [&](int index)
+    {
+        this->OnSetStateButtonIdClicked(6);
+    });
 #endif
 }
 
 void StateWidget::UpdateHistoryFile()
 {
-    QString time="\n"+QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
-    int space=5;
-    QString fvco=m_fvcoComboBox->currentText().leftJustified(space, ' ');
-    QString dopler =m_doplerFreqLineEdit->text().leftJustified(space, ' ');
+    QString time = "\n" + QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
+    int space = 5;
+    QString fvco = m_fvcoComboBox->currentText().leftJustified(space, ' ');
+    QString dopler = m_doplerFreqLineEdit->text().leftJustified(space, ' ');
     QString speed = m_speedLineEdit->text().leftJustified(space, ' ');
-    QString range= m_rangeLineEdit->text().leftJustified(space, ' ');
+    QString range = m_rangeLineEdit->text().leftJustified(space, ' ');
     QString gaintTx = QString::number(m_gainTXSlider->GetCurrentDoubleRangeValue(), 'f', 3);
     QString gaintRx = QString::number(m_gainRXSlider->GetCurrentDoubleRangeValue(), 'f', 3);
-    QString attenuator =m_attenuatorComboBox->currentText();
-    QString noise=m_noiseComboBox->currentText();
-    QString message=time + "|Fvco(МПЦ)= "+fvco+" |Доплер(ГЦ)= "+dopler+ " |Скорость(М/С)= "+speed+ " |Дистанция(М)= "+range+ " |gainTx= "+gaintTx+ " |gainRx= "+gaintRx+ " |Ослабление= "+attenuator + " |"+ noise;
+    QString attenuator = m_attenuatorComboBox->currentText();
+    QString noise = m_noiseComboBox->currentText();
+    QString message = time + "|Fvco(МПЦ)= " + fvco + " |Доплер(ГЦ)= " + dopler + " |Скорость(М/С)= " + speed + " |Дистанция(М)= " + range + " |gainTx= " + gaintTx + " |gainRx= " + gaintRx + " |Ослабление= " + attenuator + " |" + noise;
     m_file->write(message.toUtf8());
     m_file->flush();
 }
@@ -330,14 +359,15 @@ void StateWidget::UpdateHistoryFile()
 
 void StateWidget::OnConsoleLog(const QString &message)
 {
-    QString time=QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
-    m_log->appendPlainText(time+ " "+ message);
+    QString time = QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
+    m_log->appendPlainText(time + " " + message);
 }
 
 void StateWidget::OnSetStateButtonIdClicked(int id)
 {
-    double firstValue=0.0, secondValue=0.0;
-    switch (id) {
+    double firstValue = 0.0, secondValue = 0.0;
+    switch (id)
+    {
     case 0:
     {
         OnConsoleLog(QStringLiteral("Высылаем сообщение пинга"));
@@ -348,11 +378,11 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
         if (!m_fvcoComboBox->currentText().isEmpty())
         {
             bool isOk;
-            firstValue=m_fvcoComboBox->currentText().toDouble(&isOk);
+            firstValue = m_fvcoComboBox->currentText().toDouble(&isOk);
             if (isOk)
             {
-                firstValue=firstValue*1000000;
-                OnConsoleLog("Высылаем первое сообщение: установка частоты RX fvco= " +QString::number(firstValue)+ " ГЦ");
+                firstValue = firstValue * 1000000;
+                OnConsoleLog("Высылаем первое сообщение: установка частоты RX fvco= " + QString::number(firstValue) + " ГЦ");
                 break;
             }
             else
@@ -369,24 +399,24 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
     }
     case 2:
     {
-        if (!m_fvcoComboBox->currentText().isEmpty()&&!m_doplerFreqLineEdit->text().isEmpty())
+        if (!m_fvcoComboBox->currentText().isEmpty() && !m_doplerFreqLineEdit->text().isEmpty())
         {
             bool isOk1, isOk2;
-            firstValue=m_fvcoComboBox->currentText().toDouble(&isOk1);
-            secondValue=m_doplerFreqLineEdit->text().toDouble(&isOk2);
+            firstValue = m_fvcoComboBox->currentText().toDouble(&isOk1);
+            secondValue = m_doplerFreqLineEdit->text().toDouble(&isOk2);
             if (isOk1)
             {
-                firstValue=firstValue*1000000;
+                firstValue = firstValue * 1000000;
                 if (isOk2)
                 {
 
-                    OnConsoleLog("Высылаем второе сообщение: установка частоты Tx fvco= " +QString::number(firstValue) + " ГЦ и доплер= "+ QString::number(secondValue, 'f')+ " ГЦ");
+                    OnConsoleLog("Высылаем второе сообщение: установка частоты Tx fvco= " + QString::number(firstValue) + " ГЦ и доплер= " + QString::number(secondValue, 'f') + " ГЦ");
                     break;
                 }
                 else
                 {
                     OnConsoleLog("Не смогли перевесли в число " + m_doplerFreqLineEdit->text());
-                    OnConsoleLog("Высылаем сообщение fvco= "+QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
+                    OnConsoleLog("Высылаем сообщение fvco= " + QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
                     break;
                 }
             }
@@ -407,7 +437,7 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
         if (!m_rangeLineEdit->text().isEmpty())
         {
             bool isOk;
-            firstValue=m_rangeLineEdit->text().toDouble(&isOk);
+            firstValue = m_rangeLineEdit->text().toDouble(&isOk);
             if (isOk)
             {
                 OnConsoleLog("Высылаем третье сообщение: установка дальности ответного сигнала. Дистанция= " + QString::number(firstValue, 'f') );
@@ -427,15 +457,15 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
     }
     case 4:
     {
-        firstValue=m_gainTXSlider->GetCurrentDoubleRangeValue();
-        secondValue=m_gainRXSlider->GetCurrentDoubleRangeValue();
+        firstValue = m_gainTXSlider->GetCurrentDoubleRangeValue();
+        secondValue = m_gainRXSlider->GetCurrentDoubleRangeValue();
         OnConsoleLog("Высылаем четвертое сообщение: установка усиления. Tx= " + QString::number(firstValue, 'f') + " Rx= " + QString::number(secondValue, 'f'));
         break;
     }
     case 5:
     {
         bool isOk;
-        firstValue=m_attenuatorComboBox->currentText().toDouble(&isOk);
+        firstValue = m_attenuatorComboBox->currentText().toDouble(&isOk);
         if (isOk)
         {
             OnConsoleLog(QStringLiteral("Высылаем пятое сообщение: установка ослабления"));
@@ -449,48 +479,51 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
     case 6:
     {
         OnConsoleLog("Шестое сообщение высылаем" + m_noiseComboBox->currentText());
-        firstValue=m_noiseComboBox->currentIndex();
-        if (firstValue==4 || firstValue==3)
+        firstValue = m_noiseComboBox->currentIndex();
+        if (firstValue == 4 || firstValue == 3)
         {
             bool isOk;
-            secondValue=m_noiseLineEdit->text().toDouble(&isOk);
+            secondValue = m_noiseLineEdit->text().toDouble(&isOk);
             if (isOk)
             {
 
-                OnConsoleLog("Шестое сообщение: параметр равен: "+ m_noiseLineEdit->text());
+                OnConsoleLog("Шестое сообщение: параметр равен: " + m_noiseLineEdit->text());
             }
             else
             {
                 OnConsoleLog("Не смогли перевесли в число: " + m_noiseLineEdit->text() + ".Берем значение 0");
-                secondValue=0.0;
+                secondValue = 0.0;
                 break;
             }
         }
         OnConsoleLog(QStringLiteral("Высылаем шестое сообщение: установка шума"));
         break;
     }
-    case 21:
+    case 12:
     {
-        if (!m_fvcoComboBox->currentText().isEmpty()&&!m_doplerFreqLineEdit->text().isEmpty())
+        if (!m_fvcoComboBox->currentText().isEmpty() && !m_doplerFreqLineEdit->text().isEmpty())
         {
             bool isOk1, isOk2;
-            firstValue=m_fvcoComboBox->currentText().toDouble(&isOk1);
-            secondValue=m_doplerFreqLineEdit->text().toDouble(&isOk2);
+            firstValue = m_fvcoComboBox->currentText().toDouble(&isOk1);
+            secondValue = m_doplerFreqLineEdit->text().toDouble(&isOk2);
             if (isOk1)
             {
-                firstValue=firstValue*1000000;
+                firstValue = firstValue * 1000000;
                 if (isOk2)
                 {
 
-                    OnConsoleLog("Высылаем второе и первое сообщения: установка частоты Tx и Rх fvco= " +QString::number(firstValue) + " ГЦ и доплер= "+ QString::number(secondValue, 'f')+ " ГЦ");
+                    OnConsoleLog("Высылаем второе и первое сообщения: установка частоты Tx и Rх fvco= " + QString::number(firstValue) + " ГЦ и доплер= " + QString::number(secondValue, 'f') + " ГЦ");
                 }
                 else
                 {
                     OnConsoleLog("Не смогли перевесли в число " + m_doplerFreqLineEdit->text());
-                    OnConsoleLog("Высылаем второе и первое сообщения: fvco= "+QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
+                    OnConsoleLog("Высылаем второе и первое сообщения: fvco= " + QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
                 }
-                id=1;
-                QTimer::singleShot(7, [&](){    m_statePresenter->SetStateToDevice(2, m_fvcoComboBox->currentText().toDouble()*1000000, m_doplerFreqLineEdit->text().toDouble());});
+                id = 1;
+                QTimer::singleShot(1000, [ = ]()
+                {
+                    m_statePresenter->SetStateToDevice(2, m_fvcoComboBox->currentText().toDouble() * 1000000, m_doplerFreqLineEdit->text().toDouble());
+                });
             }
             else
             {
@@ -515,19 +548,34 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
     UpdateHistoryFile();
 }
 
+void StateWidget::OnRestartDevice()
+{
+    m_statePresenter->ToSendMessageToDeivce(QByteArray("\x0d\x5a"));
+}
+
+void StateWidget::OnSendRawHexMessage()
+{
+    const QByteArray message = QByteArray::fromHex(m_rawHexInputEdit->text().toUtf8());
+    m_statePresenter->ToSendMessageToDeivce(message);
+}
+
 void StateWidget::OnGetStateButtonIdClicked(int id)
 {
-    switch (id) {
+    switch (id)
+    {
     case 1:
     {
         OnConsoleLog(QStringLiteral("Получаем рабочую точку"));
         break;
     }
-    case 21:
+    case 12:
     {
         OnConsoleLog(QStringLiteral("Получаем доплера точку"));
-        id=1;
-        QTimer::singleShot(7, [&](){    m_statePresenter->GetStateFromDevice(2);});
+        id = 1;
+        QTimer::singleShot(1000, [ = ]()
+        {
+            m_statePresenter->GetStateFromDevice(2);
+        });
         break;
     }
     case 3:
@@ -563,29 +611,31 @@ void StateWidget::OnSetButtonEnabled(bool state)
 {
     m_attenuatorComboBox->setEnabled(state);
     m_noiseComboBox->setEnabled(state);
-    const QList<QAbstractButton*> buttonsSetState=m_sendStateButtonsGroup->buttons();
-    for (QAbstractButton* button: buttonsSetState  ) {
+    const QList<QAbstractButton *> buttonsSetState = m_sendStateButtonsGroup->buttons();
+    for (QAbstractButton *button : buttonsSetState  )
+    {
         button->setEnabled(state);
     }
-    const QList<QAbstractButton*> buttonsGetState=m_getStateButtonGroup->buttons();
-    for (QAbstractButton* button: buttonsGetState ) {
+    const QList<QAbstractButton *> buttonsGetState = m_getStateButtonGroup->buttons();
+    for (QAbstractButton *button : buttonsGetState )
+    {
         button->setEnabled(state);
     }
 }
 
 void StateWidget::OnChangeDoplerLineEdit(const QString &doplerText)
 {
-    double dopler=doplerText.toDouble();
-    double speed=dopler*c/(2.0*m_fvcoComboBox->currentText().toDouble()*1000000.0);
+    double dopler = doplerText.toDouble();
+    double speed = dopler * c / (2.0 * m_fvcoComboBox->currentText().toDouble() * 1000000.0);
     m_speedLineEdit->setText(QString::number(speed, 'f'));
     m_settingFileService->SetAttribute(m_settingsAtribute, "dopler", doplerText);
 }
 
 void StateWidget::OnChangeSpeedLineEdit(const QString &speedText)
 {
-    double speed=speedText.toDouble();
-    double dopler1=speed*m_fvcoComboBox->currentText().toDouble()*1000000.0*2.0;
-    double dopler=dopler1/c;
+    double speed = speedText.toDouble();
+    double dopler1 = speed * m_fvcoComboBox->currentText().toDouble() * 1000000.0 * 2.0;
+    double dopler = dopler1 / c;
     m_doplerFreqLineEdit->setText(QString::number(dopler, 'f'));
     m_settingFileService->SetAttribute(m_settingsAtribute, "dopler", QString::number(dopler));
 }
@@ -602,14 +652,14 @@ void StateWidget::OnChangeRangeLineEdit(const QString &range)
 
 void StateWidget::OnChangeGainTxLineEdit(double gainTx)
 {
-    const QString gainTxString=QString::number(gainTx, 'f', 1);
+    const QString gainTxString = QString::number(gainTx, 'f', 1);
     m_gainTxValue->setText(gainTxString);
     m_settingFileService->SetAttribute(m_settingsAtribute, "gainTx", gainTxString);
 }
 
 void StateWidget::OnChangeGainRxLineEdit(double gainRx)
 {
-    const QString gainRxString=QString::number(gainRx, 'f', 1);
+    const QString gainRxString = QString::number(gainRx, 'f', 1);
     m_gainRxValue->setText(gainRxString);
     m_settingFileService->SetAttribute(m_settingsAtribute, "gainRx", gainRxString);
 }
@@ -622,4 +672,9 @@ void StateWidget::OnChangeNoiseLineEdit(const QString &noise)
 void StateWidget::OnChangeSinusLineEdit(const QString &sinus)
 {
     m_settingFileService->SetAttribute(m_settingsAtribute, "sinus", sinus);
+}
+
+void StateWidget::OnChangeHexInput(const QString &hexMessage)
+{
+//    m_hexLabel->setText("Отправим: " + hexMessage.toLatin1().toHex());
 }

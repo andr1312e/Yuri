@@ -39,7 +39,7 @@ const QString StateMessageGetter::GetDataFromMessage(const QByteArray &message)
     case 6:
         return GetWorkModeFromSixMessage(message);
     default:
-        return QStringLiteral(" StateMessageGetter::getDataFromMessage ничего");
+        return QStringLiteral("OK");
     }
 }
 

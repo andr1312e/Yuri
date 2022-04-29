@@ -12,7 +12,7 @@
 #include <messageCreators/statemessagegetter.h>
 #include <messageCreators/statemessagesender.h>
 
-class StatePresenter :public QObject
+class StatePresenter : public QObject
 {
     Q_OBJECT
 public:
@@ -31,7 +31,8 @@ private Q_SLOTS:
 public:
     void DisconnectOldHandler();
     void ConnectHander(DataHandler *dataHandler);
-    void SetStateToDevice(quint8 messageId, double firstParam=0.0, double SecondParam=0.0);
+    void SetStateToDevice(quint8 messageId, double firstParam = 0.0, double SecondParam = 0.0);
+    void ToSendMessageToDeivce(const QByteArray &arr);
     void GetStateFromDevice(quint8 messageIdWantToGet);
 
 private:
