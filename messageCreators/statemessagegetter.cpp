@@ -23,9 +23,10 @@ StateMessageGetter::~StateMessageGetter()
 
 const QString StateMessageGetter::GetDataFromMessage(const QByteArray &message)
 {
-    qDebug()<< "GET"<<message.toHex();
-    quint8 sendedMessageId=message.at(m_indexOfGettingMessageId);
-    switch (sendedMessageId) {
+    qDebug() << "GET" << message.toHex();
+    quint8 sendedMessageId = message.at(m_indexOfGettingMessageId);
+    switch (sendedMessageId)
+    {
     case 1:
         return GetFvcoFromFirstMessage(message);
     case 2:
@@ -45,9 +46,9 @@ const QString StateMessageGetter::GetDataFromMessage(const QByteArray &message)
 
 const QString StateMessageGetter::GetFvcoFromFirstMessage(const QByteArray &message)
 {
-    if(message.count()==8)
+    if (message.count() == 8)
     {
-        qDebug()<< QStringLiteral("Приняли ") << message.toHex();
+        qDebug() << QStringLiteral("Приняли ") << message.toHex();
         QByteArray arrayINTRX;
         arrayINTRX.append(message.at(2));
         arrayINTRX.append(message.at(3));
@@ -65,22 +66,22 @@ const QString StateMessageGetter::GetFvcoFromFirstMessage(const QByteArray &mess
         quint32 FRACT_RX;
         fractDataStream >> FRACT_RX;
 
-        bool DIV_RX=message.at(7);
+        bool DIV_RX = message.at(7);
 
         //Значение сидит только здесь, первую парсить не нужно
 
-        double FRACT_RX_BIG=FRACT_RX;
-        double pow=qPow(2, 20);
-        FRACT_RX_BIG=FRACT_RX_BIG/pow;
-        FRACT_RX_BIG=FRACT_RX_BIG+INT_RX+4.0;
-        FRACT_RX_BIG=FRACT_RX_BIG/2.0;
-        FRACT_RX_BIG=FRACT_RX_BIG*Fref*qPow(2, DIV_RX);
+        double FRACT_RX_BIG = FRACT_RX;
+        double pow = qPow(2, 20);
+        FRACT_RX_BIG = FRACT_RX_BIG / pow;
+        FRACT_RX_BIG = FRACT_RX_BIG + INT_RX + 4.0;
+        FRACT_RX_BIG = FRACT_RX_BIG / 2.0;
+        FRACT_RX_BIG = FRACT_RX_BIG * Fref * qPow(2, DIV_RX);
 
-        quint16 FRACT_RX_RETURNED=(quint16)qCeil(FRACT_RX_BIG/1000000.0);
-        FRACT_RX_RETURNED=FRACT_RX_RETURNED+3;
+        quint16 FRACT_RX_RETURNED = (quint16)qCeil(FRACT_RX_BIG / 1000000.0);
+        FRACT_RX_RETURNED = FRACT_RX_RETURNED + 3;
 
-        m_currentFvco=FRACT_RX_RETURNED;
-        const QString result= QStringLiteral("Рабочая точка равна Fvco= %1 Мегагерц").arg(FRACT_RX_RETURNED);
+        m_currentFvco = FRACT_RX_RETURNED;
+        const QString result = QStringLiteral("Рабочая точка равна Fvco= %1 Мегагерц").arg(FRACT_RX_RETURNED);
         return result;
     }
     return QLatin1String();
@@ -88,15 +89,15 @@ const QString StateMessageGetter::GetFvcoFromFirstMessage(const QByteArray &mess
 
 const QString StateMessageGetter::GetDoplerFromSecondMessage(const QByteArray &message)
 {
-    if(m_currentFvco==0)
+    if (m_currentFvco == 0)
     {
-            return QLatin1String();
+        return QLatin1String();
     }
     else
     {
-        if(message.count()==8)
+        if (message.count() == 8)
         {
-            qDebug()<< QStringLiteral("Приняли ") << message.toHex();
+            qDebug() << QStringLiteral("Приняли ") << message.toHex();
             QByteArray arrayINTTX;
             arrayINTTX.append(message.at(2));
             arrayINTTX.append(message.at(3));
@@ -114,20 +115,20 @@ const QString StateMessageGetter::GetDoplerFromSecondMessage(const QByteArray &m
             quint32 FRACT_RX;
             fractDataStream >> FRACT_RX;
 
-            bool DIV_RX=message.at(7);
+            bool DIV_RX = message.at(7);
 
             //Значение сидит только здесь, первую парсить не нужно
 
-            double FRACT_RX_BIG=FRACT_RX;
-            double pow=qPow(2, 20);
-            FRACT_RX_BIG=FRACT_RX_BIG/pow;
-            FRACT_RX_BIG=FRACT_RX_BIG+INT_TX+4.0;
-            FRACT_RX_BIG=FRACT_RX_BIG/2.0;
-            FRACT_RX_BIG=FRACT_RX_BIG*Fref*qPow(2, DIV_RX);
-            FRACT_RX_BIG=FRACT_RX_BIG+3000000;
-            int dopler=FRACT_RX_BIG-m_currentFvco*1000000;
-            m_currentFvco=0;
-            const QString result= QStringLiteral("Частота Доплера= %1 герц").arg(dopler);
+            double FRACT_RX_BIG = FRACT_RX;
+            double pow = qPow(2, 20);
+            FRACT_RX_BIG = FRACT_RX_BIG / pow;
+            FRACT_RX_BIG = FRACT_RX_BIG + INT_TX + 4.0;
+            FRACT_RX_BIG = FRACT_RX_BIG / 2.0;
+            FRACT_RX_BIG = FRACT_RX_BIG * Fref * qPow(2, DIV_RX);
+            FRACT_RX_BIG = FRACT_RX_BIG /*+ 3000000*/;
+            int dopler = FRACT_RX_BIG - m_currentFvco * 1000000;
+            m_currentFvco = 0;
+            const QString result = QStringLiteral("Частота Доплера= %1 герц").arg(dopler);
             return result;
         }
         return QLatin1String();
@@ -136,18 +137,18 @@ const QString StateMessageGetter::GetDoplerFromSecondMessage(const QByteArray &m
 
 const QString StateMessageGetter::GetDistanceFromThirdMessage(const QByteArray &message)
 {
-    if(message.count()==4)
+    if (message.count() == 4)
     {
         QByteArray distance;
         distance.append(message.at(2));
         distance.append(message.at(3));
         QDataStream IntDataStream(distance);
         quint16 distance_INT;
-        IntDataStream >>distance_INT;
-        double realDistance=distance_INT;
-        realDistance=realDistance/f*c;
-        realDistance=realDistance+distanseToAnswerer;
-        const QString result= QStringLiteral("Дистанция = %1 метров").arg(realDistance);
+        IntDataStream >> distance_INT;
+        double realDistance = distance_INT - 1.0;
+        realDistance = realDistance / 2.0 * c / f;
+        realDistance = realDistance + distanseToAnswerer;
+        const QString result = QStringLiteral("Дистанция = %1 метров").arg(realDistance);
         return result;
     }
     return QLatin1String();
@@ -156,11 +157,11 @@ const QString StateMessageGetter::GetDistanceFromThirdMessage(const QByteArray &
 const QString StateMessageGetter::GetGainTxGainRXFromFourthMessage(const QByteArray &message)
 {
 
-    if (message.count()==4)
+    if (message.count() == 4)
     {
-        double GAIN_TX=message.at(2)/2.0;
-        double GAIN_RX=message.at(3)/2.0;
-        const QString result= QStringLiteral("Усиление TX= %1 децибел Усиление RX= %2 децибел").arg(GAIN_TX).arg(GAIN_RX);
+        double GAIN_TX = message.at(2) / 2.0;
+        double GAIN_RX = message.at(3) / 2.0;
+        const QString result = QStringLiteral("Усиление TX= %1 децибел Усиление RX= %2 децибел").arg(GAIN_TX).arg(GAIN_RX);
         return result;
     }
     return QLatin1String();
@@ -168,11 +169,11 @@ const QString StateMessageGetter::GetGainTxGainRXFromFourthMessage(const QByteAr
 
 const QString StateMessageGetter::GetAttenuatorRXFromFiveMessage(const QByteArray &message)
 {
-    if (message.count()==3)
+    if (message.count() == 3)
     {
-        quint8 Attenuator_RX=quint8(message.at(2));
-        quint8 realValue=atteniatorTable.key(Attenuator_RX);
-        const QString result= QStringLiteral("Ослабление= %1 децибел").arg(realValue);
+        quint8 Attenuator_RX = quint8(message.at(2));
+        quint8 realValue = atteniatorTable.key(Attenuator_RX);
+        const QString result = QStringLiteral("Ослабление= %1 децибел").arg(realValue);
         return result;
     }
     return QLatin1String();
@@ -180,12 +181,12 @@ const QString StateMessageGetter::GetAttenuatorRXFromFiveMessage(const QByteArra
 
 const QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message)
 {
-    if (message.count()==3)
+    if (message.count() == 3)
     {
-        const quint8 WorkModeIndex=quint8(message.at(2));
-        if(WorkModeIndex<noiseValues.count())
+        const quint8 WorkModeIndex = quint8(message.at(2));
+        if (WorkModeIndex < noiseValues.count())
         {
-            const QString result= "Рабочий режим: "+ noiseValues.at(WorkModeIndex);
+            const QString result = "Рабочий режим: " + noiseValues.at(WorkModeIndex);
             return result;
         }
 

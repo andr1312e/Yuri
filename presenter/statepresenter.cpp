@@ -18,20 +18,20 @@ StatePresenter::~StatePresenter()
 void StatePresenter::CreateObjects()
 {
     bool ok;
-    double f = m_settingFileService->GetAttribute("const", "f", "32650000").toDouble(&ok);
+    double f = m_settingFileService->GetAttribute("const", "f", "30250000").toDouble(&ok);
     if (!ok || f <= 0)
     {
-        f = 32650000;
+        f = 30250000;
     }
     double fref = m_settingFileService->GetAttribute("const", "fref", "40000000").toDouble(&ok);
     if (!ok || fref <= 0)
     {
-        f = 40000000;
+        fref = 40000000;
     }
-    quint32 distanseToAnswerer = m_settingFileService->GetAttribute("const", "distanfeToAnswerer", "335").toUInt(&ok);
+    quint32 distanseToAnswerer = m_settingFileService->GetAttribute("const", "distanfeToAnswerer", "350").toUInt(&ok);
     if (!ok)
     {
-        distanseToAnswerer = 335;
+        distanseToAnswerer = 350;
     }
     m_messageSetter.operator = (QSharedPointer<StateMessageSender>(new StateMessageSender(f, fref, distanseToAnswerer)));
     m_messageGetter.operator = (QSharedPointer<StateMessageGetter>(new StateMessageGetter(f, fref, distanseToAnswerer)));
@@ -109,7 +109,6 @@ void StatePresenter::SetStateToDevice(quint8 messageId, double firstParam, doubl
 
     }
     Q_EMIT ToUpdateHistoryFile();
-    Q_EMIT ToConsoleLog("Размер " + QString::number(message.size()) + " начинаем высылать "  + QString::fromLatin1(message.toHex()));
     m_dataHandler->SendMessageToDevice(message);
 }
 

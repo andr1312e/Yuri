@@ -13,8 +13,8 @@ public:
     explicit SerialHandler(QObject *parent);
     ~SerialHandler();
 private:
-    virtual void CreateHander() override;
-    virtual void ConnectObjects() override;
+    virtual void CreateHander() Q_DECL_OVERRIDE;
+    virtual void ConnectObjects() Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void OnReadyRead();
@@ -23,9 +23,9 @@ private Q_SLOTS:
 public:
     void TryToConnectToHost(const QString &comPortName);
 public:
-    virtual void WriteMessageToBuffer(const QByteArray &array) override;
-    virtual void FlushBuffer() override;
-    virtual void FromHostDisconnect() override;
+    virtual void WriteMessageToBuffer(const QByteArray &array) Q_DECL_OVERRIDE;
+    virtual void FlushBuffer() Q_DECL_OVERRIDE;
+    virtual void FromHostDisconnect() Q_DECL_OVERRIDE;
 private:
     QSerialPort *m_connectionPort;
 };
