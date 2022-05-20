@@ -4,7 +4,7 @@
 #include <QRegularExpression>
 #include <QTimer>
 
-StateWidget::StateWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent)
+StateWidget::StateWidget(SettingFileService *settingFileService, QWidget *parent)
     : QWidget(parent)
     , m_settingFileService(settingFileService)
     , m_attenuatorValues({"0", "1", "2", "3", "4", "5", "6", "9", "12", "15", "18", "21", "24", "27", "30"})
@@ -18,10 +18,9 @@ StateWidget::StateWidget(QSharedPointer<SettingFileService> &settingFileService,
 
 StateWidget::~StateWidget()
 {
-    m_file->close();
+    m_file.close();
     delete m_statePresenter;
 
-    delete m_file;
     delete m_intValidator;
     delete m_gainValidator;
 
@@ -85,12 +84,12 @@ void StateWidget::ConnectHander(DataHandler *dataHandler)
 void StateWidget::CreateObjects()
 {
     m_statePresenter = new StatePresenter(m_settingFileService, this);
-    m_file = new QFile(QDir::currentPath() + "/история запросов.txt");
+    m_file.setFileName(QDir::currentPath() + "/история запросов.txt");
     m_intValidator = new QIntValidator();
     m_gainValidator = new QIntValidator(0, 64);
-    m_file->open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
-    long long minWorkPointValue = 2695;
-    for (int i = 0; i < 30; i++)
+    m_file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text);
+    int minWorkPointValue = 2695;
+    for (int i = 0; i < 30; ++i)
     {
         workPointsValues.append(QString::number(minWorkPointValue));
         minWorkPointValue = minWorkPointValue + 10;
@@ -156,8 +155,6 @@ void StateWidget::CreateUI()
 
     m_log = new QPlainTextEdit();
     //    m_log->setStyleSheet(QStringLiteral("color: white; background-color: black;"));
-
-
 }
 
 void StateWidget::FillButtonGroup()
@@ -183,15 +180,15 @@ void StateWidget::FillButtonGroup()
 
 void StateWidget::InsertWidgetsIntoLayout()
 {
-    QList<QAbstractButton *> sendStateButtonList = m_sendStateButtonsGroup->buttons();
-    QList<QAbstractButton *> getStateButtonList = m_getStateButtonGroup->buttons();
+    const QList<QAbstractButton *> sendStateButtonList = m_sendStateButtonsGroup->buttons();
+    const QList<QAbstractButton *> getStateButtonList = m_getStateButtonGroup->buttons();
     QList<QAbstractButton *>::const_iterator setStateButtonListInterator = sendStateButtonList.cbegin();
     QList<QAbstractButton *>::const_iterator getStateButtonLIstIterator = getStateButtonList.cbegin();
 
     m_workPointLineLayout->addWidget(m_fvcoLabel);
     m_workPointLineLayout->addWidget(m_fvcoComboBox);
     AddButtonFromGroupToLayout(&setStateButtonListInterator, &setStateButtonListInterator, m_workPointLineLayout);
-    AddButtonFromGroupToLayout(&getStateButtonLIstIterator, nullptr, m_workPointLineLayout);
+    AddButtonFromGroupToLayout(&getStateButtonLIstIterator, Q_NULLPTR, m_workPointLineLayout);
 
     m_speedLayout->addWidget(m_DoplerFreqLabel);
     m_speedLayout->addWidget(m_doplerFreqLineEdit);
@@ -219,7 +216,7 @@ void StateWidget::InsertWidgetsIntoLayout()
     m_noiseLineLayout->addWidget(m_noiseLineEdit);
     m_noiseLineLayout->addWidget(m_noiseLabel);
     m_noiseLineLayout->addWidget(m_noiseComboBox);
-    AddButtonFromGroupToLayout(&getStateButtonLIstIterator, nullptr, m_noiseLineLayout);
+    AddButtonFromGroupToLayout(&getStateButtonLIstIterator, Q_NULLPTR, m_noiseLineLayout);
 
     m_mainLayout->addLayout(m_workPointLineLayout);
     m_mainLayout->addLayout(m_speedLayout);
@@ -230,7 +227,7 @@ void StateWidget::InsertWidgetsIntoLayout()
     m_mainLayout->addLayout(m_messageSendButtonsLayout);
     m_mainLayout->addLayout(m_messageGetButtonsLayout);
 
-    AddButtonFromGroupToLayout(&setStateButtonListInterator, nullptr, m_mainLayout);
+    AddButtonFromGroupToLayout(&setStateButtonListInterator, Q_NULLPTR, m_mainLayout);
     m_mainLayout->addWidget(m_restartDevice);
     m_rawHexLayout->addWidget(m_rawHexInputEdit);
     m_rawHexLayout->addWidget(m_hexLabel);
@@ -239,8 +236,6 @@ void StateWidget::InsertWidgetsIntoLayout()
     m_mainLayout->addLayout(m_rawHexLayout);
     m_mainLayout->addWidget(m_logClearButton);
     m_mainLayout->addWidget(m_log);
-
-
 
     setLayout(m_mainLayout);
 }
@@ -287,8 +282,8 @@ void StateWidget::FillUI()
     m_log->appendPlainText(QStringLiteral("Не подключено к ответчику"));
 
 
-//    bool val=m_settingFileService->GetAttribute(m_settingsAtribute, "uiEnabled", "0").toInt();
-    OnSetButtonEnabled(true);
+    const bool EnableUI = m_settingFileService->GetAttribute(m_settingsAtribute, "uiEnabled", "0").toInt();
+    OnSetButtonEnabled(EnableUI);
 
 }
 
@@ -296,7 +291,7 @@ void StateWidget::AddButtonFromGroupToLayout(QList<QAbstractButton *>::const_ite
 {
     layout->addWidget(**setButtonIterator);
     setButtonIterator->operator++();
-    if (getButtonIterator != nullptr)
+    if (Q_NULLPTR != getButtonIterator)
     {
         layout->addWidget(**getButtonIterator);
         getButtonIterator->operator++();
@@ -341,162 +336,211 @@ void StateWidget::ConnectObjects()
 
 void StateWidget::UpdateHistoryFile()
 {
-    QString time = "\n" + QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
-    int space = 5;
-    QString fvco = m_fvcoComboBox->currentText().leftJustified(space, ' ');
-    QString dopler = m_doplerFreqLineEdit->text().leftJustified(space, ' ');
-    QString speed = m_speedLineEdit->text().leftJustified(space, ' ');
-    QString range = m_rangeLineEdit->text().leftJustified(space, ' ');
-    QString gaintTx = QString::number(m_gainTXSlider->GetCurrentDoubleRangeValue(), 'f', 3);
-    QString gaintRx = QString::number(m_gainRXSlider->GetCurrentDoubleRangeValue(), 'f', 3);
-    QString attenuator = m_attenuatorComboBox->currentText();
-    QString noise = m_noiseComboBox->currentText();
-    QString message = time + "|Fvco(МПЦ)= " + fvco + " |Доплер(ГЦ)= " + dopler + " |Скорость(М/С)= " + speed + " |Дистанция(М)= " + range + " |gainTx= " + gaintTx + " |gainRx= " + gaintRx + " |Ослабление= " + attenuator + " |" + noise;
-    m_file->write(message.toUtf8());
-    m_file->flush();
+    const QString time = "\n" + QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
+    const int space = 5;
+    const QString fvco = m_fvcoComboBox->currentText().leftJustified(space, ' ');
+    const QString dopler = m_doplerFreqLineEdit->text().leftJustified(space, ' ');
+    const QString speed = m_speedLineEdit->text().leftJustified(space, ' ');
+    const QString range = m_rangeLineEdit->text().leftJustified(space, ' ');
+    const QString gaintTx = QString::number(m_gainTXSlider->GetCurrentDoubleRangeValue(), 'f', 3);
+    const QString gaintRx = QString::number(m_gainRXSlider->GetCurrentDoubleRangeValue(), 'f', 3);
+    const QString attenuator = m_attenuatorComboBox->currentText();
+    const QString noise = m_noiseComboBox->currentText();
+    const QString message = time + "|Fvco(МПЦ)= " + fvco + " |Доплер(ГЦ)= " + dopler + " |Скорость(М/С)= " + speed + " |Дистанция(М)= " + range + " |gainTx= " + gaintTx + " |gainRx= " + gaintRx + " |Ослабление= " + attenuator + " |" + noise;
+    m_file.write(message.toUtf8());
+    m_file.flush();
 }
 
 
 void StateWidget::OnConsoleLog(const QString &message)
 {
-    QString time = QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
+    const QString time = QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
     m_log->appendPlainText(time + " " + message);
 }
 
 void StateWidget::OnSetStateButtonIdClicked(int id)
 {
-    double firstValue = 0.0, secondValue = 0.0;
     switch (id)
     {
     case 0:
     {
         OnConsoleLog(QStringLiteral("Высылаем сообщение пинга"));
+        m_statePresenter->SetMessageToQueue(id);
         break;
     }
     case 1:
     {
-        if (!m_fvcoComboBox->currentText().isEmpty())
+        if (m_fvcoComboBox->currentText().isEmpty())
+        {
+            OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Рабочая точка Fvco: для частоты Rx"));
+        }
+        else
         {
             bool isOk;
-            firstValue = m_fvcoComboBox->currentText().toDouble(&isOk);
+            const double fvco = m_fvcoComboBox->currentText().toDouble(&isOk) * 1000000;
             if (isOk)
             {
-                firstValue = firstValue * 1000000;
-                OnConsoleLog("Высылаем первое сообщение: установка частоты RX fvco= " + QString::number(firstValue) + " ГЦ");
-                break;
+                OnConsoleLog("Высылаем первое сообщение: установка частоты RX fvco= " + m_fvcoComboBox->currentText() + " MГЦ");
+                m_statePresenter->SetMessageToQueue(id, fvco);
             }
             else
             {
                 OnConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
-                return;
             }
         }
-        else
+        break;
+    }
+    case 2:
+    {
+        if (m_fvcoComboBox->currentText().isEmpty() || m_doplerFreqLineEdit->text().isEmpty())
         {
             OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx"));
             return;
         }
-    }
-    case 2:
-    {
-        if (!m_fvcoComboBox->currentText().isEmpty() && !m_doplerFreqLineEdit->text().isEmpty())
+        else
         {
             bool isOk1, isOk2;
-            firstValue = m_fvcoComboBox->currentText().toDouble(&isOk1);
-            secondValue = m_doplerFreqLineEdit->text().toDouble(&isOk2);
+            const double fvco = m_fvcoComboBox->currentText().toDouble(&isOk1) * 1000000;
+            const double doplers = m_doplerFreqLineEdit->text().toDouble(&isOk2);
             if (isOk1)
             {
-                firstValue = firstValue * 1000000;
                 if (isOk2)
                 {
 
-                    OnConsoleLog("Высылаем второе сообщение: установка частоты Tx fvco= " + QString::number(firstValue) + " ГЦ и доплер= " + QString::number(secondValue, 'f') + " ГЦ");
+                    OnConsoleLog("Высылаем второе сообщение: установка частоты Tx fvco= " + m_fvcoComboBox->currentText() + " ГЦ и доплер= " +  m_doplerFreqLineEdit->text() + " ГЦ");
+                    m_statePresenter->SetMessageToQueue(id, fvco, doplers);
                     break;
                 }
                 else
                 {
                     OnConsoleLog("Не смогли перевесли в число " + m_doplerFreqLineEdit->text());
-                    OnConsoleLog("Высылаем сообщение fvco= " + QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
-                    break;
+                    OnConsoleLog("Высылаем сообщение fvco= " + m_fvcoComboBox->currentText() + " МГЦ доплер= 0 ГЦ");
+                    m_statePresenter->SetMessageToQueue(id, fvco);
                 }
             }
             else
             {
                 OnConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
-                return;
             }
         }
-        else
-        {
-            OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx"));
-            return;
-        }
+        break;
     }
     case 3:
     {
-        if (!m_rangeLineEdit->text().isEmpty())
+        if (m_rangeLineEdit->text().isEmpty())
         {
-            bool isOk;
-            firstValue = m_rangeLineEdit->text().toDouble(&isOk);
-            if (isOk)
-            {
-                OnConsoleLog("Высылаем третье сообщение: установка дальности ответного сигнала. Дистанция= " + QString::number(firstValue, 'f') );
-                break;
-            }
-            else
-            {
-                OnConsoleLog("Не смогли перевесли в число " + m_rangeLineEdit->text());
-                return;
-            }
+            OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Дальность ответного сигнала: d"));
         }
         else
         {
-            OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Дальность ответного сигнала: d"));
-            return;
+            bool isOk;
+            const double distance = m_rangeLineEdit->text().toDouble(&isOk);
+            if (isOk)
+            {
+                OnConsoleLog("Высылаем третье сообщение: установка дальности ответного сигнала. Дистанция= " + m_rangeLineEdit->text());
+                m_statePresenter->SetMessageToQueue(id, distance);
+            }
+            else
+            {
+                OnConsoleLog("Третье сообщение: не смогли перевесли в число " + m_rangeLineEdit->text());
+            }
         }
+        break;
     }
     case 4:
     {
-        firstValue = m_gainTXSlider->GetCurrentDoubleRangeValue();
-        secondValue = m_gainRXSlider->GetCurrentDoubleRangeValue();
-        OnConsoleLog("Высылаем четвертое сообщение: установка усиления. Tx= " + QString::number(firstValue, 'f') + " Rx= " + QString::number(secondValue, 'f'));
+        const double gainTx = m_gainTXSlider->GetCurrentDoubleRangeValue();
+        const double gainRx = m_gainRXSlider->GetCurrentDoubleRangeValue();
+        OnConsoleLog("Высылаем четвертое сообщение: установка усиления. Tx= " + m_gainTXSlider->GetCurrentDoubleRangeText() + " Rx= " + m_gainRXSlider->GetCurrentDoubleRangeText());
+        m_statePresenter->SetMessageToQueue(id, gainTx, gainRx);
         break;
     }
     case 5:
     {
         bool isOk;
-        firstValue = m_attenuatorComboBox->currentText().toDouble(&isOk);
+        const double attenuator = m_attenuatorComboBox->currentText().toDouble(&isOk);
         if (isOk)
         {
             OnConsoleLog(QStringLiteral("Высылаем пятое сообщение: установка ослабления"));
+            m_statePresenter->SetMessageToQueue(id, attenuator);
         }
         else
         {
-            OnConsoleLog("Не смогли перевесли в число " + m_attenuatorComboBox->currentText());
+            OnConsoleLog("Пятое сообщение: не смогли перевесли в число " + m_attenuatorComboBox->currentText());
         }
         break;
     }
     case 6:
     {
-        OnConsoleLog("Шестое сообщение высылаем" + m_noiseComboBox->currentText());
-        firstValue = m_noiseComboBox->currentIndex();
-        if (firstValue == 4 || firstValue == 3)
+        const double noise = m_noiseComboBox->currentIndex();
+        if (noise >= 3)
         {
-            bool isOk;
-            secondValue = m_noiseLineEdit->text().toDouble(&isOk);
-            if (isOk)
+            bool fvcoParced, doplerParced;
+            double fvco;
+            if (3 == noise)
             {
-
-                OnConsoleLog("Шестое сообщение: параметр равен: " + m_noiseLineEdit->text());
+                fvco = (m_fvcoComboBox->currentText().toDouble(&fvcoParced) - 3) * 1000000;
             }
             else
             {
-                OnConsoleLog("Не смогли перевесли в число: " + m_noiseLineEdit->text() + ".Берем значение 0");
-                secondValue = 0.0;
-                break;
+                fvco = m_fvcoComboBox->currentText().toDouble(&fvcoParced) * 1000000;
+            }
+            if (fvcoParced)
+            {
+                m_statePresenter->SetMessageToQueue(1, fvco);
+                const double doplers = m_doplerFreqLineEdit->text().toDouble(&doplerParced);
+                if (doplerParced)
+                {
+                    m_statePresenter->SetMessageToQueue(2, fvco, doplerParced);
+                }
+                else
+                {
+                    m_statePresenter->SetMessageToQueue(2, fvco);
+                    OnConsoleLog("Шестое сообщение: доплер не можем распарсить, берем значение 0");
+                }
+                bool noiseValParced;
+                const double noiseValue = m_noiseLineEdit->text().toDouble(&noiseValParced);
+                if (noiseValParced)
+                {
+                    OnConsoleLog("Высылаем шестое сообщение: установка шума, параметр равен: " + m_noiseLineEdit->text());
+                    m_statePresenter->SetMessageToQueue(id, noise, noiseValue);
+                }
+                else
+                {
+                    OnConsoleLog("Шестое сообщение: не смогли перевесли в число: " + m_noiseLineEdit->text() + ".Берем значение 0");
+                    m_statePresenter->SetMessageToQueue(id, noise);
+                }
+            }
+            else
+            {
+                OnConsoleLog("Шестое сообщение: сначала установите рабочую точку");
+            }
+
+        }
+        else
+        {
+            bool fvcoParced, doplerParced;
+            const double fvco = (m_fvcoComboBox->currentText().toDouble(&fvcoParced)) * 1000000;
+            if (fvcoParced)
+            {
+                m_statePresenter->SetMessageToQueue(1, fvco);
+                const double doplers = m_doplerFreqLineEdit->text().toDouble(&doplerParced);
+                if (doplerParced)
+                {
+                    m_statePresenter->SetMessageToQueue(2, fvco, doplers);
+                }
+                else
+                {
+                    m_statePresenter->SetMessageToQueue(2, fvco);
+                    OnConsoleLog("Шестое сообщение: доплер не можем распарсить, берем значение 0");
+                }
+                m_statePresenter->SetMessageToQueue(id, noise);
+            }
+            else
+            {
+                OnConsoleLog("Шестое сообщение: сначала установите рабочую точку");
             }
         }
-        OnConsoleLog(QStringLiteral("Высылаем шестое сообщение: установка шума"));
         break;
     }
     case 12:
@@ -504,47 +548,43 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
         if (!m_fvcoComboBox->currentText().isEmpty() && !m_doplerFreqLineEdit->text().isEmpty())
         {
             bool isOk1, isOk2;
-            firstValue = m_fvcoComboBox->currentText().toDouble(&isOk1);
-            secondValue = m_doplerFreqLineEdit->text().toDouble(&isOk2);
+            const double Fvco = m_fvcoComboBox->currentText().toDouble(&isOk1) * 1000000;
+            const double dopler = m_doplerFreqLineEdit->text().toDouble(&isOk2);
             if (isOk1)
             {
-                firstValue = firstValue * 1000000;
                 if (isOk2)
                 {
 
-                    OnConsoleLog("Высылаем второе и первое сообщения: установка частоты Tx и Rх fvco= " + QString::number(firstValue) + " ГЦ и доплер= " + QString::number(secondValue, 'f') + " ГЦ");
+                    OnConsoleLog("Высылаем второе и первое сообщения: установка частоты Tx и Rх fvco= " + m_fvcoComboBox->currentText() + " МГЦ и доплер= " + m_doplerFreqLineEdit->text() + " ГЦ");
+                    m_statePresenter->SetMessageToQueue(1, Fvco);
+                    m_statePresenter->SetMessageToQueue(2, Fvco, dopler);
                 }
                 else
                 {
                     OnConsoleLog("Не смогли перевесли в число " + m_doplerFreqLineEdit->text());
-                    OnConsoleLog("Высылаем второе и первое сообщения: fvco= " + QString::number(firstValue) + " МГЦ доплер= 0 ГЦ");
+                    OnConsoleLog("Высылаем второе и первое сообщения: fvco= " + m_fvcoComboBox->currentText() + " МГЦ доплер= 0 ГЦ");
+                    m_statePresenter->SetMessageToQueue(1, Fvco);
+                    m_statePresenter->SetMessageToQueue(2, Fvco);
                 }
-                id = 1;
-                QTimer::singleShot(1000, [ = ]()
-                {
-                    m_statePresenter->SetStateToDevice(2, m_fvcoComboBox->currentText().toDouble() * 1000000, m_doplerFreqLineEdit->text().toDouble());
-                });
             }
             else
             {
                 OnConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
-                return;
             }
         }
         else
         {
             OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx"));
-            return;
         }
         break;
     }
     default:
     {
-        OnConsoleLog(QStringLiteral("Обработка не написана void CommandWidget::buttonIdClicked"));
+        OnConsoleLog(QStringLiteral("Обработка не написана void StateWidget::buttonIdClicked(int id)"));
         return;
     }
     }
-    m_statePresenter->SetStateToDevice(id, firstValue, secondValue);
+
     UpdateHistoryFile();
 }
 
@@ -612,12 +652,12 @@ void StateWidget::OnSetButtonEnabled(bool state)
     m_attenuatorComboBox->setEnabled(state);
     m_noiseComboBox->setEnabled(state);
     const QList<QAbstractButton *> buttonsSetState = m_sendStateButtonsGroup->buttons();
-    for (QAbstractButton *button : buttonsSetState  )
+    for (QAbstractButton *const button : buttonsSetState  )
     {
         button->setEnabled(state);
     }
     const QList<QAbstractButton *> buttonsGetState = m_getStateButtonGroup->buttons();
-    for (QAbstractButton *button : buttonsGetState )
+    for (QAbstractButton *const button : buttonsGetState )
     {
         button->setEnabled(state);
     }
@@ -625,17 +665,17 @@ void StateWidget::OnSetButtonEnabled(bool state)
 
 void StateWidget::OnChangeDoplerLineEdit(const QString &doplerText)
 {
-    double dopler = doplerText.toDouble();
-    double speed = dopler * c / (2.0 * m_fvcoComboBox->currentText().toDouble() * 1000000.0);
+    const double dopler = doplerText.toDouble();
+    const double speed = dopler * c / (2.0 * m_fvcoComboBox->currentText().toDouble() * 1000000.0);
     m_speedLineEdit->setText(QString::number(speed, 'f'));
     m_settingFileService->SetAttribute(m_settingsAtribute, "dopler", doplerText);
 }
 
 void StateWidget::OnChangeSpeedLineEdit(const QString &speedText)
 {
-    double speed = speedText.toDouble();
-    double dopler1 = speed * m_fvcoComboBox->currentText().toDouble() * 1000000.0 * 2.0;
-    double dopler = dopler1 / c;
+    const double speed = speedText.toDouble();
+    const double dopler1 = speed * m_fvcoComboBox->currentText().toDouble() * 1000000.0 * 2.0;
+    const double dopler = dopler1 / c;
     m_doplerFreqLineEdit->setText(QString::number(dopler, 'f'));
     m_settingFileService->SetAttribute(m_settingsAtribute, "dopler", QString::number(dopler));
 }

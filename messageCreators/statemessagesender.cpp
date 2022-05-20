@@ -6,8 +6,8 @@ StateMessageSender::StateMessageSender(const double f, const double fref, const 
     : f(f)
     , Fref(fref)
     , distanseToAnswerer(distanseToAnswerer)
+    , messagesIds({0, 1, 2, 3, 4, 5, 6, 7, 8})
 {
-
 }
 
 StateMessageSender::~StateMessageSender()
@@ -25,10 +25,10 @@ QByteArray StateMessageSender::CreateZeroCommand() const
 
 QByteArray StateMessageSender::CreateFirstCommand(double Fvco) const
 {
-    quint8 id = messagesIds.at(1);
-    qint16 INT_Rx = calculateINT_Rx(Fvco); //МГЦ
-    qint32 FRACT_Rx = calculateFRACT_RxNew(Fvco); //МГЦ
-    bool DivRx = calculateDIV_rx(Fvco);
+    const quint8 id = messagesIds.at(1);
+    const qint16 INT_Rx = CalculateINT_Rx(Fvco); //МГЦ
+    const qint32 FRACT_Rx = CalculateFRACT_RxNew(Fvco); //МГЦ
+    const bool DivRx = CalculateDIV_rx(Fvco);
 
     QByteArray lastThreeBytes;
     QDataStream threeBytesStream(&lastThreeBytes, QIODevice::WriteOnly);
@@ -49,10 +49,10 @@ QByteArray StateMessageSender::CreateFirstCommand(double Fvco) const
 
 QByteArray StateMessageSender::CreateSecondCommand(double Fvco, double doplerFreq) const
 {
-    double ResultFreq = Fvco + doplerFreq;
-    qint16 INT_Tx = calculateINT_Rx(ResultFreq);
-    qint32 FRACT_Tx = calculateFRACT_RxOld(ResultFreq);
-    bool DivTx = calculateDIV_rx(ResultFreq);
+    const double ResultFreq = Fvco + doplerFreq;
+    const qint16 INT_Tx = CalculateINT_Rx(ResultFreq);
+    const qint32 FRACT_Tx = CalculateFRACT_RxNew(ResultFreq);
+    const bool DivTx = CalculateDIV_rx(ResultFreq);
 
 
     QByteArray lastThreeBytes;
@@ -77,9 +77,9 @@ QByteArray StateMessageSender::CreateSecondCommand(double Fvco, double doplerFre
 QByteArray StateMessageSender::CreateThirdCommand(double distance) const
 {
     distance += 26, 9434889941;
-    double secondVal = f / c;
-    double distanceDouble = 2.0 * qAbs(distance - distanseToAnswerer) * secondVal + 1.0;
-    quint16 DISTANCE = distanceDouble;
+    const double secondVal = f / c;
+    const double distanceDouble = 2.0 * qAbs(distance - distanseToAnswerer) * secondVal + 1.0;
+    const quint16 DISTANCE = distanceDouble;
 
     QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);
@@ -90,8 +90,8 @@ QByteArray StateMessageSender::CreateThirdCommand(double distance) const
 
 QByteArray StateMessageSender::CreateFourthCommand(double gainTX, double gainRX) const
 {
-    quint8 GAIN_TX = calculateGAIN(gainTX);
-    quint8 GAIN_RX = calculateGAIN(gainRX);
+    const quint8 GAIN_TX = CalculateGAIN(gainTX);
+    const quint8 GAIN_RX = CalculateGAIN(gainRX);
 
     QByteArray command;
     command.append(messagesIds.at(4));
@@ -102,7 +102,7 @@ QByteArray StateMessageSender::CreateFourthCommand(double gainTX, double gainRX)
 
 QByteArray StateMessageSender::CreateFiveCommand(double AttenuatorDb) const
 {
-    quint8 attenuator = calculateAtteniator(AttenuatorDb);
+    const quint8 attenuator = CalculateAtteniator(AttenuatorDb);
 
     QByteArray command;
     command.append(messagesIds.at(5));
@@ -118,9 +118,9 @@ QByteArray StateMessageSender::CreateSixCommand(double noiseType, double noiseVa
     if (noiseType > 2)
     {
         quint32 noiseVal = (quint32)noiseValue;
-        quint8 first = (noiseVal >> (8 * 0)) & 0xff;
-        quint8 second = (noiseVal >> (8 * 1)) & 0xff;
-        quint8 third = (noiseVal >> (8 * 2)) & 0xff;
+        const quint8 first = (noiseVal >> (8 * 0)) & 0xff;
+        const quint8 second = (noiseVal >> (8 * 1)) & 0xff;
+        const quint8 third = (noiseVal >> (8 * 2)) & 0xff;
         command.append(third);
         command.append(second);
         command.append(first);
@@ -136,9 +136,9 @@ QByteArray StateMessageSender::CreateSevenCommand(quint8 param) const
     return command;
 }
 
-quint16 StateMessageSender::calculateINT_Rx(double Fvco) const
+quint16 StateMessageSender::CalculateINT_Rx(double Fvco) const
 {
-    bool DIV_Rx = calculateDIV_rx(Fvco);
+    const bool DIV_Rx = CalculateDIV_rx(Fvco);
     double INT_RxDouble = Fvco - 3000000.0;
     INT_RxDouble = INT_RxDouble * 2.0;
     INT_RxDouble = INT_RxDouble / pow(2, DIV_Rx);
@@ -148,9 +148,9 @@ quint16 StateMessageSender::calculateINT_Rx(double Fvco) const
     return INT_Rx;
 }
 
-quint32 StateMessageSender::calculateFRACT_RxOld(double Fvco) const
+quint32 StateMessageSender::CalculateFRACT_RxOld(double Fvco) const
 {
-    bool DIV_Rx = calculateDIV_rx(Fvco);
+    const bool DIV_Rx = CalculateDIV_rx(Fvco);
     double povValue = (pow(2, 20));
     double FirstValue = 2.0 * Fvco;
     double FirstValueDiv = Fref * pow(2, DIV_Rx);
@@ -161,9 +161,9 @@ quint32 StateMessageSender::calculateFRACT_RxOld(double Fvco) const
     return FRACT_Rx;
 }
 
-quint32 StateMessageSender::calculateFRACT_RxNew(double Fvco) const
+quint32 StateMessageSender::CalculateFRACT_RxNew(double Fvco) const
 {
-    bool DIV_Rx = calculateDIV_rx(Fvco);
+    const bool DIV_Rx = CalculateDIV_rx(Fvco);
     double povValue = (qPow(2, 20));
     double RealFvco = Fvco - 3000000.0;
     double FirstValue = RealFvco * 2.0;
@@ -174,21 +174,21 @@ quint32 StateMessageSender::calculateFRACT_RxNew(double Fvco) const
     return FRACT_Rx;
 }
 
-quint8 StateMessageSender::calculateGAIN(double gain) const
+quint8 StateMessageSender::CalculateGAIN(double gain) const
 {
     if (gain > (31.5))
     {
         gain = 31.5;
     }
-    quint8 GAIN_X = gain * 2.0;
+    const quint8 GAIN_X = gain * 2.0;
     return GAIN_X;
 }
 
-quint8 StateMessageSender::calculateAtteniator(quint16 atteniatorDb) const
+quint8 StateMessageSender::CalculateAtteniator(quint8 atteniatorDb) const
 {
-    if (atteniatorTable.count(atteniatorDb))
+    if (atteniatorTable.contains(atteniatorDb))
     {
-        quint8 atteniatorValue = atteniatorTable[atteniatorDb];
+        const quint8 atteniatorValue = atteniatorTable[atteniatorDb];
         return atteniatorValue;
     }
     else
@@ -197,14 +197,7 @@ quint8 StateMessageSender::calculateAtteniator(quint16 atteniatorDb) const
     }
 }
 
-bool StateMessageSender::calculateDIV_rx(double Fvco) const
+bool StateMessageSender::CalculateDIV_rx(double Fvco) const
 {
-    if (Fvco > 2750000000)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+    return Fvco > 2750000000;
 }

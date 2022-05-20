@@ -10,17 +10,17 @@ class DataHandler: public QObject
     Q_OBJECT
 public:
     explicit DataHandler(QObject *parent);
-    ~DataHandler();
+    virtual ~DataHandler();
     virtual void ClearBuffer();
 private:
-    virtual void CreateHander()=0;
-    virtual void ConnectObjects()=0;
+    virtual void CreateHander() = 0;
+    virtual void ConnectObjects() = 0;
 Q_SIGNALS:
     void ToButtonsEnabledChanging(bool state);
     void ToConsoleLog(QString message);
     void ToStateWidgetConsoleLog(QString message);
     void ToFirmwareWidgetConsoleLog(QString message);
-    void ToStateGettingFromMessage(QByteArray &message);
+    void ToStateGettingFromMessage(const QByteArray &message);
     void ToRegisterStateChanging(quint8 state);
     void ToReadFirmwareAgain();
     void ToFirmWareFormDeviceLoaded(QByteArray *firmwareFromDevice);
@@ -28,9 +28,9 @@ public:
     void SetHandlerState(HandlerState state);
     void SendMessageToDevice(const QByteArray &array);
     void SetConnectionState(quint8 state);
-    virtual void WriteMessageToBuffer(const QByteArray &bytes)=0;
-    virtual void FlushBuffer()=0;
-    virtual void FromHostDisconnect()=0;
+    virtual void WriteMessageToBuffer(const QByteArray &bytes) = 0;
+    virtual void FlushBuffer() = 0;
+    virtual void FromHostDisconnect() = 0;
     virtual void FromHostDisconnected();
 protected:
     virtual void ToHostConnected();
@@ -47,9 +47,9 @@ protected:
     const char m_endOfFirmwareSymbol;
     HandlerState m_gettingMessageType;
     quint8 m_currentStopLineNumber;
-    QByteArray *m_readyReadBuffer;
+    QByteArray m_readyReadBuffer;
 private:
-    const QByteArray *m_stopReadingFirmwareArray;
+    const QByteArray m_stopReadingFirmwareArray;
     QByteArray *m_firmwareFromDevice;
 };
 

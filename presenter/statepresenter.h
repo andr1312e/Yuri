@@ -12,11 +12,13 @@
 #include <messageCreators/statemessagegetter.h>
 #include <messageCreators/statemessagesender.h>
 
+#include <QQueue>
+
 class StatePresenter : public QObject
 {
     Q_OBJECT
 public:
-    explicit StatePresenter(QSharedPointer<SettingFileService> &settingFileService, QObject *parent);
+    explicit StatePresenter(SettingFileService *settingFileService, QObject *parent);
     ~StatePresenter();
 private:
     void CreateObjects();
@@ -26,21 +28,22 @@ Q_SIGNALS:
     void ToConsoleLog(QString message);
     void ToUpdateHistoryFile();
 private Q_SLOTS:
-    void OnGetMessageWithState(QByteArray &messageFromDevice);
-
+    void OnGetMessageWithState(const QByteArray &messageFromDevice);
 public:
     void DisconnectOldHandler();
     void ConnectHander(DataHandler *dataHandler);
-    void SetStateToDevice(quint8 messageId, double firstParam = 0.0, double SecondParam = 0.0);
+    void SetMessageToQueue(quint8 messageId, double firstParam = 0.0, double SecondParam = 0.0);
     void ToSendMessageToDeivce(const QByteArray &arr);
     void GetStateFromDevice(quint8 messageIdWantToGet);
-
+protected:
+    void virtual timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
 private:
-    QSharedPointer<SettingFileService> m_settingFileService;
+    QQueue<QByteArray> m_messagesQueue;
+    SettingFileService *m_settingFileService;
     DataHandler *m_dataHandler;
 
-    QSharedPointer <StateMessageSender> m_messageSetter;
-    QSharedPointer <StateMessageGetter> m_messageGetter;
+    StateMessageSender *m_messageSetter;
+    StateMessageGetter *m_messageGetter;
 };
 
 #endif // PRESENTER_STATEPRESENTER_H

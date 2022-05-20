@@ -31,7 +31,7 @@ void MainWindow::CreateObjects()
     m_serialHandler->setObjectName(QStringLiteral("SerialHandler"));
     qDebug() << "FIRST m_currentConnectionInterface" << &m_currentConnectionInterface;
     m_currentConnectionInterface = Q_NULLPTR;
-    m_settingFileService = QSharedPointer<SettingFileService>(new SettingFileService(QStringLiteral("setting.xml")));
+    m_settingFileService = new SettingFileService(QStringLiteral("setting.xml"));
 }
 
 void MainWindow::CreateUI()

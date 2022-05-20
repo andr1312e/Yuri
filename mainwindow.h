@@ -43,7 +43,7 @@ private:
     DataHandler *m_currentConnectionInterface;
     TcpHandler *m_tcpHandler;
     SerialHandler *m_serialHandler;
-    QSharedPointer<SettingFileService> m_settingFileService;
+    SettingFileService *m_settingFileService;
 
 private:
     void RegisterHadnler(DataHandler *dataHandler);

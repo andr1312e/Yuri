@@ -18,11 +18,11 @@
 
 #include "messageCreators/firmwarecommansmaker.h"
 
-class FirmwarePresenter :public QObject
+class FirmwarePresenter : public QObject
 {
     Q_OBJECT
 public:
-    FirmwarePresenter(QSharedPointer<SettingFileService> &settingFileService, QObject *parent);
+    FirmwarePresenter(SettingFileService *settingFileService, QObject *parent);
     ~FirmwarePresenter();
 private:
     void CreateObjects();
@@ -77,8 +77,8 @@ private:
     QTimer *m_writingFirmwareTimer;
     QTimer *m_erasingTimer;
 private:
-    QSharedPointer<SettingFileService> m_settingFileService;
-    const QString m_lastFirmwareAttribute="lastFirmware";
+    SettingFileService *const m_settingFileService;
+    const QString m_lastFirmwareAttribute = "lastFirmware";
     FirmwareMessageMaker *m_firmwareMessageMaker;
 
     std::list<QByteArray> *m_writinFirmwareCommandsList;

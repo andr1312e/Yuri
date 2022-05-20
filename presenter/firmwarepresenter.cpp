@@ -3,7 +3,7 @@
 #include <QElapsedTimer>
 
 
-FirmwarePresenter::FirmwarePresenter(QSharedPointer<SettingFileService> &settingFileService, QObject *parent)
+FirmwarePresenter::FirmwarePresenter(SettingFileService *settingFileService, QObject *parent)
     : QObject(parent)
     , m_dataHandler(Q_NULLPTR)
     , m_maxMessageSize(256)
@@ -64,10 +64,10 @@ void FirmwarePresenter::OnFlash(bool isNeedToCheck, bool isNeedToRestartAfterSuc
 {
     m_timer->stop();
     Q_EMIT ToSetButtonsEnabled(false);
-    m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
+    m_dataHandler->SendMessageToDevice(m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
 
     m_dataHandler->SetHandlerState(HandlerState::Flash);
-    m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->m_eraseCommand);
+    m_dataHandler->SendMessageToDevice(m_firmwareMessageMaker->m_eraseCommand);
     m_needToCheck = isNeedToCheck;
 
     m_isNeedToRestartAfterSuccess = isNeedToRestartAfterSuccess;
@@ -92,41 +92,41 @@ void FirmwarePresenter::SendMessageToQueue(quint8 command, quint32 adress, quint
     {
     case 0:
     {
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_restartHardwareCommand);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_restartHardwareCommand);
         break;
     }
     case 3:
     {
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->ReadToBufferCommand(adress, lenght));
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_readFromBufferCommand);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->ReadToBufferCommand(adress, lenght));
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_readFromBufferCommand);
         break;
     }
     case 4:
     {
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_restartHardwareCommand);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_restartHardwareCommand);
         break;
     }
     case 5:
     {
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_readRegisterStatusCommand);
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_readFromBufferCommand);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_readRegisterStatusCommand);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_readFromBufferCommand);
         break;
     }
     case 6:
     {
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
         break;
     }
     case 9:
     {
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_flashIdCommad);
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_readFromBufferCommand);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_flashIdCommad);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_readFromBufferCommand);
         break;
     }
     case 199:
     {
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
-        m_commandsQueue->enqueue(*m_firmwareMessageMaker->m_eraseCommand);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
+        m_commandsQueue->enqueue(m_firmwareMessageMaker->m_eraseCommand);
         break;
     }
     default:
@@ -235,9 +235,9 @@ void FirmwarePresenter::OnReadFirmwareAgain()
     Q_EMIT ToConsoleLog("Считываем страницу: " + QString::number(m_currentPage));
     Q_EMIT ToProgressBarSetValue(m_currentPage);
     m_currentPage++;
-    m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->ReadToBufferCommand(m_currentAdress, m_maxMessageSize - 1));
+    m_dataHandler->SendMessageToDevice(m_firmwareMessageMaker->ReadToBufferCommand(m_currentAdress, m_maxMessageSize - 1));
     SleepMiliseconds(3);
-    m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->m_readFromBufferCommand);
+    m_dataHandler->SendMessageToDevice(m_firmwareMessageMaker->m_readFromBufferCommand);
     m_currentAdress = m_currentAdress + m_maxMessageSize;
 }
 
@@ -293,8 +293,8 @@ void FirmwarePresenter::OnErasingTimerTimeOut()
     {
         Q_EMIT ToConsoleLog(QStringLiteral("Занят. Форматируется еще..."));
         Q_EMIT ToConsoleLog(QStringLiteral("Высылаем еще раз запрос на проверку состояния"));
-        m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->m_readRegisterStatusCommand);
-        m_dataHandler->SendMessageToDevice(*m_firmwareMessageMaker->m_readFromBufferCommand);
+        m_dataHandler->SendMessageToDevice(m_firmwareMessageMaker->m_readRegisterStatusCommand);
+        m_dataHandler->SendMessageToDevice(m_firmwareMessageMaker->m_readFromBufferCommand);
     }
     else
     {
@@ -378,7 +378,7 @@ void FirmwarePresenter::PrepareCommandsToFlash(const std::list<QByteArray> &page
     quint32 currentAdress = 0;
     for (std::list<QByteArray>::const_iterator it = pagesOfFirmware.begin(); it != pagesOfFirmware.end(); ++it)
     {
-        m_writinFirmwareCommandsList->push_back(*m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
+        m_writinFirmwareCommandsList->push_back(m_firmwareMessageMaker->m_makeWriteOnlyBufferCommand);
         if (it->count() == m_maxMessageSize)
         {
             FillFullPageIntoBuffer(&*it);

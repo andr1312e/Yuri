@@ -3,16 +3,19 @@
 #include <QByteArray>
 #include <QWeakPointer>
 
-StatePresenter::StatePresenter(QSharedPointer<SettingFileService> &settingFileService, QObject *parent)
+StatePresenter::StatePresenter(SettingFileService *settingFileService, QObject *parent)
     :  QObject(parent)
     ,  m_settingFileService(settingFileService)
     ,  m_dataHandler(Q_NULLPTR)
 {
     CreateObjects();
+    startTimer(1500, Qt::VeryCoarseTimer);
 }
 
 StatePresenter::~StatePresenter()
 {
+    delete m_messageSetter;
+    delete m_messageGetter;
 }
 
 void StatePresenter::CreateObjects()
@@ -33,13 +36,13 @@ void StatePresenter::CreateObjects()
     {
         distanseToAnswerer = 350;
     }
-    m_messageSetter.operator = (QSharedPointer<StateMessageSender>(new StateMessageSender(f, fref, distanseToAnswerer)));
-    m_messageGetter.operator = (QSharedPointer<StateMessageGetter>(new StateMessageGetter(f, fref, distanseToAnswerer)));
+    m_messageSetter = new StateMessageSender(f, fref, distanseToAnswerer);
+    m_messageGetter = new StateMessageGetter(f, fref, distanseToAnswerer);
 }
 
-void StatePresenter::OnGetMessageWithState(QByteArray &messageFromDevice)
+void StatePresenter::OnGetMessageWithState(const QByteArray &messageFromDevice)
 {
-    QString currentValue = m_messageGetter->GetDataFromMessage(messageFromDevice);
+    const QString currentValue = m_messageGetter->GetDataFromMessage(messageFromDevice);
     Q_EMIT ToConsoleLog(currentValue);
 }
 
@@ -60,56 +63,56 @@ void StatePresenter::ConnectHander(DataHandler *dataHandler)
     connect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::OnGetMessageWithState);
 }
 
-void StatePresenter::SetStateToDevice(quint8 messageId, double firstParam, double SecondParam)
+void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, double SecondParam)
 {
+    if (m_messagesQueue.isEmpty())
+    {
+
+    }
     m_dataHandler->SetHandlerState(HandlerState::Normal);
-    QByteArray message;
     switch (messageId)
     {
     case 1:
     {
-        message = m_messageSetter->CreateFirstCommand(firstParam);
+        m_messagesQueue.enqueue(m_messageSetter->CreateFirstCommand(firstParam));
         break;
     }
     case 2:
     {
-        message = m_messageSetter->CreateSecondCommand(firstParam, SecondParam);
+        m_messagesQueue.enqueue(m_messageSetter->CreateSecondCommand(firstParam, SecondParam));
         break;
     }
     case 3:
     {
-        message = m_messageSetter->CreateThirdCommand(firstParam);
+        m_messagesQueue.enqueue(m_messageSetter->CreateThirdCommand(firstParam));
         break;
     }
     case 4:
     {
-        message = m_messageSetter->CreateFourthCommand(firstParam, SecondParam);
+        m_messagesQueue.enqueue(m_messageSetter->CreateFourthCommand(firstParam, SecondParam));
         break;
     }
     case 5:
     {
-        message = m_messageSetter->CreateFiveCommand(firstParam);
+        m_messagesQueue.enqueue(m_messageSetter->CreateFiveCommand(firstParam));
         break;
     }
     case 6:
     {
-        message = m_messageSetter->CreateSixCommand(firstParam, SecondParam);
+        m_messagesQueue.enqueue(m_messageSetter->CreateSixCommand(firstParam, SecondParam));
         break;
     }
     case 7:
     {
-        message = m_messageSetter->CreateSevenCommand(firstParam);
+        m_messagesQueue.enqueue(m_messageSetter->CreateSevenCommand(firstParam));
         break;
     }
     default:
     {
-        message = m_messageSetter->CreateZeroCommand();
+        m_messagesQueue.enqueue(m_messageSetter->CreateZeroCommand());
         break;
     }
-
     }
-    Q_EMIT ToUpdateHistoryFile();
-    m_dataHandler->SendMessageToDevice(message);
 }
 
 void StatePresenter::ToSendMessageToDeivce(const QByteArray &message)
@@ -121,6 +124,15 @@ void StatePresenter::ToSendMessageToDeivce(const QByteArray &message)
 void StatePresenter::GetStateFromDevice(quint8 messageIdWantToGet)
 {
     m_dataHandler->SetHandlerState(HandlerState::Normal);
-    QByteArray message(m_messageSetter->CreateSevenCommand(messageIdWantToGet));
+    const QByteArray message(m_messageSetter->CreateSevenCommand(messageIdWantToGet));
     m_dataHandler->SendMessageToDevice(message);
+}
+
+void StatePresenter::timerEvent(QTimerEvent *event)
+{
+    if (!m_messagesQueue.isEmpty())
+    {
+        Q_EMIT ToUpdateHistoryFile();
+        m_dataHandler->SendMessageToDevice(m_messagesQueue.dequeue());
+    }
 }

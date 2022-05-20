@@ -22,7 +22,7 @@ class FirmWareWidget: public QWidget
 {
     Q_OBJECT
 public:
-    FirmWareWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent);
+    FirmWareWidget(SettingFileService *settingFileService, QWidget *parent);
     ~FirmWareWidget();
 private:
     void CreateObjects();
@@ -58,7 +58,7 @@ private:
     void ResetProgressBar(int blocksCount);
 
 private:
-    QSharedPointer<SettingFileService> m_settingFileService;
+    SettingFileService *m_settingFileService;
     FirmwarePresenter *m_firmwarePresenter;
 };
 

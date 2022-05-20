@@ -24,7 +24,7 @@ class StateWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StateWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent);
+    explicit StateWidget(SettingFileService *settingFileService, QWidget *parent);
     ~StateWidget();
     void DisconnectOldHander();
     void ConnectHander(DataHandler *dataHandler);
@@ -112,10 +112,10 @@ private:
 
     QPlainTextEdit *m_log;
 private:
-    QSharedPointer<SettingFileService> m_settingFileService;
+    SettingFileService *const m_settingFileService;
     StatePresenter *m_statePresenter;
     const quint32 c = 299792458;
-    QFile *m_file;
+    QFile m_file;
     QStringList workPointsValues;
     QStringList m_attenuatorValues;
     QIntValidator *m_intValidator;

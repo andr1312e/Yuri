@@ -15,57 +15,63 @@ DoubleSlider::~DoubleSlider()
 
 void DoubleSlider::OnValueChanged(int intValue)
 {
-    double doubleValue = intValue / 10.0;
+    const double doubleValue = intValue / 10.0;
     Q_EMIT  ToValueChanged(doubleValue);
 }
 
 void DoubleSlider::SetDoubleRange(double min, double max)
 {
-    int minValue=min*10;
-    int maxValue=max*10;
+    const int minValue = min * 10;
+    const int maxValue = max * 10;
     QSlider::setRange(minValue, maxValue);
-    this->setTickInterval(50);
-    this->setSingleStep(5);
-    this->setPageStep(5);
+    setTickInterval(50);
+    setSingleStep(5);
+    setPageStep(5);
 }
 
-double DoubleSlider::GetCurrentDoubleRangeValue()
+double DoubleSlider::GetCurrentDoubleRangeValue() const
 {
-    double value=QSlider::value();
-    return value/10;
+    const double value = QSlider::value();
+    return value / 10;
+}
+
+QString DoubleSlider::GetCurrentDoubleRangeText() const
+{
+    const double value = GetCurrentDoubleRangeValue();
+    return QString::number(value);
 }
 
 void DoubleSlider::mouseReleaseEvent(QMouseEvent *event)
 {
-    qDebug()<< event->x();
-    if ((event->x())<=0)
+    qDebug() << event->x();
+    if ((event->x()) <= 0)
     {
         setValue(0);
     }
     else
     {
-        if (event->x()>=width())
+        if (event->x() >= width())
         {
-            qDebug()<< "event->x()" << event->x();
+            qDebug() << "event->x()" << event->x();
             setValue(maximum());
         }
         else
         {
-            double abstPos= event->x();
-            abstPos=abstPos/width();
-            int newSliderPos=abstPos*maximum();
+            double abstPos = event->x();
+            abstPos = abstPos / width();
+            int newSliderPos = abstPos * maximum();
             if (newSliderPos % 5 <= 2)
             {
-                 newSliderPos=newSliderPos/5;
-                 newSliderPos=newSliderPos*5;
+                newSliderPos = newSliderPos / 5;
+                newSliderPos = newSliderPos * 5;
             }
             else
             {
-                newSliderPos=newSliderPos/5;
-                newSliderPos=(newSliderPos+1)*5;
+                newSliderPos = newSliderPos / 5;
+                newSliderPos = (newSliderPos + 1) * 5;
             }
             setValue(newSliderPos);
-            qDebug()<< newSliderPos;
+            qDebug() << newSliderPos;
         }
     }
 

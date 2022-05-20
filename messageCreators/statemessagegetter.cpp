@@ -21,7 +21,7 @@ StateMessageGetter::~StateMessageGetter()
 
 }
 
-const QString StateMessageGetter::GetDataFromMessage(const QByteArray &message)
+QString StateMessageGetter::GetDataFromMessage(const QByteArray &message)
 {
     qDebug() << "GET" << message.toHex();
     quint8 sendedMessageId = message.at(m_indexOfGettingMessageId);
@@ -44,7 +44,7 @@ const QString StateMessageGetter::GetDataFromMessage(const QByteArray &message)
     }
 }
 
-const QString StateMessageGetter::GetFvcoFromFirstMessage(const QByteArray &message)
+QString StateMessageGetter::GetFvcoFromFirstMessage(const QByteArray &message)
 {
     if (message.count() == 8)
     {
@@ -87,7 +87,7 @@ const QString StateMessageGetter::GetFvcoFromFirstMessage(const QByteArray &mess
     return QLatin1String();
 }
 
-const QString StateMessageGetter::GetDoplerFromSecondMessage(const QByteArray &message)
+QString StateMessageGetter::GetDoplerFromSecondMessage(const QByteArray &message)
 {
     if (m_currentFvco == 0)
     {
@@ -125,17 +125,17 @@ const QString StateMessageGetter::GetDoplerFromSecondMessage(const QByteArray &m
             FRACT_RX_BIG = FRACT_RX_BIG + INT_TX + 4.0;
             FRACT_RX_BIG = FRACT_RX_BIG / 2.0;
             FRACT_RX_BIG = FRACT_RX_BIG * Fref * qPow(2, DIV_RX);
-            FRACT_RX_BIG = FRACT_RX_BIG /*+ 3000000*/;
+            FRACT_RX_BIG = FRACT_RX_BIG + 3000000;
             int dopler = FRACT_RX_BIG - m_currentFvco * 1000000;
             m_currentFvco = 0;
-            const QString result = QStringLiteral("Частота Доплера= %1 герц").arg(dopler);
+            const QString result = QStringLiteral("Частота Доплера= %1 герц").arg(qAbs(dopler));
             return result;
         }
         return QLatin1String();
     }
 }
 
-const QString StateMessageGetter::GetDistanceFromThirdMessage(const QByteArray &message)
+QString StateMessageGetter::GetDistanceFromThirdMessage(const QByteArray &message) const
 {
     if (message.count() == 4)
     {
@@ -154,32 +154,32 @@ const QString StateMessageGetter::GetDistanceFromThirdMessage(const QByteArray &
     return QLatin1String();
 }
 
-const QString StateMessageGetter::GetGainTxGainRXFromFourthMessage(const QByteArray &message)
+QString StateMessageGetter::GetGainTxGainRXFromFourthMessage(const QByteArray &message) const
 {
 
     if (message.count() == 4)
     {
-        double GAIN_TX = message.at(2) / 2.0;
-        double GAIN_RX = message.at(3) / 2.0;
+        const double GAIN_TX = message.at(2) / 2.0;
+        const double GAIN_RX = message.at(3) / 2.0;
         const QString result = QStringLiteral("Усиление TX= %1 децибел Усиление RX= %2 децибел").arg(GAIN_TX).arg(GAIN_RX);
         return result;
     }
     return QLatin1String();
 }
 
-const QString StateMessageGetter::GetAttenuatorRXFromFiveMessage(const QByteArray &message)
+QString StateMessageGetter::GetAttenuatorRXFromFiveMessage(const QByteArray &message) const
 {
     if (message.count() == 3)
     {
-        quint8 Attenuator_RX = quint8(message.at(2));
-        quint8 realValue = atteniatorTable.key(Attenuator_RX);
+        const quint8 Attenuator_RX = quint8(message.at(2));
+        const quint8 realValue = atteniatorTable.key(Attenuator_RX);
         const QString result = QStringLiteral("Ослабление= %1 децибел").arg(realValue);
         return result;
     }
     return QLatin1String();
 }
 
-const QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message)
+QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message) const
 {
     if (message.count() == 3)
     {

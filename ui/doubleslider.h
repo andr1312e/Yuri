@@ -17,7 +17,8 @@ private Q_SLOTS:
     void OnValueChanged(int intValue);
 public:
     void SetDoubleRange(double  min, double max);
-    double GetCurrentDoubleRangeValue();
+    double GetCurrentDoubleRangeValue() const;
+    QString GetCurrentDoubleRangeText() const;
 
     // QWidget interface
 protected:

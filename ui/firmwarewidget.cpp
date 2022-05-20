@@ -1,6 +1,6 @@
 #include "firmwarewidget.h"
 
-FirmWareWidget::FirmWareWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent)
+FirmWareWidget::FirmWareWidget(SettingFileService *settingFileService, QWidget *parent)
     : QWidget(parent)
     , m_settingFileService(settingFileService)
 

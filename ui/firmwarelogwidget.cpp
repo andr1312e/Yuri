@@ -2,7 +2,7 @@
 
 
 
-FirmwareLogWidget::FirmwareLogWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent)
+FirmwareLogWidget::FirmwareLogWidget(SettingFileService *settingFileService, QWidget *parent)
     : QWidget(parent)
     , m_settingFileService(settingFileService)
 {

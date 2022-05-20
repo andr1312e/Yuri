@@ -12,8 +12,8 @@ public:
     explicit TcpHandler(QObject *parent);
     ~TcpHandler();
 private:
-    virtual void CreateHander() override;
-    virtual void ConnectObjects() override;
+    virtual void CreateHander() Q_DECL_OVERRIDE;
+    virtual void ConnectObjects() Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void OnReadyRead();
@@ -22,9 +22,9 @@ private Q_SLOTS:
 public:
     void TryToConnectToHost(const QString &adress, const QString &port);
 public:
-    virtual void WriteMessageToBuffer(const QByteArray &part) override;
-    virtual void FlushBuffer() override;
-    virtual void FromHostDisconnect() override;
+    virtual void WriteMessageToBuffer(const QByteArray &part) Q_DECL_OVERRIDE;
+    virtual void FlushBuffer() Q_DECL_OVERRIDE;
+    virtual void FromHostDisconnect() Q_DECL_OVERRIDE;
 private:
     QTcpSocket *m_connectionPort;
 

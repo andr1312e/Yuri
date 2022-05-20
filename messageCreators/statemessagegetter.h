@@ -8,20 +8,20 @@
 class StateMessageGetter
 {
 public:
-    StateMessageGetter(const double f, const double fref, const quint32 distanseToAnswerer);
+    explicit StateMessageGetter(const double f, const double fref, const quint32 distanseToAnswerer);
     ~StateMessageGetter();
-    const QString GetDataFromMessage(const QByteArray &message);
+    QString GetDataFromMessage(const QByteArray &message);
 private:
-    const QString GetFvcoFromFirstMessage(const QByteArray &message);
-    const QString GetDoplerFromSecondMessage(const QByteArray &message);
-    const QString GetDistanceFromThirdMessage(const QByteArray &message);
-    const QString GetGainTxGainRXFromFourthMessage(const QByteArray &message);
-    const QString GetAttenuatorRXFromFiveMessage(const QByteArray &message);
-    const QString GetWorkModeFromSixMessage(const QByteArray &message);
+    QString GetFvcoFromFirstMessage(const QByteArray &message);
+    QString GetDoplerFromSecondMessage(const QByteArray &message);
+    QString GetDistanceFromThirdMessage(const QByteArray &message) const;
+    QString GetGainTxGainRXFromFourthMessage(const QByteArray &message) const;
+    QString GetAttenuatorRXFromFiveMessage(const QByteArray &message) const;
+    QString GetWorkModeFromSixMessage(const QByteArray &message) const;
 private:
     const int m_indexOfGettingMessageId;
     const double f;
-    const double c=299792458.0;
+    const double c = 299792458.0;
     const double Fref;
     const quint32 distanseToAnswerer;
 private:

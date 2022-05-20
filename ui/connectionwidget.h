@@ -19,7 +19,7 @@ class ConnectionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ConnectionWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent);
+    explicit ConnectionWidget(SettingFileService *settingFileService, QWidget *parent);
     ~ConnectionWidget();
 private:
     void CreateObjects();
@@ -64,7 +64,7 @@ private:
     QPushButton *m_disconnectButton;
 
     QTimer *m_checkSerialPortsTimer;
-    const QSharedPointer<SettingFileService> m_settingFileService;
+    SettingFileService *const m_settingFileService;
 };
 
 #endif // UI_CONNECTIONWIDGET_H

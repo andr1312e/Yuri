@@ -20,21 +20,22 @@ public:
     QByteArray CreateFiveCommand(double AttenuatorDb) const;
     QByteArray CreateSixCommand(double noiseType, double noiseValue) const;
     QByteArray CreateSevenCommand(quint8 param) const;
+
+private:
+    quint16 CalculateINT_Rx(double Fvco) const;
+    quint32 CalculateFRACT_RxOld(double Fvco) const;
+    quint32 CalculateFRACT_RxNew(double Fvco) const;
+    quint8 CalculateGAIN(double gain) const;
+    quint8 CalculateAtteniator(quint8 atteniatorDb) const;
+    bool CalculateDIV_rx(double Fvco) const;
+
 private:
     const double c = 299792458.0;
-
     const double f;
     const double Fref;
     const quint32 distanseToAnswerer;
-    const std::array<quint8, 9> messagesIds = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-private:
+    const QVarLengthArray<quint8, 9> messagesIds;
 
-    quint16 calculateINT_Rx(double Fvco) const;
-    quint32 calculateFRACT_RxOld(double Fvco) const;
-    quint32 calculateFRACT_RxNew(double Fvco) const;
-    quint8 calculateGAIN(double gain) const;
-    quint8 calculateAtteniator(quint16 atteniatorDb) const;
-    bool calculateDIV_rx(double Fvco) const;
 };
 
 #endif // MESSAGECREATORS_STATEMESSAGESENDER_H

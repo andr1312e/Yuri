@@ -1,6 +1,6 @@
 #include "connectionwidget.h"
 
-ConnectionWidget::ConnectionWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent)
+ConnectionWidget::ConnectionWidget(SettingFileService *settingFileService, QWidget *parent)
     : QWidget(parent)
     , m_settingFileService(settingFileService)
 {

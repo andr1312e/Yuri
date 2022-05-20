@@ -15,12 +15,12 @@ SettingFileService::~SettingFileService()
 
 const QString SettingFileService::GetAttribute(const QString &tagName, const QString &attributeName, const QString &defaultValue)
 {
-    const QDomElement settings=m_document->firstChildElement();
-    const QDomNodeList settigList=settings.childNodes();
-    for (int i=0; i<settigList.count(); ++i)
+    const QDomElement settings = m_document->firstChildElement();
+    const QDomNodeList settigList = settings.childNodes();
+    for (int i = 0; i < settigList.count(); ++i)
     {
-        const QDomElement setting=settigList.at(i).toElement();
-        if (tagName==setting.tagName())
+        const QDomElement setting = settigList.at(i).toElement();
+        if (tagName == setting.tagName())
         {
             if (setting.hasAttribute(attributeName))
             {
@@ -34,18 +34,18 @@ const QString SettingFileService::GetAttribute(const QString &tagName, const QSt
 
 void SettingFileService::SetAttribute(const QString &tagName, const QString &attributeName, const QString &value)
 {
-    QDomElement settings=m_document->firstChildElement();
-    QDomNodeList settigList=settings.childNodes();
-    for (int i=0; i<settigList.count(); ++i)
+    QDomElement settings = m_document->firstChildElement();
+    const QDomNodeList settigList = settings.childNodes();
+    for (int i = 0; i < settigList.count(); ++i)
     {
-        QDomElement setting=settigList.at(i).toElement();
-        if (tagName==setting.tagName())
+        QDomElement setting = settigList.at(i).toElement();
+        if (tagName == setting.tagName())
         {
             setting.setAttribute(attributeName, value);
             return;
         }
     }
-    QDomElement lastElem=m_document->createElement(tagName);
+    QDomElement lastElem = m_document->createElement(tagName);
     lastElem.setAttribute(attributeName, value);
     settings.appendChild(lastElem);
 }
@@ -55,13 +55,13 @@ void SettingFileService::ReadSettingsDocument()
     QFile file(m_fileName);
     if (file.open(QIODevice::ReadWrite))
     {
-        const QByteArray arr=file.readAll();
+        const QByteArray arr = file.readAll();
         file.close();
-        bool successfulRead=m_document->setContent(arr);
-        if(!successfulRead)
+        const bool successfulRead = m_document->setContent(arr);
+        if (!successfulRead)
         {
             m_document->clear();
-            QDomElement firstElem=m_document->createElement("settings");
+            const QDomElement firstElem = m_document->createElement("settings");
             m_document->appendChild(firstElem);
         }
     }
@@ -73,7 +73,7 @@ void SettingFileService::ReadSettingsDocument()
 
 void SettingFileService::WriteSettingsDocument()
 {
-    const QByteArray stringDocumetString=m_document->toString().toUtf8();
+    const QByteArray stringDocumetString = m_document->toString().toUtf8();
     QFile settingFile(m_fileName);
     if (settingFile.open(QIODevice::WriteOnly))
     {

@@ -13,7 +13,7 @@ class FirmwareLogWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit FirmwareLogWidget(QSharedPointer<SettingFileService> &settingFileService, QWidget *parent);
+    explicit FirmwareLogWidget(SettingFileService *settingFileService, QWidget *parent);
     ~FirmwareLogWidget();
 private:
     void CreateUI();
@@ -29,14 +29,14 @@ public Q_SLOTS:
 public:
     void SetWidgetEnabled(bool state);
 private:
+    SettingFileService *const m_settingFileService;
+private:
     QVBoxLayout *m_mainLayout;
-
     QPushButton *m_restarPushButton;
     QPushButton *m_logClearButton;
     QPlainTextEdit *m_log;
     QLabel *m_resultLabel;
 
-    const QSharedPointer<SettingFileService> m_settingFileService;
 };
 
 #endif // UI_FIRMWARELOGWIDGET_H
