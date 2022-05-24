@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete m_settingFileService;
+//    delete m_settingFileService;
     delete m_tcpHandler;
     delete m_serialHandler;
     delete m_statusBar;
