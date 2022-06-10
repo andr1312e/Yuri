@@ -7,7 +7,7 @@
 StateWidget::StateWidget(SettingFileService *settingFileService, QWidget *parent)
     : QWidget(parent)
     , m_settingFileService(settingFileService)
-    , m_attenuatorValues({"0", "1", "2", "3", "4", "5", "6", "9", "12", "15", "18", "21", "24", "27", "30"})
+    , m_attenuatorValues{"0", "1", "2", "3", "4", "5", "6", "9", "12", "15", "18", "21", "24", "27", "30"}
 {
     CreateObjects();
     CreateUI();
@@ -29,8 +29,6 @@ StateWidget::~StateWidget()
     delete m_workPointLineLayout;
     delete m_gainLineLayout;
     delete m_attenuatorLineLayout;
-    delete m_messageSendButtonsLayout;
-    delete m_messageGetButtonsLayout;
     delete m_stateLayout;
     delete m_noiseLineLayout;
     delete m_mainLayout;
@@ -100,13 +98,17 @@ void StateWidget::CreateObjects()
 void StateWidget::CreateUI()
 {
     m_mainLayout = new QVBoxLayout();
+
+    m_modesLayout = new QHBoxLayout();
+
+    m_modesWidget = new QGroupBox();
+    m_leftLayout = new QVBoxLayout();
+
     m_speedLayout = new QHBoxLayout();
     m_rangeLineLayout = new QHBoxLayout();
     m_workPointLineLayout = new QHBoxLayout();
     m_gainLineLayout = new QHBoxLayout();
     m_attenuatorLineLayout = new QHBoxLayout();
-    m_messageSendButtonsLayout = new QHBoxLayout();
-    m_messageGetButtonsLayout = new QHBoxLayout();
     m_stateLayout = new QHBoxLayout();
     m_noiseLineLayout = new QHBoxLayout();
 
@@ -137,20 +139,26 @@ void StateWidget::CreateUI()
     m_attenuatorComboBox = new QComboBox();
 
 
-    m_noiseLabel = new QLabel();
+
     m_noiseValueLabel = new QLabel();
     m_noiseLineEdit = new QLineEdit();
+
+    m_deviceModeLayout = new QHBoxLayout();
+    m_noiseLabel = new QLabel();
     m_noiseComboBox = new QComboBox();
 
     m_sendStateButtonsGroup = new QButtonGroup();
     FillButtonGroup();
+
+    m_bPraWidget = new BParWidget(this);
+
+
 
     m_logClearButton = new QPushButton();
     m_restartDevice = new QPushButton();
 
     m_rawHexLayout = new QHBoxLayout();
     m_rawHexInputEdit = new QLineEdit();
-    m_hexLabel = new QLabel();
     m_sendRawHexButton = new QPushButton();
 
     m_log = new QPlainTextEdit();
@@ -214,23 +222,29 @@ void StateWidget::InsertWidgetsIntoLayout()
 
     m_noiseLineLayout->addWidget(m_noiseValueLabel);
     m_noiseLineLayout->addWidget(m_noiseLineEdit);
-    m_noiseLineLayout->addWidget(m_noiseLabel);
-    m_noiseLineLayout->addWidget(m_noiseComboBox);
-    AddButtonFromGroupToLayout(&getStateButtonLIstIterator, Q_NULLPTR, m_noiseLineLayout);
 
-    m_mainLayout->addLayout(m_workPointLineLayout);
-    m_mainLayout->addLayout(m_speedLayout);
-    m_mainLayout->addLayout(m_rangeLineLayout);
-    m_mainLayout->addLayout(m_gainLineLayout);
-    m_mainLayout->addLayout(m_attenuatorLineLayout);
-    m_mainLayout->addLayout(m_noiseLineLayout);
-    m_mainLayout->addLayout(m_messageSendButtonsLayout);
-    m_mainLayout->addLayout(m_messageGetButtonsLayout);
 
-    AddButtonFromGroupToLayout(&setStateButtonListInterator, Q_NULLPTR, m_mainLayout);
-    m_mainLayout->addWidget(m_restartDevice);
+    m_leftLayout->addLayout(m_workPointLineLayout);
+    m_leftLayout->addLayout(m_speedLayout);
+    m_leftLayout->addLayout(m_rangeLineLayout);
+    m_leftLayout->addLayout(m_gainLineLayout);
+    m_leftLayout->addLayout(m_attenuatorLineLayout);
+    m_leftLayout->addLayout(m_noiseLineLayout);
+
+
+    m_modesWidget->setLayout(m_leftLayout);
+    m_modesLayout->addWidget(m_modesWidget);
+    m_modesLayout->addWidget(m_bPraWidget);
+    m_mainLayout->addLayout(m_modesLayout);
+
+    m_deviceModeLayout->addWidget(m_noiseLabel);
+    m_deviceModeLayout->addWidget(m_noiseComboBox);
+    AddButtonFromGroupToLayout(&getStateButtonLIstIterator, Q_NULLPTR, m_deviceModeLayout);
+    AddButtonFromGroupToLayout(&setStateButtonListInterator, Q_NULLPTR, m_deviceModeLayout);
+    m_deviceModeLayout->addWidget(m_restartDevice);
+
+    m_mainLayout->addLayout(m_deviceModeLayout);
     m_rawHexLayout->addWidget(m_rawHexInputEdit);
-    m_rawHexLayout->addWidget(m_hexLabel);
     m_rawHexLayout->addWidget(m_sendRawHexButton);
 
     m_mainLayout->addLayout(m_rawHexLayout);
@@ -280,9 +294,11 @@ void StateWidget::FillUI()
     m_logClearButton->setText(QStringLiteral("Консоль отчистить"));
     m_log->setReadOnly(true);
     m_log->appendPlainText(QStringLiteral("Не подключено к ответчику"));
+    m_bPraWidget->setDisabled(true);
 
 
     const bool EnableUI = m_settingFileService->GetAttribute(m_settingsAtribute, "uiEnabled", "0").toInt();
+    m_modesWidget->setTitle("Состояния устройства");
 //    OnSetButtonEnabled(EnableUI);
 
 }
@@ -310,10 +326,10 @@ void StateWidget::ConnectObjects()
 
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
     connect(m_restartDevice, &QPushButton::clicked, this, &StateWidget::OnRestartDevice);
-    connect(m_rawHexInputEdit, &QLineEdit::textEdited, this, &StateWidget::OnChangeHexInput);
-    connect(m_sendRawHexButton, &QPushButton::clicked, this, &StateWidget::OnSendRawHexMessage);
+    connect(m_sendRawHexButton, &QPushButton::clicked, this, QOverload<>::of(&StateWidget::OnSendRawHexMessage));
     connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::OnConsoleLog);
     connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::OnSetButtonEnabled);
+    connect(m_bPraWidget, &BParWidget::ToSendBParMessage, this, QOverload<const QByteArray &>::of(&StateWidget::OnSendRawHexMessage));
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(m_sendStateButtonsGroup, &QButtonGroup::idClicked, this, &StateWidget::OnSetStateButtonIdClicked);
     connect(m_getStateButtonGroup, &QButtonGroup::idClicked, this, &StateWidget::OnGetStateButtonIdClicked);
@@ -329,7 +345,23 @@ void StateWidget::ConnectObjects()
 #else
     connect(m_noiseComboBox, QOverload<int>::of(&QComboBox::activated), [&](int index)
     {
-        this->OnSetStateButtonIdClicked(6);
+        if (index == m_noiseComboBox->count() - 1)
+        {
+            m_bPraWidget->setEnabled(true);
+            m_modesWidget->setEnabled(false);
+        }
+        else
+        {
+            if(m_bPraWidget->isEnabled())
+            {
+                m_bPraWidget->setEnabled(false);
+                m_modesWidget->setEnabled(true);
+            }
+            else
+            {
+              this->OnSetStateButtonIdClicked(6);
+            }
+        }
     });
 #endif
 }
@@ -599,6 +631,11 @@ void StateWidget::OnSendRawHexMessage()
     m_statePresenter->ToSendMessageToDeivce(message);
 }
 
+void StateWidget::OnSendRawHexMessage(const QByteArray &array)
+{
+m_statePresenter->ToSendMessageToDeivce(array);
+}
+
 void StateWidget::OnGetStateButtonIdClicked(int id)
 {
     switch (id)
@@ -712,9 +749,4 @@ void StateWidget::OnChangeNoiseLineEdit(const QString &noise)
 void StateWidget::OnChangeSinusLineEdit(const QString &sinus)
 {
     m_settingFileService->SetAttribute(m_settingsAtribute, "sinus", sinus);
-}
-
-void StateWidget::OnChangeHexInput(const QString &hexMessage)
-{
-//    m_hexLabel->setText("Отправим: " + hexMessage.toLatin1().toHex());
 }

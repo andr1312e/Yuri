@@ -1,7 +1,7 @@
 QT       += core network widgets serialport xml
 
 CONFIG += c++latest
-VERSION = 3.4.5.1
+VERSION = 3.4.6.1
 
 #message("Дата сборки= $$BUILD_DATE")
 BUILD_DATE = $$system( date /t ) $$system( time /t )
@@ -25,7 +25,9 @@ SOURCES += \
     connections\serialhandler.cpp \
     connections\tcphandler.cpp \
     services/settingfileservice.cpp \
+    ui/bparwidget.cpp \
     ui/connectionwidget.cpp \
+    ui/datawidget.cpp \
     ui/doubleslider.cpp \
     ui/firmwareflasherwidget.cpp \
     ui/firmwarelogwidget.cpp \
@@ -45,7 +47,9 @@ HEADERS += \
     connections\serialhandler.h \
     connections\tcphandler.h \
     services/settingfileservice.h \
+    ui/bparwidget.h \
     ui/connectionwidget.h \
+    ui/datawidget.h \
     ui/doubleslider.h \
     ui/firmwareflasherwidget.h \
     ui/firmwarelogwidget.h \

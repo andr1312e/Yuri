@@ -17,7 +17,7 @@
 
 #include "connections/datahandler.h"
 #include "presenter/statepresenter.h"
-
+#include "ui/bparwidget.h"
 #include "ui/doubleslider.h"
 
 class StateWidget : public QWidget
@@ -49,11 +49,12 @@ private Q_SLOTS:
     void OnChangeGainRxLineEdit(double gainRx);
     void OnChangeNoiseLineEdit(const QString &noise);
     void OnChangeSinusLineEdit(const QString &sinus);
-    void OnChangeHexInput(const QString &hexMessage);
+    void OnSendRawHexMessage();
+    void OnSendRawHexMessage(const QByteArray &array);
 public Q_SLOTS:
     void OnSetStateButtonIdClicked(int id);
     void OnRestartDevice();
-    void OnSendRawHexMessage();
+
     void OnGetStateButtonIdClicked(int messageWantToGet);
     void OnSetButtonEnabled(bool state);
     void OnConsoleLog(const QString &message);
@@ -62,6 +63,12 @@ private:
     void UpdateHistoryFile();
 private:
     QVBoxLayout *m_mainLayout;
+
+    QHBoxLayout *m_modesLayout;
+    BParWidget *m_bPraWidget;
+
+    QGroupBox *m_modesWidget;
+    QVBoxLayout *m_leftLayout;
     QHBoxLayout *m_speedLayout;
     QLabel *m_DoplerFreqLabel;
     QLineEdit *m_doplerFreqLineEdit;
@@ -91,10 +98,11 @@ private:
     QHBoxLayout *m_noiseLineLayout;
     QLabel *m_noiseValueLabel;
     QLineEdit *m_noiseLineEdit;
+
+    QHBoxLayout *m_deviceModeLayout;
     QLabel *m_noiseLabel;
     QComboBox *m_noiseComboBox;
 
-    QHBoxLayout *m_messageSendButtonsLayout;
     QButtonGroup *m_sendStateButtonsGroup;
 
     QHBoxLayout *m_messageGetButtonsLayout;
@@ -107,7 +115,6 @@ private:
 
     QHBoxLayout *m_rawHexLayout;
     QLineEdit *m_rawHexInputEdit;
-    QLabel *m_hexLabel;
     QPushButton *m_sendRawHexButton;
 
     QPlainTextEdit *m_log;

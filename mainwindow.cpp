@@ -57,8 +57,7 @@ void MainWindow::InsertWidgetsIntoMainWindow()
 void MainWindow::FillUI()
 {
     const QString qtVersion = qVersion();
-    QString build_date = QString(BUILD_DATE);
-    setWindowTitle("Настройка Юстировочного оборудования блок М14ХЛ2 Плата СЮИТ.687263.035 Qt " + qtVersion + " Версия " + APP_VERSION + " Cборка: " + build_date);
+    setWindowTitle("Настройка Юстировочного оборудования блок М14ХЛ2 Плата СЮИТ.687263.035 Qt " + qtVersion + " Версия " + APP_VERSION + " Cборка: " + BUILD_DATE);
     m_statusBar->showMessage(QStringLiteral("Не подключено"));
 }
 

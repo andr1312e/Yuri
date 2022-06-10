@@ -13,6 +13,7 @@
 #include "ui/statewidget.h"
 #include "ui/infowidget.h"
 #include "ui/firmwarewidget.h"
+#include "ui/bparwidget.h"
 
 class MainWindow : public QMainWindow
 {

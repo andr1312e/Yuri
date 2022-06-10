@@ -47,11 +47,9 @@ public:
     bool IsCurrentComPortBisy(QString &comboBoxText);
     bool IsComPortBisy(const QSerialPortInfo *info);
 
-    QTimer *checkSerialPortsTimer() const;
-    void setCheckSerialPortsTimer(QTimer *newCheckSerialPortsTimer);
-
 private:
     QVBoxLayout *m_mainLayout;
+
     QComboBox *m_connectionTypeComboBox;
     QHBoxLayout *m_adressAndPortLayout;
     QLabel *m_adressAndPortLabel;

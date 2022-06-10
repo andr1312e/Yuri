@@ -129,6 +129,8 @@ void StatePresenter::timerEvent(QTimerEvent *event)
     if (!m_messagesQueue.isEmpty())
     {
         Q_EMIT ToUpdateHistoryFile();
+//        auto array=m_messagesQueue.dequeue();
+//        Q_EMIT ToConsoleLog("Размер " + QString::number(array.size()) + " начинаем высылать "  + QString::fromLatin1(array.toHex()));
         m_dataHandler->SendMessageToDevice(m_messagesQueue.dequeue());
     }
 }
