@@ -1,8 +1,13 @@
 QT       += core network widgets serialport xml
 
 CONFIG += c++latest
-VERSION = 3.4.4.2
+VERSION = 3.4.5.1
+
+#message("Дата сборки= $$BUILD_DATE")
+BUILD_DATE = $$system( date /t ) $$system( time /t )
+BUILD_DATE = $$member(BUILD_DATE,0)_$$member(BUILD_DATE,1)
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += BUILD_DATE=\\\"$$BUILD_DATE\\\"
 TARGET = "YUstirovojchnyj_komplekt"
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

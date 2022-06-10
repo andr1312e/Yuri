@@ -65,10 +65,6 @@ void StatePresenter::ConnectHander(DataHandler *dataHandler)
 
 void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, double SecondParam)
 {
-    if (m_messagesQueue.isEmpty())
-    {
-
-    }
     m_dataHandler->SetHandlerState(HandlerState::Normal);
     switch (messageId)
     {

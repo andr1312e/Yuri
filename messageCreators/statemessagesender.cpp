@@ -115,7 +115,7 @@ QByteArray StateMessageSender::CreateSixCommand(double noiseType, double noiseVa
     QByteArray command;
     command.append(messagesIds.at(6));
     command.append(quint8(noiseType));
-    if (noiseType > 2)
+    if (noiseType > 2 && noiseType < 4)
     {
         quint32 noiseVal = (quint32)noiseValue;
         const quint8 first = (noiseVal >> (8 * 0)) & 0xff;

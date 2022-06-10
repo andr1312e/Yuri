@@ -283,7 +283,7 @@ void StateWidget::FillUI()
 
 
     const bool EnableUI = m_settingFileService->GetAttribute(m_settingsAtribute, "uiEnabled", "0").toInt();
-    OnSetButtonEnabled(EnableUI);
+//    OnSetButtonEnabled(EnableUI);
 
 }
 
@@ -475,71 +475,71 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
         const double noise = m_noiseComboBox->currentIndex();
         if (noise >= 3)
         {
-            bool fvcoParced, doplerParced;
-            double fvco;
-            if (3 == noise)
+//            bool fvcoParced, doplerParced;
+//            double fvco;
+//            if (3 == noise)
+//            {
+//                fvco = (m_fvcoComboBox->currentText().toDouble(&fvcoParced) - 3) * 1000000;
+//            }
+//            else
+//            {
+//                fvco = m_fvcoComboBox->currentText().toDouble(&fvcoParced) * 1000000;
+//            }
+//            if (fvcoParced)
+//            {
+//                m_statePresenter->SetMessageToQueue(1, fvco);
+//                const double doplers = m_doplerFreqLineEdit->text().toDouble(&doplerParced);
+//                if (doplerParced)
+//                {
+//                    m_statePresenter->SetMessageToQueue(2, fvco, doplerParced);
+//                }
+//                else
+//                {
+//                    m_statePresenter->SetMessageToQueue(2, fvco);
+//                    OnConsoleLog("Шестое сообщение: доплер не можем распарсить, берем значение 0");
+//                }
+            bool noiseValParced;
+            const double noiseValue = m_noiseLineEdit->text().toDouble(&noiseValParced);
+            if (noiseValParced)
             {
-                fvco = (m_fvcoComboBox->currentText().toDouble(&fvcoParced) - 3) * 1000000;
+                OnConsoleLog("Высылаем шестое сообщение: установка шума, параметр равен: " + m_noiseLineEdit->text());
+                m_statePresenter->SetMessageToQueue(id, noise, noiseValue);
             }
             else
             {
-                fvco = m_fvcoComboBox->currentText().toDouble(&fvcoParced) * 1000000;
+                OnConsoleLog("Шестое сообщение: не смогли перевесли в число: " + m_noiseLineEdit->text() + ".Берем значение 0");
+                m_statePresenter->SetMessageToQueue(id, noise);
             }
-            if (fvcoParced)
-            {
-                m_statePresenter->SetMessageToQueue(1, fvco);
-                const double doplers = m_doplerFreqLineEdit->text().toDouble(&doplerParced);
-                if (doplerParced)
-                {
-                    m_statePresenter->SetMessageToQueue(2, fvco, doplerParced);
-                }
-                else
-                {
-                    m_statePresenter->SetMessageToQueue(2, fvco);
-                    OnConsoleLog("Шестое сообщение: доплер не можем распарсить, берем значение 0");
-                }
-                bool noiseValParced;
-                const double noiseValue = m_noiseLineEdit->text().toDouble(&noiseValParced);
-                if (noiseValParced)
-                {
-                    OnConsoleLog("Высылаем шестое сообщение: установка шума, параметр равен: " + m_noiseLineEdit->text());
-                    m_statePresenter->SetMessageToQueue(id, noise, noiseValue);
-                }
-                else
-                {
-                    OnConsoleLog("Шестое сообщение: не смогли перевесли в число: " + m_noiseLineEdit->text() + ".Берем значение 0");
-                    m_statePresenter->SetMessageToQueue(id, noise);
-                }
-            }
-            else
-            {
-                OnConsoleLog("Шестое сообщение: сначала установите рабочую точку");
-            }
+//            }
+//            else
+//            {
+//                OnConsoleLog("Шестое сообщение: сначала установите рабочую точку");
+//            }
 
         }
         else
         {
-            bool fvcoParced, doplerParced;
-            const double fvco = (m_fvcoComboBox->currentText().toDouble(&fvcoParced)) * 1000000;
-            if (fvcoParced)
-            {
-                m_statePresenter->SetMessageToQueue(1, fvco);
-                const double doplers = m_doplerFreqLineEdit->text().toDouble(&doplerParced);
-                if (doplerParced)
-                {
-                    m_statePresenter->SetMessageToQueue(2, fvco, doplers);
-                }
-                else
-                {
-                    m_statePresenter->SetMessageToQueue(2, fvco);
-                    OnConsoleLog("Шестое сообщение: доплер не можем распарсить, берем значение 0");
-                }
-                m_statePresenter->SetMessageToQueue(id, noise);
-            }
-            else
-            {
-                OnConsoleLog("Шестое сообщение: сначала установите рабочую точку");
-            }
+//            bool fvcoParced, doplerParced;
+//            const double fvco = (m_fvcoComboBox->currentText().toDouble(&fvcoParced)) * 1000000;
+//            if (fvcoParced)
+//            {
+//                m_statePresenter->SetMessageToQueue(1, fvco);
+//                const double doplers = m_doplerFreqLineEdit->text().toDouble(&doplerParced);
+//                if (doplerParced)
+//                {
+//                    m_statePresenter->SetMessageToQueue(2, fvco, doplers);
+//                }
+//                else
+//                {
+//            m_statePresenter->SetMessageToQueue(2, fvco);
+//            OnConsoleLog("Шестое сообщение: доплер не можем распарсить, берем значение 0");
+//                }
+            m_statePresenter->SetMessageToQueue(id, noise);
+//            }
+//            else
+//            {
+//                OnConsoleLog("Шестое сообщение: сначала установите рабочую точку");
+//            }
         }
         break;
     }
