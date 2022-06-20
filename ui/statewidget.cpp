@@ -337,12 +337,6 @@ void StateWidget::ConnectObjects()
     connect(m_sendStateButtonsGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::OnSetStateButtonIdClicked);
     connect(m_getStateButtonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &StateWidget::OnGetStateButtonIdClicked);
 #endif
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    connect(m_noiseComboBox, &QComboBox::currentIndexChanged, [&](int index)
-    {
-        this->OnSetStateButtonIdClicked(6);
-    });
-#else
     connect(m_noiseComboBox, QOverload<int>::of(&QComboBox::activated), [&](int index)
     {
         if (index == m_noiseComboBox->count() - 1)
@@ -352,18 +346,14 @@ void StateWidget::ConnectObjects()
         }
         else
         {
-            if(m_bPraWidget->isEnabled())
+            if (m_bPraWidget->isEnabled())
             {
                 m_bPraWidget->setEnabled(false);
                 m_modesWidget->setEnabled(true);
             }
-            else
-            {
-              this->OnSetStateButtonIdClicked(6);
-            }
+            OnSetStateButtonIdClicked(6);
         }
     });
-#endif
 }
 
 void StateWidget::UpdateHistoryFile()
@@ -633,7 +623,7 @@ void StateWidget::OnSendRawHexMessage()
 
 void StateWidget::OnSendRawHexMessage(const QByteArray &array)
 {
-m_statePresenter->ToSendMessageToDeivce(array);
+    m_statePresenter->ToSendMessageToDeivce(array);
 }
 
 void StateWidget::OnGetStateButtonIdClicked(int id)
