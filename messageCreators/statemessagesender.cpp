@@ -23,7 +23,7 @@ QByteArray StateMessageSender::CreateZeroCommand() const noexcept
     return command;
 }
 
-QByteArray StateMessageSender::CreateFirstCommand(double Fvco) const
+QByteArray StateMessageSender::CreateFirstCommand(double Fvco) const noexcept
 {
     const quint8 id = messagesIds.at(1);
     const qint16 INT_Rx = CalculateINT_Rx(Fvco); //МГЦ
@@ -47,7 +47,7 @@ QByteArray StateMessageSender::CreateFirstCommand(double Fvco) const
     return command;
 }
 
-QByteArray StateMessageSender::CreateSecondCommand(double Fvco, double doplerFreq) const
+QByteArray StateMessageSender::CreateSecondCommand(double Fvco, double doplerFreq) const noexcept
 {
     const double ResultFreq = Fvco + doplerFreq;
     const qint16 INT_Tx = CalculateINT_Rx(ResultFreq);
@@ -74,7 +74,7 @@ QByteArray StateMessageSender::CreateSecondCommand(double Fvco, double doplerFre
     return command;
 }
 
-QByteArray StateMessageSender::CreateThirdCommand(double distance) const
+QByteArray StateMessageSender::CreateThirdCommand(double distance) const noexcept
 {
     distance += 26, 9434889941;
     const double secondVal = f / c;
@@ -88,7 +88,7 @@ QByteArray StateMessageSender::CreateThirdCommand(double distance) const
     return command;
 }
 
-QByteArray StateMessageSender::CreateFourthCommand(double gainTX, double gainRX) const
+QByteArray StateMessageSender::CreateFourthCommand(double gainTX, double gainRX) const noexcept
 {
     const quint8 GAIN_TX = CalculateGAIN(gainTX);
     const quint8 GAIN_RX = CalculateGAIN(gainRX);
@@ -100,7 +100,7 @@ QByteArray StateMessageSender::CreateFourthCommand(double gainTX, double gainRX)
     return command;
 }
 
-QByteArray StateMessageSender::CreateFiveCommand(double AttenuatorDb) const
+QByteArray StateMessageSender::CreateFiveCommand(double AttenuatorDb) const noexcept
 {
     const quint8 attenuator = CalculateAtteniator(AttenuatorDb);
 
@@ -110,7 +110,7 @@ QByteArray StateMessageSender::CreateFiveCommand(double AttenuatorDb) const
     return command;
 }
 
-QByteArray StateMessageSender::CreateSixCommand(double noiseType, double noiseValue) const
+QByteArray StateMessageSender::CreateSixCommand(double noiseType, double noiseValue) const noexcept
 {
     QByteArray command;
     command.append(messagesIds.at(6));
@@ -128,7 +128,7 @@ QByteArray StateMessageSender::CreateSixCommand(double noiseType, double noiseVa
     return command;
 }
 
-QByteArray StateMessageSender::CreateSevenCommand(quint8 param) const
+QByteArray StateMessageSender::CreateSevenCommand(quint8 param) const noexcept
 {
     QByteArray command;
     command.append(messagesIds.at(7));
@@ -136,7 +136,7 @@ QByteArray StateMessageSender::CreateSevenCommand(quint8 param) const
     return command;
 }
 
-QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const
+QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const noexcept
 {
     QByteArray bParMessage;
     QDataStream stream(&bParMessage, QIODevice::WriteOnly);

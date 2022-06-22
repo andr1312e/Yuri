@@ -1,5 +1,5 @@
-#ifndef SETTINGFILESERVICE_H
-#define SETTINGFILESERVICE_H
+#ifndef SERVICES_SETTINGFILESERVICE_H
+#define SERVICES_SETTINGFILESERVICE_H
 
 #include <QFile>
 #include <QDebug>
@@ -11,14 +11,15 @@ class SettingFileService
 public:
     explicit SettingFileService(const QString &fileName);
     ~SettingFileService();
-    const QString GetAttribute(const QString &tagName, const QString &attributeName, const QString &defaultValue);
+public:
+    QString GetAttribute(const QString &tagName, const QString &attributeName, const QString &defaultValue);
     void SetAttribute(const QString &tagName, const QString &attributeName, const QString &value);
 private:
     void ReadSettingsDocument();
-    void WriteSettingsDocument();
+    void WriteSettingsDocument() const;
 private:
     const QString m_fileName;
     QDomDocument* const m_document;
 };
 
-#endif // SETTINGFILESERVICE_H
+#endif // SERVICES_SETTINGFILESERVICE_H

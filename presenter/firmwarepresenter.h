@@ -13,16 +13,14 @@
 #endif
 
 #include "services/settingfileservice.h"
-
 #include "connections/datahandler.h"
-
 #include "messageCreators/firmwarecommansmaker.h"
 
 class FirmwarePresenter : public QObject
 {
     Q_OBJECT
 public:
-    FirmwarePresenter(SettingFileService *settingFileService, QObject *parent);
+    explicit FirmwarePresenter(SettingFileService *settingFileService, QObject *parent);
     ~FirmwarePresenter();
 private:
     void CreateObjects();

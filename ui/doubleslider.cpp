@@ -15,8 +15,18 @@ DoubleSlider::~DoubleSlider()
 
 void DoubleSlider::OnValueChanged(int intValue)
 {
-    const double doubleValue = intValue / 10.0;
-    Q_EMIT  ToValueChanged(doubleValue);
+    qDebug()<< intValue;
+    const int divRemainder=intValue%5;
+    if(0==divRemainder)
+    {
+        const double doubleValue = intValue / 10.0;
+        Q_EMIT  ToValueChanged(doubleValue);
+    }
+    else
+    {
+       setValue(intValue-divRemainder);
+    }
+
 }
 
 void DoubleSlider::SetDoubleRange(double min, double max)
@@ -29,52 +39,14 @@ void DoubleSlider::SetDoubleRange(double min, double max)
     setPageStep(5);
 }
 
-double DoubleSlider::GetCurrentDoubleRangeValue() const
+double DoubleSlider::GetCurrentDoubleRangeValue() const noexcept
 {
     const double value = QSlider::value();
     return value / 10;
 }
 
-QString DoubleSlider::GetCurrentDoubleRangeText() const
+QString DoubleSlider::GetCurrentDoubleRangeText() const noexcept
 {
     const double value = GetCurrentDoubleRangeValue();
     return QString::number(value);
-}
-
-void DoubleSlider::mouseReleaseEvent(QMouseEvent *event)
-{
-    qDebug() << event->x();
-    if ((event->x()) <= 0)
-    {
-        setValue(0);
-    }
-    else
-    {
-        if (event->x() >= width())
-        {
-            qDebug() << "event->x()" << event->x();
-            setValue(maximum());
-        }
-        else
-        {
-            double abstPos = event->x();
-            abstPos = abstPos / width();
-            int newSliderPos = abstPos * maximum();
-            if (newSliderPos % 5 <= 2)
-            {
-                newSliderPos = newSliderPos / 5;
-                newSliderPos = newSliderPos * 5;
-            }
-            else
-            {
-                newSliderPos = newSliderPos / 5;
-                newSliderPos = (newSliderPos + 1) * 5;
-            }
-            setValue(newSliderPos);
-            qDebug() << newSliderPos;
-        }
-    }
-
-
-    event->accept();
 }

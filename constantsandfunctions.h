@@ -3,8 +3,6 @@
 #include <QtGlobal>
 #include <QMap>
 
-
-
 const QMap<quint8, quint8> atteniatorTable { {0, 15},
     {1, 14},
     {2, 13},
@@ -21,7 +19,13 @@ const QMap<quint8, quint8> atteniatorTable { {0, 15},
     {27, 2},
     {30, 1},};
 
-const QStringList noiseValues = {"все Отключено", "ответчик ВКЛЮЧЕН", "шумогенератор ВКЛЮЧЕН", "Синус ВКЛЮЧЕН", "М-сигнал ВКЛЮЧЕН", "БПАР"};
+const QStringList noiseValues = {QStringLiteral("все Отключено"),
+                                 QStringLiteral("ответчик ВКЛЮЧЕН"),
+                                 QStringLiteral("шумогенератор ВКЛЮЧЕН"),
+                                 QStringLiteral("Синус ВКЛЮЧЕН"),
+                                 QStringLiteral("М-сигнал ВКЛЮЧЕН"),
+                                 QStringLiteral("БПАР")
+                                };
 
 
 

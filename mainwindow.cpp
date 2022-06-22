@@ -13,11 +13,15 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-//    delete m_settingFileService;
+    m_docWidget->close();
+    m_docWidget->clear();
+
+    delete m_settingFileService;
     delete m_tcpHandler;
     delete m_serialHandler;
     delete m_statusBar;
 
+    delete m_docWidget;
     delete m_connectionWidget;
     delete m_stateWidget;
     delete m_firmwareWidget;
@@ -41,10 +45,11 @@ void MainWindow::CreateUI()
     m_connectionWidget = new ConnectionWidget(m_settingFileService, this);
     m_stateWidget = new StateWidget(m_settingFileService, this);
     m_firmwareWidget = new FirmWareWidget(m_settingFileService, this);
+    m_docWidget = new QListWidget(this);
     m_tabWidget = new QTabWidget();
     m_tabWidget->addTab(m_stateWidget, QStringLiteral("Окно команд"));
     m_tabWidget->addTab(m_firmwareWidget, QStringLiteral("Окно прошивки"));
-    m_tabWidget->addTab(new QWidget(this), QStringLiteral("Окно информации"));
+    m_tabWidget->addTab(m_docWidget, QStringLiteral("Окно протокола"));
 }
 
 void MainWindow::InsertWidgetsIntoMainWindow()
@@ -59,6 +64,15 @@ void MainWindow::FillUI()
     const QString qtVersion = qVersion();
     setWindowTitle("Настройка Юстировочного оборудования блок М14ХЛ2 Плата СЮИТ.687263.035 Qt " + qtVersion + " Версия " + APP_VERSION + " Cборка: " + BUILD_DATE);
     m_statusBar->showMessage(QStringLiteral("Не подключено"));
+    for (int i = 0; i < 5; ++i)
+    {
+        QListWidgetItem *item = new QListWidgetItem(m_docWidget);
+        const QString path=":/doc/"+QString::number(i)+".jpg";
+        QIcon icon(path);
+        item->setIcon(icon);
+        m_docWidget->addItem(item);
+    }
+    m_docWidget->setViewMode(QListView::IconMode);
 }
 
 void MainWindow::ConnectObjects()
@@ -92,6 +106,11 @@ void MainWindow::OnDisconnectFromMoxa()
     m_connectionWidget->SetButtonsEnabled(true);
     m_statusBar->showMessage(QStringLiteral("Не подключено"));
     DisconnectOldHander();
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    m_docWidget->setIconSize(event->size()*2);
 }
 
 void MainWindow::RegisterHadnler(DataHandler *dataHandler)

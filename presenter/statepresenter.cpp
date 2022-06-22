@@ -1,7 +1,4 @@
-#include "statepresenter.h"
-#include <QDebug>
-#include <QByteArray>
-#include <QWeakPointer>
+#include "presenter/statepresenter.h"
 
 StatePresenter::StatePresenter(SettingFileService *settingFileService, QObject *parent)
     :  QObject(parent)

@@ -1,4 +1,4 @@
-#include "settingfileservice.h"
+#include "services/settingfileservice.h"
 
 SettingFileService::SettingFileService(const QString &fileName)
     : m_fileName(fileName)
@@ -13,13 +13,13 @@ SettingFileService::~SettingFileService()
     delete m_document;
 }
 
-const QString SettingFileService::GetAttribute(const QString &tagName, const QString &attributeName, const QString &defaultValue)
+QString SettingFileService::GetAttribute(const QString &tagName, const QString &attributeName, const QString &defaultValue)
 {
-    const QDomElement settings = m_document->firstChildElement();
-    const QDomNodeList settigList = settings.childNodes();
-    for (int i = 0; i < settigList.count(); ++i)
+    const QDomElement rootElem = m_document->firstChildElement();
+    const QDomNodeList settingsList = rootElem.childNodes();
+    for (int i = 0; i < settingsList.count(); ++i)
     {
-        const QDomElement setting = settigList.at(i).toElement();
+        const QDomElement setting = settingsList.at(i).toElement();
         if (tagName == setting.tagName())
         {
             if (setting.hasAttribute(attributeName))
@@ -34,30 +34,30 @@ const QString SettingFileService::GetAttribute(const QString &tagName, const QSt
 
 void SettingFileService::SetAttribute(const QString &tagName, const QString &attributeName, const QString &value)
 {
-    QDomElement settings = m_document->firstChildElement();
-    const QDomNodeList settigList = settings.childNodes();
-    for (int i = 0; i < settigList.count(); ++i)
+    QDomElement rootElem = m_document->firstChildElement();
+    const QDomNodeList settingsList = rootElem.childNodes();
+    for (int i = 0; i < settingsList.count(); ++i)
     {
-        QDomElement setting = settigList.at(i).toElement();
-        if (tagName == setting.tagName())
+        QDomElement settingElement = settingsList.at(i).toElement();
+        if (tagName == settingElement.tagName())
         {
-            setting.setAttribute(attributeName, value);
+            settingElement.setAttribute(attributeName, value);
             return;
         }
     }
     QDomElement lastElem = m_document->createElement(tagName);
     lastElem.setAttribute(attributeName, value);
-    settings.appendChild(lastElem);
+    rootElem.appendChild(lastElem);
 }
 
 void SettingFileService::ReadSettingsDocument()
 {
     QFile file(m_fileName);
-    if (file.open(QIODevice::ReadWrite))
+    if (file.open(QIODevice::ReadOnly))
     {
-        const QByteArray arr = file.readAll();
+        const QByteArray fileContent = file.readAll();
         file.close();
-        const bool successfulRead = m_document->setContent(arr);
+        const bool successfulRead = m_document->setContent(fileContent);
         if (!successfulRead)
         {
             m_document->clear();
@@ -71,7 +71,7 @@ void SettingFileService::ReadSettingsDocument()
     }
 }
 
-void SettingFileService::WriteSettingsDocument()
+void SettingFileService::WriteSettingsDocument() const
 {
     const QByteArray stringDocumetString = m_document->toString().toUtf8();
     QFile settingFile(m_fileName);

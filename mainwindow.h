@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QSerialPortInfo>
+#include <QListWidget>
 
 #include "services/settingfileservice.h"
 
@@ -31,7 +32,8 @@ private Q_SLOTS:
     void OnConnectToInternetMoxa(const QString &adress, const QString &port);
     void OnConnectToUsbMoxa(const QString &comPortName);
     void OnDisconnectFromMoxa();
-
+protected:
+    virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
 
     QStatusBar *m_statusBar;
@@ -40,6 +42,7 @@ private:
     InfoWidget *m_infoWidget;
     StateWidget *m_stateWidget;
     FirmWareWidget *m_firmwareWidget;
+    QListWidget *m_docWidget;
 
     DataHandler *m_currentConnectionInterface;
     TcpHandler *m_tcpHandler;

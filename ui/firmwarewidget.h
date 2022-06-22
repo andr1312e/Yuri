@@ -22,7 +22,7 @@ class FirmWareWidget: public QWidget
 {
     Q_OBJECT
 public:
-    FirmWareWidget(SettingFileService *settingFileService, QWidget *parent);
+    explicit FirmWareWidget(SettingFileService *settingFileService, QWidget *parent);
     ~FirmWareWidget();
 private:
     void CreateObjects();

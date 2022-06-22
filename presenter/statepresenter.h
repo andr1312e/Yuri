@@ -5,15 +5,17 @@
 #include <QtGlobal>
 #include <QScopedPointer>
 #include <QSharedPointer>
+#include <QDebug>
+#include <QByteArray>
+#include <QWeakPointer>
+#include <QQueue>
+
 #include "connections/datahandler.h"
 
 #include "services/settingfileservice.h"
 
-#include <messageCreators/statemessagegetter.h>
-#include <messageCreators/statemessagesender.h>
-
-#include <QAbstractButton>
-#include <QQueue>
+#include "messageCreators/statemessagegetter.h"
+#include "messageCreators/statemessagesender.h"
 
 class StatePresenter : public QObject
 {

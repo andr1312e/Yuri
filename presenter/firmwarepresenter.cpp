@@ -141,13 +141,13 @@ void FirmwarePresenter::SendMessageToQueue(quint8 command, quint32 adress, quint
 
 void FirmwarePresenter::FillFullPageIntoBuffer(const QByteArray *partOfFirmware)
 {
-    QByteArray by = partOfFirmware->mid(0, m_maxBufferBytesCount);
-    m_writinFirmwareCommandsList->push_back(m_firmwareMessageMaker->WriteDataToBufferCommand(true, by));
+    const QByteArray firstPart = partOfFirmware->mid(0, m_maxBufferBytesCount);
+    m_writinFirmwareCommandsList->push_back(m_firmwareMessageMaker->WriteDataToBufferCommand(true, firstPart));
     int currentSubByteArrayIndex = m_maxBufferBytesCount;
     for (int i = 1; i < m_bufferCounts; i++)
     {
-        by = partOfFirmware->mid(currentSubByteArrayIndex, m_maxBufferBytesCount);
-        m_writinFirmwareCommandsList->push_back(m_firmwareMessageMaker->WriteDataToBufferCommand(false, by));
+        const QByteArray partPage = partOfFirmware->mid(currentSubByteArrayIndex, m_maxBufferBytesCount);
+        m_writinFirmwareCommandsList->push_back(m_firmwareMessageMaker->WriteDataToBufferCommand(false, partPage));
         currentSubByteArrayIndex += m_maxBufferBytesCount;
     }
 }
@@ -307,7 +307,7 @@ void FirmwarePresenter::OnErasingTimerTimeOut()
 void FirmwarePresenter::OnTakedHardwareState(quint8 state)
 {
     Q_EMIT ToConsoleLog("Состояние= " + QString::number(state));
-    if (state == 0)
+    if (0 ==state)
     {
         m_isPcbBisy = false;
     }

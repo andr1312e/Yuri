@@ -13,14 +13,14 @@ public:
     explicit StateMessageSender(const double f, const double fref, const quint32 distanfeToAnswerer);
     ~StateMessageSender();
     QByteArray CreateZeroCommand() const noexcept;
-    QByteArray CreateFirstCommand(double Fvco) const;
-    QByteArray CreateSecondCommand(double Fvco, double doplerFreq) const;
-    QByteArray CreateThirdCommand(double distance) const;
-    QByteArray CreateFourthCommand(double gainTX, double gainRX) const;
-    QByteArray CreateFiveCommand(double AttenuatorDb) const;
-    QByteArray CreateSixCommand(double noiseType, double noiseValue) const;
-    QByteArray CreateSevenCommand(quint8 param) const;
-    QByteArray CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const;
+    QByteArray CreateFirstCommand(double Fvco) const noexcept;
+    QByteArray CreateSecondCommand(double Fvco, double doplerFreq) const noexcept;
+    QByteArray CreateThirdCommand(double distance) const noexcept;
+    QByteArray CreateFourthCommand(double gainTX, double gainRX) const noexcept;
+    QByteArray CreateFiveCommand(double AttenuatorDb) const noexcept;
+    QByteArray CreateSixCommand(double noiseType, double noiseValue) const noexcept;
+    QByteArray CreateSevenCommand(quint8 param) const noexcept;
+    QByteArray CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const noexcept;
 
 private:
     quint16 CalculateINT_Rx(double Fvco) const noexcept;

@@ -1,7 +1,7 @@
 QT       += core network widgets serialport xml
 
 CONFIG += c++latest
-VERSION = 3.4.6.3
+VERSION = 3.4.6.4
 
 #message("Дата сборки= $$BUILD_DATE")
 BUILD_DATE = $$system( date /t ) $$system( time /t )
@@ -56,3 +56,6 @@ HEADERS += \
     ui/firmwarewidget.h \
     ui/infowidget.h \
     ui/statewidget.h
+
+RESOURCES += \
+    qrc.qrc

@@ -27,6 +27,8 @@ BParWidget::~BParWidget()
     delete m_lchmButton;
     delete m_answerDelayLabel;
     delete m_answerDelayValue;
+    delete m_enableThreshold;
+    delete m_thresholdComboBox;
     for (QAbstractButton *button : m_foRadioButtons->buttons())
     {
         delete button;
@@ -60,7 +62,7 @@ void BParWidget::CreateUI()
     m_foRadioButtons = new QButtonGroup();
     for (int i = 0; i < 6; ++i)
     {
-        m_foRadioButtons->addButton(new QRadioButton(QLatin1Literal("Fo ") + QString::number(i + 1)), i);
+        m_foRadioButtons->addButton(new QRadioButton(QStringLiteral("Fo ") + QString::number(i + 1)), i);
     }
 }
 

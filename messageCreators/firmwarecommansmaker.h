@@ -10,7 +10,7 @@ class FirmwareMessageMaker
 public:
     explicit FirmwareMessageMaker();
     ~FirmwareMessageMaker();
-
+public:
     const QByteArray &ReadToBufferCommand(quint32 adress, quint8 lenght);
     QByteArray WriteBufferToFlashCommand(quint32 adress, quint16 lenght) const;
     QByteArray WriteDataToBufferCommand(bool isNewPage, const QByteArray &data) const;//0e 5.0 команда запись
