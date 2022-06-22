@@ -12,7 +12,7 @@ class StateMessageSender
 public:
     explicit StateMessageSender(const double f, const double fref, const quint32 distanfeToAnswerer);
     ~StateMessageSender();
-    QByteArray CreateZeroCommand() const;
+    QByteArray CreateZeroCommand() const noexcept;
     QByteArray CreateFirstCommand(double Fvco) const;
     QByteArray CreateSecondCommand(double Fvco, double doplerFreq) const;
     QByteArray CreateThirdCommand(double distance) const;
@@ -20,16 +20,19 @@ public:
     QByteArray CreateFiveCommand(double AttenuatorDb) const;
     QByteArray CreateSixCommand(double noiseType, double noiseValue) const;
     QByteArray CreateSevenCommand(quint8 param) const;
+    QByteArray CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const;
 
 private:
-    quint16 CalculateINT_Rx(double Fvco) const;
-    quint32 CalculateFRACT_RxOld(double Fvco) const;
-    quint32 CalculateFRACT_RxNew(double Fvco) const;
-    quint8 CalculateGAIN(double gain) const;
+    quint16 CalculateINT_Rx(double Fvco) const noexcept;
+    quint32 CalculateFRACT_RxOld(double Fvco) const noexcept;
+    quint32 CalculateFRACT_RxNew(double Fvco) const noexcept;
+    quint8 CalculateGAIN(double gain) const noexcept;
     quint8 CalculateAtteniator(quint8 atteniatorDb) const;
-    bool CalculateDIV_rx(double Fvco) const;
+    bool CalculateDIV_rx(double Fvco) const noexcept;
+    quint16 CalculateBparDistance(int distance) const noexcept;
 
 private:
+    const int m_distanceToSolver=0;
     const double c = 299792458.0;
     const double f;
     const double Fref;

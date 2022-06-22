@@ -31,17 +31,17 @@ void SerialHandler::ConnectObjects()
 void SerialHandler::OnReadyRead()
 {
     switch (m_gettingMessageType) {
-    case Normal:
+    case HandlerState::Normal:
     {
         NormalStateMessageAnalyze(m_connectionPort->readAll());
         break;
     }
-    case ReadFirmware:
+    case HandlerState::ReadFirmware:
     {
         ReadFirmwareMessageAnalyze(m_connectionPort->readAll());
         break;
     }
-    case Flash:
+    case HandlerState::Flash:
     {
         FlashFirmwareMessageAnalyze(m_connectionPort->readAll());
         break;
@@ -111,13 +111,11 @@ void SerialHandler::TryToConnectToHost(const QString &comPortName)
 
 void SerialHandler::WriteMessageToBuffer(const QByteArray &array)
 {
-    qDebug()<<"WriteMessageToBuffer()";
     m_connectionPort->write(array);
 }
 
 void SerialHandler::FlushBuffer()
 {
-    qDebug()<<"FlushBuffer()";
     m_connectionPort->flush();
 }
 

@@ -33,17 +33,17 @@ void TcpHandler::ConnectObjects()
 void TcpHandler::OnReadyRead()
 {
     switch (m_gettingMessageType) {
-    case Normal:
+    case HandlerState::Normal:
     {
         NormalStateMessageAnalyze(m_connectionPort->readAll());
         break;
     }
-    case ReadFirmware:
+    case HandlerState::ReadFirmware:
     {
         ReadFirmwareMessageAnalyze(m_connectionPort->readAll());
         break;
     }
-    case Flash:
+    case HandlerState::Flash:
     {
         FlashFirmwareMessageAnalyze(m_connectionPort->readAll());
         break;

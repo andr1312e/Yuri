@@ -111,6 +111,12 @@ void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, doub
     }
 }
 
+void StatePresenter::SendBparMessage(quint8 foButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 currentThreshold, int distance)
+{
+    const QByteArray messageBpar=m_messageSetter->CreateBparCommand(foButtonId, isLcm, tksIndex, hasThreshold, currentThreshold, distance);
+    ToSendMessageToDeivce(messageBpar);
+}
+
 void StatePresenter::ToSendMessageToDeivce(const QByteArray &message)
 {
     Q_EMIT ToConsoleLog("Размер " + QString::number(message.size()) + " начинаем высылать "  + QString::fromLatin1(message.toHex()));

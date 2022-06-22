@@ -15,7 +15,7 @@ StateMessageSender::~StateMessageSender()
 
 }
 
-QByteArray StateMessageSender::CreateZeroCommand() const
+QByteArray StateMessageSender::CreateZeroCommand() const noexcept
 {
     QByteArray command = {};
     command.append(messagesIds.at(0));
@@ -136,7 +136,34 @@ QByteArray StateMessageSender::CreateSevenCommand(quint8 param) const
     return command;
 }
 
-quint16 StateMessageSender::CalculateINT_Rx(double Fvco) const
+QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const
+{
+    QByteArray bParMessage;
+    QDataStream stream(&bParMessage, QIODevice::WriteOnly);
+    quint8 bpar_mode=checkedFoButtonId;
+    if (isLcm)
+    {
+        const quint8 lcmMode = 8; //1000
+        bpar_mode += lcmMode;
+    }
+    else
+    {
+        const quint8 tkVal = tksIndex << 4;//10000 или 20000
+        bpar_mode += tkVal;
+    }
+    if (hasThreshold)
+    {
+        bpar_mode += 64;//0100000
+    }
+    const quint16 delay = CalculateBparDistance(distance);
+    stream << (quint8)6;
+    stream << (quint8)5;
+    stream << bpar_mode;
+    stream << delay;
+    stream << threshold;
+}
+
+quint16 StateMessageSender::CalculateINT_Rx(double Fvco) const noexcept
 {
     const bool DIV_Rx = CalculateDIV_rx(Fvco);
     double INT_RxDouble = Fvco - 3000000.0;
@@ -148,7 +175,7 @@ quint16 StateMessageSender::CalculateINT_Rx(double Fvco) const
     return INT_Rx;
 }
 
-quint32 StateMessageSender::CalculateFRACT_RxOld(double Fvco) const
+quint32 StateMessageSender::CalculateFRACT_RxOld(double Fvco) const noexcept
 {
     const bool DIV_Rx = CalculateDIV_rx(Fvco);
     double povValue = (pow(2, 20));
@@ -161,7 +188,7 @@ quint32 StateMessageSender::CalculateFRACT_RxOld(double Fvco) const
     return FRACT_Rx;
 }
 
-quint32 StateMessageSender::CalculateFRACT_RxNew(double Fvco) const
+quint32 StateMessageSender::CalculateFRACT_RxNew(double Fvco) const noexcept
 {
     const bool DIV_Rx = CalculateDIV_rx(Fvco);
     double povValue = (qPow(2, 20));
@@ -174,7 +201,7 @@ quint32 StateMessageSender::CalculateFRACT_RxNew(double Fvco) const
     return FRACT_Rx;
 }
 
-quint8 StateMessageSender::CalculateGAIN(double gain) const
+quint8 StateMessageSender::CalculateGAIN(double gain) const noexcept
 {
     if (gain > (31.5))
     {
@@ -197,7 +224,12 @@ quint8 StateMessageSender::CalculateAtteniator(quint8 atteniatorDb) const
     }
 }
 
-bool StateMessageSender::CalculateDIV_rx(double Fvco) const
+bool StateMessageSender::CalculateDIV_rx(double Fvco) const noexcept
 {
     return Fvco > 2750000000;
+}
+
+quint16 StateMessageSender::CalculateBparDistance(int distance) const noexcept
+{
+    return (distance-m_distanceToSolver)/f*c;
 }

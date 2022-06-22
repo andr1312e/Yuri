@@ -6,7 +6,7 @@ DataHandler::DataHandler(QObject *parent)
     , pcbStateMessageBytesCount(1)
     , m_maxMessageBytesCount(255)
     , m_endOfFirmwareSymbol(static_cast<char>(0xff))
-    , m_gettingMessageType(Normal)
+    , m_gettingMessageType(HandlerState::Normal)
     , m_currentStopLineNumber(0)
     , m_stopReadingFirmwareArray(256, m_endOfFirmwareSymbol)
     , m_firmwareFromDevice(new QByteArray())
@@ -28,6 +28,7 @@ void DataHandler::ClearBuffer()
 
 void DataHandler::SetHandlerState(HandlerState state)
 {
+
     m_gettingMessageType = state;
     ClearBuffer();
 }

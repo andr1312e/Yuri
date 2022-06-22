@@ -12,6 +12,7 @@
 #include <messageCreators/statemessagegetter.h>
 #include <messageCreators/statemessagesender.h>
 
+#include <QAbstractButton>
 #include <QQueue>
 
 class StatePresenter : public QObject
@@ -33,6 +34,7 @@ public:
     void DisconnectOldHandler();
     void ConnectHander(DataHandler *dataHandler);
     void SetMessageToQueue(quint8 messageId, double firstParam = 0.0, double SecondParam = 0.0);
+    void SendBparMessage(quint8 foButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 currentThreshold, int distance);
     void ToSendMessageToDeivce(const QByteArray &arr);
     void GetStateFromDevice(quint8 messageIdWantToGet);
 protected:

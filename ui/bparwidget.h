@@ -12,12 +12,15 @@
 #include <QButtonGroup>
 #include <QGroupBox>
 #include <QDebug>
+#include <QCheckBox>
+
+#include "presenter/statepresenter.h"
 
 class BParWidget : public QGroupBox
 {
     Q_OBJECT
 public:
-    explicit BParWidget(QWidget *parent);
+    explicit BParWidget(StatePresenter *presenter, QWidget *parent);
     ~BParWidget();
 private:
     void CreateObjects();
@@ -25,11 +28,14 @@ private:
     void InsertWidgetsIntoLayout();
     void FillUI();
     void ConnectObjects();
-Q_SIGNALS:
-    void ToSendBParMessage(const QByteArray &message);
 private Q_SLOTS:
     void OnSetRadioImpulsEnabled(bool state);
     void OnCollectParam();
+    void OnThresoldComboBoxChecked(int state);
+private:
+    const double m_distanceToSolver=0.0;
+    StatePresenter * const m_presenter;
+
 private:
     QHBoxLayout *m_mainLayout;
 
@@ -44,6 +50,8 @@ private:
     QRadioButton *m_lchmButton;
     QLabel *m_answerDelayLabel;
     QSpinBox *m_answerDelayValue;
+    QCheckBox *m_enableThreshold;
+    QComboBox *m_thresholdComboBox;
 
     QVBoxLayout *m_foLayouyt;
     QButtonGroup *m_foRadioButtons;

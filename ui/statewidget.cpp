@@ -150,7 +150,7 @@ void StateWidget::CreateUI()
     m_sendStateButtonsGroup = new QButtonGroup();
     FillButtonGroup();
 
-    m_bPraWidget = new BParWidget(this);
+    m_bPraWidget = new BParWidget(m_statePresenter, this);
 
 
 
@@ -329,7 +329,6 @@ void StateWidget::ConnectObjects()
     connect(m_sendRawHexButton, &QPushButton::clicked, this, QOverload<>::of(&StateWidget::OnSendRawHexMessage));
     connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::OnConsoleLog);
     connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::OnSetButtonEnabled);
-    connect(m_bPraWidget, &BParWidget::ToSendBParMessage, this, QOverload<const QByteArray &>::of(&StateWidget::OnSendRawHexMessage));
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(m_sendStateButtonsGroup, &QButtonGroup::idClicked, this, &StateWidget::OnSetStateButtonIdClicked);
     connect(m_getStateButtonGroup, &QButtonGroup::idClicked, this, &StateWidget::OnGetStateButtonIdClicked);

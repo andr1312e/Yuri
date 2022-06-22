@@ -6,7 +6,7 @@
 
 FirmwareMessageMaker::FirmwareMessageMaker()
     : m_readRegisterStatusCommand("\x0b\x05\x0a\x00", 4)
-    , m_readFromBufferCommand(std::begin<char>({0x0d, 0x00}), 2)
+    , m_readFromBufferCommand{std::begin<char>({0x0d, 0x00}), 2}
 , m_flashIdCommad("\x0b\x09\x0a\x02", 4)
 , m_eraseCommand("\x0b\xc7\x0a\x00", 4)
 , m_makeWriteOnlyBufferCommand("\x0b\x06\x0a\x00", 4)
@@ -42,7 +42,7 @@ QByteArray FirmwareMessageMaker::WriteBufferToFlashCommand(quint32 adress, quint
 
 QByteArray FirmwareMessageMaker::WriteDataToBufferCommand(bool isNewPage, const QByteArray &data) const
 {
-    if (data.length() > 16)
+    if (data.count() > 16)
     {
         qFatal("Длина сообщения в буфере не может быть больше 16 байт");
     }

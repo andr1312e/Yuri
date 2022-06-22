@@ -3,7 +3,7 @@
 #include <QObject>
 #include <QByteArray>
 
-enum HandlerState {Normal, ReadFirmware, Flash };
+enum class HandlerState {Normal, ReadFirmware, Flash };
 
 class DataHandler: public QObject
 {
