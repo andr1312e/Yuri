@@ -161,6 +161,7 @@ QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool 
     stream << bpar_mode;
     stream << delay;
     stream << threshold;
+    return bParMessage;
 }
 
 quint16 StateMessageSender::CalculateINT_Rx(double Fvco) const noexcept

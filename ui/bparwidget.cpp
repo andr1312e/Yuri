@@ -100,8 +100,8 @@ void BParWidget::FillUI()
     m_tksComboBox->addItems(QStringList() << "ТК1" << "TK2");
     m_tksComboBox->setEditable(false);
 
-    m_answerDelayLabel->setText(QStringLiteral("Установить дальность(метры)"));
-    m_answerDelayValue->setMaximum(9999999);
+    m_answerDelayLabel->setText(QStringLiteral("Установить задежку(емр)"));
+    m_answerDelayValue->setMaximum(5999);
     m_foRadioButtons->button(0)->setChecked(true);
     m_enableThreshold->setText(QStringLiteral("Включить порог"));
     m_thresholdComboBox->addItems(QStringList() << "500" << "1000");
