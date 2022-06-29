@@ -47,7 +47,7 @@ QByteArray StateMessageSender::CreateFirstCommand(double Fvco) const noexcept
     return command;
 }
 
-QByteArray StateMessageSender::CreateSecondCommand(double Fvco, double doplerFreq) const noexcept
+QByteArray StateMessageSender::CreateSecondCommandOld(double Fvco, double doplerFreq) const noexcept
 {
     const double ResultFreq = Fvco + doplerFreq;
     const qint16 INT_Tx = CalculateINT_Rx(ResultFreq);
@@ -72,6 +72,53 @@ QByteArray StateMessageSender::CreateSecondCommand(double Fvco, double doplerFre
     streamMain << DivTx;
 
     return command;
+}
+
+QByteArray StateMessageSender::CreateSecondCommandTx(double Fvco) const noexcept
+{
+    const quint8 id = messagesIds.at(2);
+    const quint8 subId = 1;
+    const qint16 INT_Rx = CalculateINT_Rx(Fvco); //МГЦ
+    const qint32 FRACT_Rx = CalculateFRACT_RxNew(Fvco); //МГЦ
+    const bool DivRx = CalculateDIV_rx(Fvco);
+
+    QByteArray lastThreeBytes;
+    QDataStream threeBytesStream(&lastThreeBytes, QIODevice::WriteOnly);
+    threeBytesStream << FRACT_Rx;
+
+
+    QByteArray command;
+    QDataStream streamMain(&command, QIODevice::WriteOnly);
+    streamMain << id;
+    streamMain << subId;
+    streamMain << INT_Rx;
+    streamMain << (quint8)lastThreeBytes.at(1);
+    streamMain << (quint8)lastThreeBytes.at(2);
+    streamMain << (quint8)lastThreeBytes.at(3);
+    streamMain << DivRx;
+    qDebug() << QStringLiteral(" Выслали ") << command.toHex();
+                                               return command;
+}
+
+QByteArray StateMessageSender::CreateSecondCommandDopler(double doplerFreq) const noexcept
+{
+    const quint8 id = messagesIds.at(2);
+    const quint8 subId = 2;
+    const quint32 dopler=(quint32)doplerFreq;
+
+    QByteArray lastThreeBytes;
+    QDataStream threeBytesStream(&lastThreeBytes, QIODevice::WriteOnly);
+    threeBytesStream << dopler;
+
+    QByteArray command;
+    QDataStream streamMain(&command, QIODevice::WriteOnly);
+    streamMain << id;
+    streamMain << subId;
+    streamMain << (quint8)lastThreeBytes.at(1);
+    streamMain << (quint8)lastThreeBytes.at(2);
+    streamMain << (quint8)lastThreeBytes.at(3);
+    qDebug() << QStringLiteral(" Выслали ") << command.toHex();
+                                               return command;
 }
 
 QByteArray StateMessageSender::CreateThirdCommand(double distance) const noexcept
@@ -128,11 +175,15 @@ QByteArray StateMessageSender::CreateSixCommand(double noiseType, double noiseVa
     return command;
 }
 
-QByteArray StateMessageSender::CreateSevenCommand(quint8 param) const noexcept
+QByteArray StateMessageSender::CreateSevenCommand(quint8 firstParam, quint8 secondParam) const noexcept
 {
     QByteArray command;
     command.append(messagesIds.at(7));
-    command.append(quint8(param));
+    command.append(quint8(firstParam));
+    if(0!=secondParam)
+    {
+       command.append(quint8(secondParam));
+    }
     return command;
 }
 

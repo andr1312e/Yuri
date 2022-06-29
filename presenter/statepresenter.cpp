@@ -70,9 +70,20 @@ void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, doub
         m_messagesQueue.enqueue(m_messageSetter->CreateFirstCommand(firstParam));
         break;
     }
-    case 2:
+    case 21:
     {
-        m_messagesQueue.enqueue(m_messageSetter->CreateSecondCommand(firstParam, SecondParam));
+        m_messagesQueue.enqueue(m_messageSetter->CreateSecondCommandTx(firstParam));
+        break;
+    }
+    case 22:
+    {
+        m_messagesQueue.enqueue(m_messageSetter->CreateSecondCommandDopler(firstParam));
+        break;
+    }
+    case 121:
+    {
+        m_messagesQueue.enqueue(m_messageSetter->CreateFirstCommand(firstParam));
+        m_messagesQueue.enqueue(m_messageSetter->CreateSecondCommandTx(firstParam));
         break;
     }
     case 3:
@@ -120,10 +131,10 @@ void StatePresenter::ToSendMessageToDeivce(const QByteArray &message)
     m_dataHandler->SendMessageToDevice(message);
 }
 
-void StatePresenter::GetStateFromDevice(quint8 messageIdWantToGet)
+void StatePresenter::GetStateFromDevice(quint8 messageIdWantToGet, quint8 secondParam)
 {
     m_dataHandler->SetHandlerState(HandlerState::Normal);
-    const QByteArray message(m_messageSetter->CreateSevenCommand(messageIdWantToGet));
+    const QByteArray message(m_messageSetter->CreateSevenCommand(messageIdWantToGet, secondParam));
     m_dataHandler->SendMessageToDevice(message);
 }
 

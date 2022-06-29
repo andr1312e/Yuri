@@ -1,7 +1,7 @@
 QT       += core network widgets serialport xml
 
 CONFIG += c++latest
-VERSION = 3.4.6.5
+VERSION = 3.4.7.1
 
 
 #message("Дата сборки= $$BUILD_DATE")

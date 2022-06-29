@@ -13,6 +13,7 @@ public:
     QString GetDataFromMessage(const QByteArray &message);
 private:
     QString GetFvcoFromFirstMessage(const QByteArray &message);
+    QString GetFvcoFromSecondMessage(const QByteArray &message);
     QString GetDoplerFromSecondMessage(const QByteArray &message);
     QString GetDistanceFromThirdMessage(const QByteArray &message) const;
     QString GetGainTxGainRXFromFourthMessage(const QByteArray &message) const;
@@ -20,6 +21,7 @@ private:
     QString GetWorkModeFromSixMessage(const QByteArray &message) const;
 private:
     const int m_indexOfGettingMessageId;
+    const int m_subMessageIndex;
     const double f;
     const double c = 299792458.0;
     const double Fref;

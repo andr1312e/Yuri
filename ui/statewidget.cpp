@@ -169,8 +169,9 @@ void StateWidget::FillButtonGroup()
 {
 
     m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить RX")), 1);
-    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить RX и ТХ")), 12);
-    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить TX")), 2);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить TX")), 21);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить RX и ТХ")), 121);
+    m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить Доплер")), 22);
     m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить")), 3);
 
     m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Установить")), 4);
@@ -178,8 +179,9 @@ void StateWidget::FillButtonGroup()
     m_sendStateButtonsGroup->addButton(new QPushButton(QStringLiteral("Пинг")), 0);
 
     m_getStateButtonGroup = new QButtonGroup();
-    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 1);
-    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 12);
+    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запр.RX")), 1);
+    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запр.TX")), 21);
+    m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 22);
     m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 3);
     m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 4);
     m_getStateButtonGroup->addButton(new QPushButton(QStringLiteral("Запросить")), 5);
@@ -196,7 +198,8 @@ void StateWidget::InsertWidgetsIntoLayout()
     m_workPointLineLayout->addWidget(m_fvcoLabel);
     m_workPointLineLayout->addWidget(m_fvcoComboBox);
     AddButtonFromGroupToLayout(&setStateButtonListInterator, &setStateButtonListInterator, m_workPointLineLayout);
-    AddButtonFromGroupToLayout(&getStateButtonLIstIterator, Q_NULLPTR, m_workPointLineLayout);
+    AddButtonFromGroupToLayout(&setStateButtonListInterator, Q_NULLPTR, m_workPointLineLayout);
+    AddButtonFromGroupToLayout(&getStateButtonLIstIterator, &getStateButtonLIstIterator, m_workPointLineLayout);
 
     m_speedLayout->addWidget(m_DoplerFreqLabel);
     m_speedLayout->addWidget(m_doplerFreqLineEdit);
@@ -262,8 +265,8 @@ void StateWidget::FillUI()
     m_rangeLabel->setText(QStringLiteral("Дальность ответного сигнала d: метры"));
     m_gainTXLabel->setText(QStringLiteral("Усиление TX GAIN_TX: децибелы"));
     m_gainRXLabel->setText(QStringLiteral("Усиление RX GAIN_RX: децибелы"));
-    m_gainTxValue->setText("0");
-    m_gainRxValue->setText("0");
+    m_gainTxValue->setNum(0);
+    m_gainRxValue->setNum(0);
     m_attenuatorLabel->setText(QStringLiteral("Установка ослабления Attenuator_RX: децибелы"));
     m_noiseValueLabel->setText(QStringLiteral("Значения для синуса и м сигнала"));
     m_noiseLabel->setText(QStringLiteral("Режимы работы:"));
@@ -411,37 +414,67 @@ void StateWidget::OnSetStateButtonIdClicked(int id)
         }
         break;
     }
-    case 2:
+    case 21:
     {
-        if (m_fvcoComboBox->currentText().isEmpty() || m_doplerFreqLineEdit->text().isEmpty())
+        if (m_fvcoComboBox->currentText().isEmpty())
+        {
+            OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Рабочая точка Fvco: для частоты Tx"));
+            return;
+        }
+        else
+        {
+            bool isOk1;
+            const double fvco = m_fvcoComboBox->currentText().toDouble(&isOk1) * 1000000;
+            if (isOk1)
+            {
+                OnConsoleLog("Высылаем сообщение fvco= " + m_fvcoComboBox->currentText() + " МГЦ");
+                m_statePresenter->SetMessageToQueue(id, fvco);
+            }
+            else
+            {
+                OnConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
+            }
+        }
+        break;
+    }
+    case 121:
+    {
+        if (m_fvcoComboBox->currentText().isEmpty())
         {
             OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Рабочая точка Fvco: для частот Tx и Rx"));
             return;
         }
         else
         {
-            bool isOk1, isOk2;
+            bool isOk1;
             const double fvco = m_fvcoComboBox->currentText().toDouble(&isOk1) * 1000000;
-            const double doplers = m_doplerFreqLineEdit->text().toDouble(&isOk2);
             if (isOk1)
             {
-                if (isOk2)
-                {
-
-                    OnConsoleLog("Высылаем второе сообщение: установка частоты Tx fvco= " + m_fvcoComboBox->currentText() + " ГЦ и доплер= " +  m_doplerFreqLineEdit->text() + " ГЦ");
-                    m_statePresenter->SetMessageToQueue(id, fvco, doplers);
-                    break;
-                }
-                else
-                {
-                    OnConsoleLog("Не смогли перевесли в число " + m_doplerFreqLineEdit->text());
-                    OnConsoleLog("Высылаем сообщение fvco= " + m_fvcoComboBox->currentText() + " МГЦ доплер= 0 ГЦ");
-                    m_statePresenter->SetMessageToQueue(id, fvco);
-                }
+                OnConsoleLog("Высылаем сообщение fvco= " + m_fvcoComboBox->currentText() + " МГЦ");
+                m_statePresenter->SetMessageToQueue(id, fvco);
             }
             else
             {
                 OnConsoleLog("Не смогли перевесли в число " + m_fvcoComboBox->currentText());
+            }
+        }
+        break;
+    }
+    case 22:
+    {
+        if (m_doplerFreqLineEdit->text().isEmpty())
+        {
+            OnConsoleLog(QStringLiteral("Заполните пожалуйста поля: Частота Доплера"));
+            return;
+        }
+        else
+        {
+            bool isOk1;
+            const double doplers = m_doplerFreqLineEdit->text().toDouble(&isOk1);
+            if (isOk1)
+            {
+                OnConsoleLog("Высылаем сообщение установка Долера. Значение= " + m_doplerFreqLineEdit->text() + " ГЦ");
+                m_statePresenter->SetMessageToQueue(id, doplers);
             }
         }
         break;
@@ -631,46 +664,58 @@ void StateWidget::OnGetStateButtonIdClicked(int id)
     {
     case 1:
     {
-        OnConsoleLog(QStringLiteral("Получаем рабочую точку"));
+        OnConsoleLog(QStringLiteral("Получаем рабочую точку ТХ"));
+        m_statePresenter->GetStateFromDevice(id);
         break;
     }
-    case 12:
+    case 21:
+    {
+        OnConsoleLog(QStringLiteral("Получаем рабочую точку RX"));
+        m_statePresenter->GetStateFromDevice(id, 1);
+        break;
+    }
+    case 22:
     {
         OnConsoleLog(QStringLiteral("Получаем доплера точку"));
-        id = 1;
-        QTimer::singleShot(1000, [ = ]()
-        {
-            m_statePresenter->GetStateFromDevice(2);
-        });
+        m_statePresenter->GetStateFromDevice(id, 2);
+//        id = 1;
+//        QTimer::singleShot(1000, [ = ]()
+//        {
+//            m_statePresenter->GetStateFromDevice(2);
+//        });
         break;
     }
     case 3:
     {
         OnConsoleLog(QStringLiteral("Получаем дальность"));
+        m_statePresenter->GetStateFromDevice(id);
         break;
     }
     case 4:
     {
         OnConsoleLog(QStringLiteral("Получаем усиление"));
+        m_statePresenter->GetStateFromDevice(id);
         break;
     }
     case 5:
     {
         OnConsoleLog(QStringLiteral("Получаем ослабление"));
+        m_statePresenter->GetStateFromDevice(id);
         break;
     }
     case 6:
     {
         OnConsoleLog(QStringLiteral("Получаем режим работы"));
+        m_statePresenter->GetStateFromDevice(id);
         break;
     }
     default:
     {
         OnConsoleLog(QStringLiteral("Обработка команды не реализована"));
+        m_statePresenter->GetStateFromDevice(id);
         return;
     }
     }
-    m_statePresenter->GetStateFromDevice(id);
 }
 
 void StateWidget::OnSetButtonEnabled(bool state)

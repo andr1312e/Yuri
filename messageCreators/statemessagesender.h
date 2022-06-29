@@ -14,12 +14,14 @@ public:
     ~StateMessageSender();
     QByteArray CreateZeroCommand() const noexcept;
     QByteArray CreateFirstCommand(double Fvco) const noexcept;
-    QByteArray CreateSecondCommand(double Fvco, double doplerFreq) const noexcept;
+    QByteArray CreateSecondCommandOld(double Fvco, double doplerFreq) const noexcept;
+    QByteArray CreateSecondCommandTx(double Fvco) const noexcept;
+    QByteArray CreateSecondCommandDopler(double doplerFreq) const noexcept;
     QByteArray CreateThirdCommand(double distance) const noexcept;
     QByteArray CreateFourthCommand(double gainTX, double gainRX) const noexcept;
     QByteArray CreateFiveCommand(double AttenuatorDb) const noexcept;
     QByteArray CreateSixCommand(double noiseType, double noiseValue) const noexcept;
-    QByteArray CreateSevenCommand(quint8 param) const noexcept;
+    QByteArray CreateSevenCommand(quint8 firstParam, quint8 secondParam=0) const noexcept;
     QByteArray CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const noexcept;
 
 private:
