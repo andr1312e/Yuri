@@ -38,7 +38,7 @@ protected:
     void ReadFirmwareMessageAnalyze(const QByteArray &incomingByteArray);
     void FlashFirmwareMessageAnalyze(const QByteArray &incomingMessage);
 private:
-    bool IsArrayEndOfFirmware() const;
+    bool IsArrayEndOfFirmware() const noexcept;
     void RemoveLastFBytesInFimware();
 protected:
     const quint8 m_maxNumOfLinesToStop;

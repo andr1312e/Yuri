@@ -13,9 +13,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    m_docWidget->close();
-    m_docWidget->clear();
-
     delete m_settingFileService;
     delete m_tcpHandler;
     delete m_serialHandler;
@@ -31,12 +28,12 @@ MainWindow::~MainWindow()
 void MainWindow::CreateObjects()
 {
     m_tcpHandler = new TcpHandler(this);
-    m_tcpHandler->setObjectName(QStringLiteral("TcpHandler"));
+    m_tcpHandler->setObjectName(QLatin1Literal("TcpHandler"));
     m_serialHandler = new SerialHandler(this);
-    m_serialHandler->setObjectName(QStringLiteral("SerialHandler"));
+    m_serialHandler->setObjectName(QLatin1Literal("SerialHandler"));
     qDebug() << "FIRST m_currentConnectionInterface" << &m_currentConnectionInterface;
     m_currentConnectionInterface = Q_NULLPTR;
-    m_settingFileService = new SettingFileService(QStringLiteral("setting.xml"));
+    m_settingFileService = new SettingFileService(QLatin1Literal("setting.xml"));
 }
 
 void MainWindow::CreateUI()
@@ -67,12 +64,16 @@ void MainWindow::FillUI()
     for (int i = 0; i < 5; ++i)
     {
         QListWidgetItem *item = new QListWidgetItem(m_docWidget);
-        const QString path=":/doc/"+QString::number(i)+".jpg";
-        QIcon icon(path);
+        const QString path = ":/doc/" + QString::number(i) + ".jpg";
+        const QIcon icon(path);
         item->setIcon(icon);
         m_docWidget->addItem(item);
     }
     m_docWidget->setViewMode(QListView::IconMode);
+    m_tabWidget->tabBar()->setDocumentMode(true);
+    m_tabWidget->tabBar()->setExpanding(true);
+    m_tabWidget->setElideMode(Qt::ElideRight);
+    m_tabWidget->setStyleSheet(QLatin1Literal("QTabBar::tab:selected { font: bold 14px; color: black;}"));
 }
 
 void MainWindow::ConnectObjects()
@@ -95,7 +96,7 @@ void MainWindow::OnConnectToInternetMoxa(const QString &adress, const QString &p
 
 void MainWindow::OnConnectToUsbMoxa(const QString &comPortName)
 {
-    m_stateWidget->OnConsoleLog("Попытка подключится по USB... Имя порта: " + comPortName);
+    m_stateWidget->OnConsoleLog("Попытка подключится по сериал порт кабелю... Имя порта: " + comPortName);
     RegisterHadnler(m_serialHandler);
     m_serialHandler->TryToConnectToHost(comPortName);
 }
@@ -108,9 +109,10 @@ void MainWindow::OnDisconnectFromMoxa()
     DisconnectOldHander();
 }
 
+
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    m_docWidget->setIconSize(event->size()*2);
+    m_docWidget->setIconSize(event->size() * 2);
 }
 
 void MainWindow::RegisterHadnler(DataHandler *dataHandler)

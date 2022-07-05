@@ -36,7 +36,6 @@ void DataHandler::SetHandlerState(HandlerState state)
 
 void DataHandler::SendMessageToDevice(const QByteArray &array)
 {
-    Q_EMIT ToConsoleLog("Размер " + QString::number(array.size()) + " начинаем высылать "  + QString::fromLatin1(array.toHex()));
     WriteMessageToBuffer(array);
     Q_EMIT ToConsoleLog("Размер " + QString::number(array.size()) + " выслали "  + QString::fromLatin1(array.toHex()));
     FlushBuffer();
@@ -122,16 +121,9 @@ void DataHandler::FlashFirmwareMessageAnalyze(const QByteArray &incomingMessage)
     }
 }
 
-bool DataHandler::IsArrayEndOfFirmware() const
+bool DataHandler::IsArrayEndOfFirmware() const noexcept
 {
-    if (m_stopReadingFirmwareArray == m_readyReadBuffer)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return m_stopReadingFirmwareArray == m_readyReadBuffer;
 }
 
 void DataHandler::RemoveLastFBytesInFimware()

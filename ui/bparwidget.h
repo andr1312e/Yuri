@@ -32,20 +32,20 @@ private Q_SLOTS:
     void OnSetRadioImpulsEnabled(bool state);
     void OnCollectParam();
     void OnThresoldComboBoxChecked(int state);
+    void OnGetBpar();
 private:
-    const double m_distanceToSolver=0.0;
-    StatePresenter * const m_presenter;
+    StatePresenter *const m_presenter;
 
 private:
     QHBoxLayout *m_mainLayout;
 
 
     QVBoxLayout *m_powerAndDelayLayout;
-    QPushButton *m_onBparButton;
+    QPushButton *m_sendBparButton;
 
     QHBoxLayout *m_radioImpulsLayout;
     QRadioButton *m_radioImpulsButton;
-    QComboBox* m_tksComboBox;
+    QComboBox *m_tksComboBox;
 
     QRadioButton *m_lchmButton;
     QLabel *m_answerDelayLabel;
@@ -55,6 +55,7 @@ private:
 
     QVBoxLayout *m_foLayouyt;
     QButtonGroup *m_foRadioButtons;
+    QPushButton *m_getBparInfoButton;
 };
 
 #endif // BPARWIDGET_H

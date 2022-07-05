@@ -3,10 +3,10 @@
 #include <QtMath>
 
 StateMessageSender::StateMessageSender(const double f, const double fref, const quint32 distanseToAnswerer)
-    : f(f)
-    , Fref(fref)
-    , distanseToAnswerer(distanseToAnswerer)
-    , messagesIds({0, 1, 2, 3, 4, 5, 6, 7, 8})
+    : m_f(f)
+    , m_Fref(fref)
+    , m_distanseToAnswerer(distanseToAnswerer)
+    , m_messagesIds({0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
 {
 }
 
@@ -17,15 +17,15 @@ StateMessageSender::~StateMessageSender()
 
 QByteArray StateMessageSender::CreateZeroCommand() const noexcept
 {
-    QByteArray command = {};
-    command.append(messagesIds.at(0));
-    command.append(messagesIds.at(0));
+    QByteArray command;
+    command.append(m_messagesIds.front());
+    command.append(m_messagesIds.front());
     return command;
 }
 
 QByteArray StateMessageSender::CreateFirstCommand(double Fvco) const noexcept
 {
-    const quint8 id = messagesIds.at(1);
+    const quint8 id = m_messagesIds.at(1);
     const qint16 INT_Rx = CalculateINT_Rx(Fvco); //МГЦ
     const qint32 FRACT_Rx = CalculateFRACT_RxNew(Fvco); //МГЦ
     const bool DivRx = CalculateDIV_rx(Fvco);
@@ -43,7 +43,6 @@ QByteArray StateMessageSender::CreateFirstCommand(double Fvco) const noexcept
     streamMain << (quint8)lastThreeBytes.at(2);
     streamMain << (quint8)lastThreeBytes.at(3);
     streamMain << DivRx;
-    qDebug() << QStringLiteral(" Выслали ") << command.toHex();
     return command;
 }
 
@@ -61,23 +60,19 @@ QByteArray StateMessageSender::CreateSecondCommandOld(double Fvco, double dopler
 
     QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);
-    streamMain << messagesIds.at(2);
+    streamMain << m_messagesIds.at(2);
     streamMain << INT_Tx;
     streamMain << (quint8)lastThreeBytes.at(1);
     streamMain << (quint8)lastThreeBytes.at(2);
     streamMain << (quint8)lastThreeBytes.at(3);
-    //    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-3);
-    //    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-2);
-    //    streamMain << (unsigned char)lastThreeBytes.at(lastThreeBytes.count()-1);
     streamMain << DivTx;
 
     return command;
 }
 
-QByteArray StateMessageSender::CreateSecondCommandTx(double Fvco) const noexcept
+QByteArray StateMessageSender::CreateSecondCommand(double Fvco) const noexcept
 {
-    const quint8 id = messagesIds.at(2);
-    const quint8 subId = 1;
+    const quint8 id = m_messagesIds.at(2);
     const qint16 INT_Rx = CalculateINT_Rx(Fvco); //МГЦ
     const qint32 FRACT_Rx = CalculateFRACT_RxNew(Fvco); //МГЦ
     const bool DivRx = CalculateDIV_rx(Fvco);
@@ -90,47 +85,24 @@ QByteArray StateMessageSender::CreateSecondCommandTx(double Fvco) const noexcept
     QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);
     streamMain << id;
-    streamMain << subId;
     streamMain << INT_Rx;
     streamMain << (quint8)lastThreeBytes.at(1);
     streamMain << (quint8)lastThreeBytes.at(2);
     streamMain << (quint8)lastThreeBytes.at(3);
     streamMain << DivRx;
-    qDebug() << QStringLiteral(" Выслали ") << command.toHex();
-                                               return command;
-}
-
-QByteArray StateMessageSender::CreateSecondCommandDopler(double doplerFreq) const noexcept
-{
-    const quint8 id = messagesIds.at(2);
-    const quint8 subId = 2;
-    const quint32 dopler=(quint32)doplerFreq;
-
-    QByteArray lastThreeBytes;
-    QDataStream threeBytesStream(&lastThreeBytes, QIODevice::WriteOnly);
-    threeBytesStream << dopler;
-
-    QByteArray command;
-    QDataStream streamMain(&command, QIODevice::WriteOnly);
-    streamMain << id;
-    streamMain << subId;
-    streamMain << (quint8)lastThreeBytes.at(1);
-    streamMain << (quint8)lastThreeBytes.at(2);
-    streamMain << (quint8)lastThreeBytes.at(3);
-    qDebug() << QStringLiteral(" Выслали ") << command.toHex();
-                                               return command;
+    return command;
 }
 
 QByteArray StateMessageSender::CreateThirdCommand(double distance) const noexcept
 {
     distance += 26, 9434889941;
-    const double secondVal = f / c;
-    const double distanceDouble = 2.0 * qAbs(distance - distanseToAnswerer) * secondVal + 1.0;
+    const double secondVal = m_f / m_c;
+    const double distanceDouble = 2.0 * qAbs(distance - m_distanseToAnswerer) * secondVal + 1.0;
     const quint16 DISTANCE = distanceDouble;
 
     QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);
-    streamMain << messagesIds.at(3);
+    streamMain << m_messagesIds.at(3);
     streamMain << DISTANCE;
     return command;
 }
@@ -141,7 +113,7 @@ QByteArray StateMessageSender::CreateFourthCommand(double gainTX, double gainRX)
     const quint8 GAIN_RX = CalculateGAIN(gainRX);
 
     QByteArray command;
-    command.append(messagesIds.at(4));
+    command.append(m_messagesIds.at(4));
     command.append(GAIN_TX);
     command.append(GAIN_RX);
     return command;
@@ -152,7 +124,7 @@ QByteArray StateMessageSender::CreateFiveCommand(double AttenuatorDb) const noex
     const quint8 attenuator = CalculateAtteniator(AttenuatorDb);
 
     QByteArray command;
-    command.append(messagesIds.at(5));
+    command.append(m_messagesIds.at(5));
     command.append(attenuator);
     return command;
 }
@@ -160,7 +132,7 @@ QByteArray StateMessageSender::CreateFiveCommand(double AttenuatorDb) const noex
 QByteArray StateMessageSender::CreateSixCommand(double noiseType, double noiseValue) const noexcept
 {
     QByteArray command;
-    command.append(messagesIds.at(6));
+    command.append(m_messagesIds.at(6));
     command.append(quint8(noiseType));
     if (noiseType > 2 && noiseType < 4)
     {
@@ -178,11 +150,11 @@ QByteArray StateMessageSender::CreateSixCommand(double noiseType, double noiseVa
 QByteArray StateMessageSender::CreateSevenCommand(quint8 firstParam, quint8 secondParam) const noexcept
 {
     QByteArray command;
-    command.append(messagesIds.at(7));
+    command.append(m_messagesIds.at(7));
     command.append(quint8(firstParam));
-    if(0!=secondParam)
+    if (0 != secondParam)
     {
-       command.append(quint8(secondParam));
+        command.append(quint8(secondParam));
     }
     return command;
 }
@@ -190,8 +162,8 @@ QByteArray StateMessageSender::CreateSevenCommand(quint8 firstParam, quint8 seco
 QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const noexcept
 {
     QByteArray bParMessage;
-    QDataStream stream(&bParMessage, QIODevice::WriteOnly);
-    quint8 bpar_mode=checkedFoButtonId;
+    QDataStream streamMain(&bParMessage, QIODevice::WriteOnly);
+    quint8 bpar_mode = checkedFoButtonId;
     if (isLcm)
     {
         const quint8 lcmMode = 8; //1000
@@ -207,12 +179,30 @@ QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool 
         bpar_mode += 64;//0100000
     }
     const quint16 delay = CalculateBparDistance(distance);
-    stream << (quint8)6;
-    stream << (quint8)5;
-    stream << bpar_mode;
-    stream << delay;
-    stream << threshold;
+    streamMain << (quint8)6;
+    streamMain << (quint8)5;
+    streamMain << bpar_mode;
+    streamMain << delay;
+    streamMain << threshold;
     return bParMessage;
+}
+
+QByteArray StateMessageSender::CreateNineCommand(double doplerFreq) const noexcept
+{
+    const quint8 id = m_messagesIds.at(9);
+    const quint32 dopler = (quint32)doplerFreq;
+
+    QByteArray lastThreeBytes;
+    QDataStream threeBytesStream(&lastThreeBytes, QIODevice::WriteOnly);
+    threeBytesStream << dopler;
+
+    QByteArray command;
+    QDataStream streamMain(&command, QIODevice::WriteOnly);
+    streamMain << id;
+    streamMain << (quint8)lastThreeBytes.at(1);
+    streamMain << (quint8)lastThreeBytes.at(2);
+    streamMain << (quint8)lastThreeBytes.at(3);
+    return command;
 }
 
 quint16 StateMessageSender::CalculateINT_Rx(double Fvco) const noexcept
@@ -221,7 +211,7 @@ quint16 StateMessageSender::CalculateINT_Rx(double Fvco) const noexcept
     double INT_RxDouble = Fvco - 3000000.0;
     INT_RxDouble = INT_RxDouble * 2.0;
     INT_RxDouble = INT_RxDouble / pow(2, DIV_Rx);
-    INT_RxDouble = (INT_RxDouble / Fref);
+    INT_RxDouble = (INT_RxDouble / m_Fref);
     quint16 INT_Rx = (quint16)qFloor(INT_RxDouble);
     INT_Rx -= 4;
     return INT_Rx;
@@ -230,26 +220,26 @@ quint16 StateMessageSender::CalculateINT_Rx(double Fvco) const noexcept
 quint32 StateMessageSender::CalculateFRACT_RxOld(double Fvco) const noexcept
 {
     const bool DIV_Rx = CalculateDIV_rx(Fvco);
-    double povValue = (pow(2, 20));
+    const double povValue = (pow(2, 20));
     double FirstValue = 2.0 * Fvco;
-    double FirstValueDiv = Fref * pow(2, DIV_Rx);
+    const double FirstValueDiv = m_Fref * pow(2, DIV_Rx);
     FirstValue = FirstValue / FirstValueDiv;
-    double SecondValue = (qint32)FirstValue;
-    double difference = FirstValue - SecondValue;
-    quint32 FRACT_Rx = (quint32)qFloor(povValue * difference);
+    const double SecondValue = (qint32)FirstValue;
+    const double difference = FirstValue - SecondValue;
+    const quint32 FRACT_Rx = (quint32)qFloor(povValue * difference);
     return FRACT_Rx;
 }
 
 quint32 StateMessageSender::CalculateFRACT_RxNew(double Fvco) const noexcept
 {
     const bool DIV_Rx = CalculateDIV_rx(Fvco);
-    double povValue = (qPow(2, 20));
-    double RealFvco = Fvco - 3000000.0;
+    const double povValue = (qPow(2, 20));
+    const double RealFvco = Fvco - 3000000.0;
     double FirstValue = RealFvco * 2.0;
-    FirstValue = FirstValue / Fref / qPow(2, DIV_Rx);
-    double SecondValue = (qint32)FirstValue;
-    double difference = FirstValue - SecondValue;
-    quint32 FRACT_Rx = (quint32)qFloor(povValue * difference);
+    FirstValue = FirstValue / m_Fref / qPow(2, DIV_Rx);
+    const double SecondValue = (qint32)FirstValue;
+    const double difference = FirstValue - SecondValue;
+    const quint32 FRACT_Rx = (quint32)qFloor(povValue * difference);
     return FRACT_Rx;
 }
 
@@ -283,5 +273,5 @@ bool StateMessageSender::CalculateDIV_rx(double Fvco) const noexcept
 
 quint16 StateMessageSender::CalculateBparDistance(int distance) const noexcept
 {
-    return (distance-m_distanceToSolver)/f*c;
+    return (distance - m_distanceToSolver) / m_f * m_c;
 }

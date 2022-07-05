@@ -20,7 +20,7 @@ BParWidget::~BParWidget()
     delete m_powerAndDelayLayout;
     delete m_mainLayout;
 
-    delete m_onBparButton;
+    delete m_sendBparButton;
     delete m_radioImpulsButton;
     delete m_tksComboBox;
 
@@ -46,7 +46,7 @@ void BParWidget::CreateUI()
     m_mainLayout = new QHBoxLayout();
 
     m_powerAndDelayLayout = new QVBoxLayout();
-    m_onBparButton = new QPushButton();
+    m_sendBparButton = new QPushButton();
 
     m_radioImpulsLayout = new QHBoxLayout();
     m_radioImpulsButton = new QRadioButton();
@@ -62,13 +62,14 @@ void BParWidget::CreateUI()
     m_foRadioButtons = new QButtonGroup();
     for (int i = 0; i < 6; ++i)
     {
-        m_foRadioButtons->addButton(new QRadioButton(QStringLiteral("Fo ") + QString::number(i + 1)), i);
+        m_foRadioButtons->addButton(new QRadioButton(QLatin1Literal("Fo ") + QString::number(i + 1)), i);
     }
+    m_getBparInfoButton = new QPushButton();
 }
 
 void BParWidget::InsertWidgetsIntoLayout()
 {
-    m_powerAndDelayLayout->addWidget(m_onBparButton);
+    m_powerAndDelayLayout->addWidget(m_sendBparButton);
 
     m_radioImpulsLayout->addWidget(m_radioImpulsButton);
     m_radioImpulsLayout->addWidget(m_tksComboBox);
@@ -83,6 +84,7 @@ void BParWidget::InsertWidgetsIntoLayout()
     {
         m_foLayouyt->addWidget(radioButton);
     }
+    m_foLayouyt->addWidget(m_getBparInfoButton);
 
     m_mainLayout->addLayout(m_powerAndDelayLayout);
     m_mainLayout->addLayout(m_foLayouyt);
@@ -93,7 +95,7 @@ void BParWidget::InsertWidgetsIntoLayout()
 void BParWidget::FillUI()
 {
     setTitle(QStringLiteral("БПАР"));
-    m_onBparButton->setText("Отправить инфу");
+    m_sendBparButton->setText("Отправить инфу");
     m_radioImpulsButton->setText(QStringLiteral("Радиоимпульс"));
     m_radioImpulsButton->setChecked(true);
     m_lchmButton->setText(QStringLiteral("ЛЧМ (линей частот модул)"));
@@ -102,19 +104,21 @@ void BParWidget::FillUI()
 
     m_answerDelayLabel->setText(QStringLiteral("Установить задежку(емр)"));
     m_answerDelayValue->setMaximum(5999);
-    m_foRadioButtons->button(0)->setChecked(true);
     m_enableThreshold->setText(QStringLiteral("Включить порог"));
     m_thresholdComboBox->addItems(QStringList() << "500" << "1000");
     m_thresholdComboBox->setDisabled(true);
     m_thresholdComboBox->setEditable(true);
 
+    m_foRadioButtons->button(0)->setChecked(true);
+    m_getBparInfoButton->setText(QStringLiteral("Получить"));
 }
 
 void BParWidget::ConnectObjects()
 {
-    connect(m_onBparButton, &QPushButton::clicked, this,  &BParWidget::OnCollectParam);
+    connect(m_sendBparButton, &QPushButton::clicked, this,  &BParWidget::OnCollectParam);
     connect(m_radioImpulsButton, &QRadioButton::toggled, this,  &BParWidget::OnSetRadioImpulsEnabled);
     connect(m_enableThreshold, &QCheckBox::stateChanged, this, &BParWidget::OnThresoldComboBoxChecked);
+    connect(m_getBparInfoButton, &QPushButton::clicked, this, &BParWidget::OnGetBpar);
 }
 
 void BParWidget::OnSetRadioImpulsEnabled(bool state)
@@ -144,8 +148,8 @@ void BParWidget::OnCollectParam()
     }
     if (m_enableThreshold->isChecked())
     {
-        hasThreshold=true;
-        threshold=(quint16)m_thresholdComboBox->currentText().toUInt();
+        hasThreshold = true;
+        threshold = (quint16)m_thresholdComboBox->currentText().toUInt();
     }
     m_presenter->SendBparMessage(buttonId, hasLcm, tksIndex, hasThreshold, threshold, m_answerDelayValue->value());
 }
@@ -165,4 +169,9 @@ void BParWidget::OnThresoldComboBoxChecked(int state)
     default:
         break;
     }
+}
+
+void BParWidget::OnGetBpar()
+{
+    m_presenter->GetStateFromDevice(6);
 }

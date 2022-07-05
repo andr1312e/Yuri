@@ -70,20 +70,9 @@ void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, doub
         m_messagesQueue.enqueue(m_messageSetter->CreateFirstCommand(firstParam));
         break;
     }
-    case 21:
+    case 2:
     {
-        m_messagesQueue.enqueue(m_messageSetter->CreateSecondCommandTx(firstParam));
-        break;
-    }
-    case 22:
-    {
-        m_messagesQueue.enqueue(m_messageSetter->CreateSecondCommandDopler(firstParam));
-        break;
-    }
-    case 121:
-    {
-        m_messagesQueue.enqueue(m_messageSetter->CreateFirstCommand(firstParam));
-        m_messagesQueue.enqueue(m_messageSetter->CreateSecondCommandTx(firstParam));
+        m_messagesQueue.enqueue(m_messageSetter->CreateSecondCommand(firstParam));
         break;
     }
     case 3:
@@ -111,6 +100,11 @@ void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, doub
         m_messagesQueue.enqueue(m_messageSetter->CreateSevenCommand(firstParam));
         break;
     }
+    case 9:
+    {
+        m_messagesQueue.enqueue(m_messageSetter->CreateNineCommand(firstParam));
+        break;
+    }
     default:
     {
         m_messagesQueue.enqueue(m_messageSetter->CreateZeroCommand());
@@ -121,21 +115,21 @@ void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, doub
 
 void StatePresenter::SendBparMessage(quint8 foButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 currentThreshold, int distance)
 {
-    const QByteArray messageBpar=m_messageSetter->CreateBparCommand(foButtonId, isLcm, tksIndex, hasThreshold, currentThreshold, distance);
+    const QByteArray messageBpar = m_messageSetter->CreateBparCommand(foButtonId, isLcm, tksIndex, hasThreshold, currentThreshold, distance);
     ToSendMessageToDeivce(messageBpar);
 }
 
 void StatePresenter::ToSendMessageToDeivce(const QByteArray &message)
 {
     Q_EMIT ToConsoleLog("Размер " + QString::number(message.size()) + " начинаем высылать "  + QString::fromLatin1(message.toHex()));
-    m_dataHandler->SendMessageToDevice(message);
+    m_messagesQueue.enqueue(message);
 }
 
 void StatePresenter::GetStateFromDevice(quint8 messageIdWantToGet, quint8 secondParam)
 {
     m_dataHandler->SetHandlerState(HandlerState::Normal);
     const QByteArray message(m_messageSetter->CreateSevenCommand(messageIdWantToGet, secondParam));
-    m_dataHandler->SendMessageToDevice(message);
+    m_messagesQueue.enqueue(message);
 }
 
 void StatePresenter::timerEvent(QTimerEvent *event)
@@ -143,7 +137,7 @@ void StatePresenter::timerEvent(QTimerEvent *event)
     if (!m_messagesQueue.isEmpty())
     {
         Q_EMIT ToUpdateHistoryFile();
-//        auto array=m_messagesQueue.dequeue();
+//        auto array = m_messagesQueue.dequeue();
 //        Q_EMIT ToConsoleLog("Размер " + QString::number(array.size()) + " начинаем высылать "  + QString::fromLatin1(array.toHex()));
         m_dataHandler->SendMessageToDevice(m_messagesQueue.dequeue());
     }

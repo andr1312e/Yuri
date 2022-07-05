@@ -3,7 +3,6 @@
 
 #include <QByteArray>
 #include <QVector>
-#include <QVector>
 
 class FirmwareMessageMaker
 {

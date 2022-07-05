@@ -1,9 +1,11 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef UI_MAINWINDOW_H
+#define UI_MAINWINDOW_H
+
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QSerialPortInfo>
 #include <QListWidget>
+#include <QApplication>
 
 #include "services/settingfileservice.h"
 
@@ -12,7 +14,6 @@
 
 #include "ui/connectionwidget.h"
 #include "ui/statewidget.h"
-#include "ui/infowidget.h"
 #include "ui/firmwarewidget.h"
 #include "ui/bparwidget.h"
 
@@ -39,7 +40,6 @@ private:
     QStatusBar *m_statusBar;
     ConnectionWidget *m_connectionWidget;
     QTabWidget *m_tabWidget;
-    InfoWidget *m_infoWidget;
     StateWidget *m_stateWidget;
     FirmWareWidget *m_firmwareWidget;
     QListWidget *m_docWidget;
@@ -54,4 +54,4 @@ private:
     void DisconnectOldHander();
     void ConnectHander(DataHandler *dataHandler);
 };
-#endif // MAINWINDOW_H
+#endif // UI_MAINWINDOW_H

@@ -14,12 +14,14 @@ public:
 public:
     QString GetAttribute(const QString &tagName, const QString &attributeName, const QString &defaultValue);
     void SetAttribute(const QString &tagName, const QString &attributeName, const QString &value);
+    const QString &GetDataArribute() const noexcept;
 private:
     void ReadSettingsDocument();
     void WriteSettingsDocument() const;
 private:
     const QString m_fileName;
-    QDomDocument* const m_document;
+    QDomDocument m_document;
+    const QString m_settingsAtribute = "state";
 };
 
 #endif // SERVICES_SETTINGFILESERVICE_H

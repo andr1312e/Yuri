@@ -1,55 +1,108 @@
-//#ifndef DATAWIDGET_H
-//#define DATAWIDGET_H
+#ifndef UI_DATAWIDGET_H
+#define UI_DATAWIDGET_H
 
-//#include <QComboBox>
-//#include <QGroupBox>
-//#include <QLabel>
-//#include <QLineEdit>
-//#include <QVBoxLayout>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QStringList>
+#include <QVBoxLayout>
 
-//#include "doubleslider.h"
+#include "doubleslider.h"
+#include "services/settingfileservice.h"
 
+class DataWidget : public QGroupBox
+{
+    Q_OBJECT
+public:
+    DataWidget(SettingFileService *settingFileService, QWidget *parent);
+    ~DataWidget();
+private:
+    void CreateObjects();
+    void CreateUI();
+    void FillUI();
+    void InsertWidgetsIntoLayout();
+    void ConnectObjects();
+Q_SIGNALS:
+    void ToSetState(int messageId, QList<double> params);
+    void ToGetState(int messageId);
+    void ToConsoleLog(const QString &message);
+private Q_SLOTS:
+    void OnChangeFvcoComboBoxValue(const QString &fvco);
+    void OnChangeDoplerLineEdit(const QString &doplerText);
+    void OnChangeSpeedLineEdit(const QString &speedText);
+    void OnChangeRangeLineEdit(const QString &range);
+    void OnChangeGainTxLineEdit(double gainTx);
+    void OnChangeGainRxLineEdit(double gainRx);
+    void OnChangeAttenuator(int attenuatorIndex);
+    void OnChangeSinusLineEdit(const QString &sinus);
+private Q_SLOTS:
+    void OnSetRxButtonClicked();
+    void OnSetTxButtonClicked();
+    void OnGetRxButtonClicked();
+    void OnGetTxButtonClicked();
+    void OnSetDoplerButtonClicked();
+    void OnGetDoplerButtonClicked();
+    void OnSetRangeButtonClicked();
+    void OnGetRangeButtonClicked();
+    void OnSetGainButtonClicked();
+    void OnGetGainButtonClicked();
+    void OnSetAttenuatorButtonClicked();
+    void OnGetAttenuatorButtonClicked();
+public:
+    QString GetSinusValue();
+private:
+    SettingFileService *const m_settingFileService;
+    QStringList m_attenuatorValues;
+    const quint32 m_c = 299792458;
+    QIntValidator *m_intValidator;
+    QIntValidator *m_gainValidator;
+private:
+    QVBoxLayout *m_mainLayout;
 
-//class DataWidget : public QGroupBox
-//{
-//    Q_OBJECT
-//public:
-//    DataWidget(QWidget *parent);
-//    ~DataWidget();
-//private:
-//    void CreateObjects();
-//    void CreateUI();
-//    void FillButtonGroup();
-//    void InsertWidgetsIntoLayout();
-//        void AddButtonFromGroupToLayout(QList<QAbstractButton *>::const_iterator *setButtonIterator, QList<QAbstractButton *>::const_iterator *getButtonIterator, QBoxLayout *layout);
-//    void FillUI();
-//private:
-//    QVBoxLayout *m_leftLayout;
-//    QHBoxLayout *m_speedLayout;
-//    QLabel *m_DoplerFreqLabel;
-//    QLineEdit *m_doplerFreqLineEdit;
-//    QLabel *m_speedLabel;
-//    QLineEdit *m_speedLineEdit;
+    QHBoxLayout *m_workPointLineLayout;
+    QLabel *m_fvcoLabel;
+    QComboBox *m_fvcoComboBox;
+    QPushButton *m_setRxButton;
+    QPushButton *m_setTxButton;
+    QPushButton *m_setTxAndRxButton;
+    QPushButton *m_getRxButton;
+    QPushButton *m_getTxButton;
 
-//    QHBoxLayout *m_rangeLineLayout;
-//    QLabel *m_rangeLabel;
-//    QLineEdit *m_rangeLineEdit;
+    QHBoxLayout *m_doplerAndSpeedLayout;
+    QLabel *m_DoplerFreqLabel;
+    QLineEdit *m_doplerFreqLineEdit;
+    QLabel *m_speedLabel;
+    QLineEdit *m_speedLineEdit;
+    QPushButton *m_setDoplerButton;
+    QPushButton *m_getDoplerButton;
 
-//    QHBoxLayout *m_workPointLineLayout;
-//    QLabel *m_fvcoLabel;
-//    QComboBox *m_fvcoComboBox;
+    QHBoxLayout *m_rangeLineLayout;
+    QLabel *m_rangeLabel;
+    QLineEdit *m_rangeLineEdit;
+    QPushButton *m_setRangeButton;
+    QPushButton *m_getRangeButton;
 
-//    QHBoxLayout *m_gainLineLayout;
-//    QLabel *m_gainTXLabel;
-//    DoubleSlider *m_gainTXSlider;
-//    QLabel *m_gainTxValue;
-//    QLabel *m_gainRXLabel;
-//    DoubleSlider *m_gainRXSlider;
-//    QLabel *m_gainRxValue;
+    QHBoxLayout *m_gainLineLayout;
+    QLabel *m_gainTXLabel;
+    DoubleSlider *m_gainTXSlider;
+    QLabel *m_gainTxValue;
+    QLabel *m_gainRXLabel;
+    DoubleSlider *m_gainRXSlider;
+    QLabel *m_gainRxValue;
+    QPushButton *m_setGainButton;
+    QPushButton *m_getGainButton;
 
-//    QHBoxLayout *m_attenuatorLineLayout;
-//    QLabel *m_attenuatorLabel;
-//    QComboBox *m_attenuatorComboBox;
-//};
+    QHBoxLayout *m_attenuatorLineLayout;
+    QLabel *m_attenuatorLabel;
+    QComboBox *m_attenuatorComboBox;
+    QPushButton *m_setAttenuatorButton;
+    QPushButton *m_getAttenuatorButton;
 
-//#endif // DATAWIDGET_H
+    QHBoxLayout *m_sinusValLineLayout;
+    QLabel *m_sinusValueLabel;
+    QLineEdit *m_sinusLineEdit;
+};
+
+#endif // UI_DATAWIDGET_H
