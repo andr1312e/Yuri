@@ -90,27 +90,27 @@ QString StateMessageGetter::GetFvcoRxFromFirstMessage(const QByteArray &message)
 
 QString StateMessageGetter::GetFvcoTxFromSecondMessage(const QByteArray &message)
 {
-    if (message.count() == 9)
+    if (message.count() == 8)
     {
         qDebug() << QStringLiteral("Приняли ") << message.toHex();
         QByteArray arrayINTRX;
+        arrayINTRX.append(message.at(2));
         arrayINTRX.append(message.at(3));
-        arrayINTRX.append(message.at(4));
         QDataStream IntDataStream(arrayINTRX);
         quint16 INT_RX;
         IntDataStream >> INT_RX;
 
         QByteArray arrayFRACTRX;
         arrayFRACTRX.append(static_cast<char>(0x00));//иначе будет 0 нужно 4 байта
+        arrayFRACTRX.append(message.at(4));
         arrayFRACTRX.append(message.at(5));
         arrayFRACTRX.append(message.at(6));
-        arrayFRACTRX.append(message.at(7));
 
         QDataStream fractDataStream(arrayFRACTRX);
         quint32 FRACT_RX;
         fractDataStream >> FRACT_RX;
 
-        const bool DIV_RX = message.at(8);
+        const bool DIV_RX = message.at(7);
 
         //Значение сидит только здесь, первую парсить не нужно
 
@@ -132,15 +132,15 @@ QString StateMessageGetter::GetFvcoTxFromSecondMessage(const QByteArray &message
 
 QString StateMessageGetter::GetDoplerFromNineMessage(const QByteArray &message) const noexcept
 {
-    if (message.count() == 6)
+    if (message.count() == 5)
     {
         qDebug() << QStringLiteral("Приняли ") << message.toHex();
 
         QByteArray arrayDopler;
         arrayDopler.append(static_cast<char>(0x00));//иначе будет 0, нужно 4 байта
+        arrayDopler.append(message.at(2));
         arrayDopler.append(message.at(3));
         arrayDopler.append(message.at(4));
-        arrayDopler.append(message.at(5));
 
         QDataStream doplerDataStream(arrayDopler);
         quint32 dopler;

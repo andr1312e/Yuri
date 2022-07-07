@@ -193,6 +193,10 @@ void StateWidget::UpdateHistoryFile()
 void StateWidget::OnConsoleLog(const QString &message)
 {
     const QString time = QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"));
+    if (message.isEmpty())
+    {
+        int a = 3;
+    }
     m_log->appendPlainText(time + " " + message);
 }
 

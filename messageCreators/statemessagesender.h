@@ -32,7 +32,7 @@ private:
     quint8 CalculateGAIN(double gain) const noexcept;
     quint8 CalculateAtteniator(quint8 atteniatorDb) const;
     bool CalculateDIV_rx(double Fvco) const noexcept;
-    quint16 CalculateBparDistance(int distance) const noexcept;
+    quint16 CalculateBparDistance(bool isLcm, double distance) const noexcept;
 
 private:
     const int m_distanceToSolver = 0;

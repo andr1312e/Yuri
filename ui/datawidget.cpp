@@ -333,13 +333,13 @@ void DataWidget::OnSetTxButtonClicked()
 
 void DataWidget::OnGetRxButtonClicked()
 {
-    ToConsoleLog(QStringLiteral("Запрашиваем: Рабочая точка Rх"));
+    ToConsoleLog(QStringLiteral("Нажали получить рабочую точку Rх"));
     Q_EMIT ToGetState(1);
 }
 
 void DataWidget::OnGetTxButtonClicked()
 {
-    ToConsoleLog(QStringLiteral("Запрашиваем: Рабочая точка Тх"));
+    ToConsoleLog(QStringLiteral("Нажали получить рабочую точку Тх"));
     Q_EMIT ToGetState(2);
 }
 
@@ -363,7 +363,7 @@ void DataWidget::OnSetDoplerButtonClicked()
 
 void DataWidget::OnGetDoplerButtonClicked()
 {
-    ToConsoleLog(QStringLiteral("Запрашиваем: Частота Доплера"));
+    ToConsoleLog(QStringLiteral("Нажали получить частоту Доплера"));
     Q_EMIT ToGetState(9);
 }
 
@@ -391,7 +391,7 @@ void DataWidget::OnSetRangeButtonClicked()
 
 void DataWidget::OnGetRangeButtonClicked()
 {
-    ToConsoleLog(QStringLiteral("Запрашиваем: дальность ответного сигнала"));
+    ToConsoleLog(QStringLiteral("Нажали получить дальность ответного сигнала"));
     Q_EMIT ToGetState(3);
 }
 
@@ -405,7 +405,7 @@ void DataWidget::OnSetGainButtonClicked()
 
 void DataWidget::OnGetGainButtonClicked()
 {
-    ToConsoleLog(QStringLiteral("Запрашиваем: усиление Tx и Rx"));
+    ToConsoleLog(QStringLiteral("Нажали получить  усиление Tx и Rx"));
     Q_EMIT ToGetState(4);
 }
 
@@ -426,7 +426,7 @@ void DataWidget::OnSetAttenuatorButtonClicked()
 
 void DataWidget::OnGetAttenuatorButtonClicked()
 {
-    ToConsoleLog(QStringLiteral("Запрашиваем: ослабление"));
+    ToConsoleLog(QStringLiteral("Нажали получить ослабление"));
     Q_EMIT ToGetState(5);
 }
 

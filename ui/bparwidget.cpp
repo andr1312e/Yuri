@@ -105,7 +105,7 @@ void BParWidget::FillUI()
     m_answerDelayLabel->setText(QStringLiteral("Установить задежку(емр)"));
     m_answerDelayValue->setMaximum(5999);
     m_enableThreshold->setText(QStringLiteral("Включить порог"));
-    m_thresholdComboBox->addItems(QStringList() << "500" << "1000");
+    m_thresholdComboBox->addItems(QStringList() << "1500" << "3000");
     m_thresholdComboBox->setDisabled(true);
     m_thresholdComboBox->setEditable(true);
 

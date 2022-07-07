@@ -271,7 +271,21 @@ bool StateMessageSender::CalculateDIV_rx(double Fvco) const noexcept
     return Fvco > 2750000000;
 }
 
-quint16 StateMessageSender::CalculateBparDistance(int distance) const noexcept
+quint16 StateMessageSender::CalculateBparDistance(bool isLcm, double distance) const noexcept
 {
-    return (distance - m_distanceToSolver) / m_f * m_c;
+    // 18 тактов /30.62 МГЦ
+    //0,0326583932 × 1000 = 32,6583932 = наносекунды (1/f) длительность такта
+    //176,233319492 для простого = 18*32.6583932*299792458/1000000000  | такты * (1/f) *c
+    //117,488879661 для лчм   =    12*32.6583932*299792458/1000000000  |
+    if (isLcm)
+    {
+        distance += 117, 488879661;
+    }
+    else
+    {
+        distance += 176, 233319492;
+    }
+    const double secondVal = m_f / m_c;
+    const quint16 distanceDouble = 2.0 * qAbs(distance - m_distanseToAnswerer) * secondVal + 1.0;
+    return distanceDouble;
 }
