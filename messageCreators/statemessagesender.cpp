@@ -178,7 +178,7 @@ QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool 
     {
         bpar_mode += 64;//0100000
     }
-    const quint16 delay = CalculateBparDistance(distance);
+    const quint16 delay = CalculateBparDistance(isLcm, distance);
     streamMain << (quint8)6;
     streamMain << (quint8)5;
     streamMain << bpar_mode;
