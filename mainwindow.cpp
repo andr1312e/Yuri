@@ -51,7 +51,7 @@ void MainWindow::CreateUI()
 
 void MainWindow::InsertWidgetsIntoMainWindow()
 {
-    setStatusBar(m_statusBar);
+//    setStatusBar(m_statusBar);
     setMenuWidget(m_connectionWidget);
     setCentralWidget(m_tabWidget);
 }
@@ -60,7 +60,7 @@ void MainWindow::FillUI()
 {
     const QString qtVersion = qVersion();
     setWindowTitle("Настройка Юстировочного оборудования блок М14ХЛ2 Плата СЮИТ.687263.035 Qt " + qtVersion + " Версия " + APP_VERSION + " Cборка: " + BUILD_DATE);
-    m_statusBar->showMessage(QStringLiteral("Не подключено"));
+//    m_statusBar->showMessage(QStringLiteral("Не подключено"));
     for (int i = 0; i < 5; ++i)
     {
         QListWidgetItem *item = new QListWidgetItem(m_docWidget);
@@ -105,7 +105,7 @@ void MainWindow::OnDisconnectFromMoxa()
 {
     m_currentConnectionInterface->FromHostDisconnect();
     m_connectionWidget->SetButtonsEnabled(true);
-    m_statusBar->showMessage(QStringLiteral("Не подключено"));
+//    m_statusBar->showMessage(QStringLiteral("Не подключено"));
     DisconnectOldHander();
 }
 
@@ -135,6 +135,7 @@ void MainWindow::DisconnectOldHander()
 
 void MainWindow::ConnectHander(DataHandler *dataHandler)
 {
+//    m_statusBar->showMessage(QStringLiteral("Подключено"));
     dataHandler->ClearBuffer();
     connect(dataHandler, &DataHandler::ToButtonsEnabledChanging, m_connectionWidget, &ConnectionWidget::SetButtonsEnabled);
     m_stateWidget->ConnectHander(dataHandler);

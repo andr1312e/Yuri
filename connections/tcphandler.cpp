@@ -15,14 +15,20 @@ TcpHandler::~TcpHandler()
 
 void TcpHandler::CreateHander()
 {
-    m_connectionPort=new QTcpSocket(this);
+    m_connectionPort = new QTcpSocket(this);
 }
 
 void TcpHandler::ConnectObjects()
 {
-    connect(m_connectionPort, &QTcpSocket::connected, [&](){DataHandler::ToHostConnected();});
+    connect(m_connectionPort, &QTcpSocket::connected, [&]()
+    {
+        DataHandler::ToHostConnected();
+    });
     connect(m_connectionPort, &QTcpSocket::readyRead, this, &TcpHandler::OnReadyRead);
-    connect(m_connectionPort, &QTcpSocket::disconnected, [&](){DataHandler::FromHostDisconnected();});
+    connect(m_connectionPort, &QTcpSocket::disconnected, [&]()
+    {
+        DataHandler::FromHostDisconnected();
+    });
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     connect(m_connectionPort, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error), this, &TcpHandler::OnErrorOccurred);
 #else
@@ -32,7 +38,8 @@ void TcpHandler::ConnectObjects()
 
 void TcpHandler::OnReadyRead()
 {
-    switch (m_gettingMessageType) {
+    switch (m_gettingMessageType)
+    {
     case HandlerState::Normal:
     {
         NormalStateMessageAnalyze(m_connectionPort->readAll());
@@ -53,7 +60,8 @@ void TcpHandler::OnReadyRead()
 
 void TcpHandler::OnErrorOccurred(QAbstractSocket::SocketError socketError)
 {
-    switch (socketError) {
+    switch (socketError)
+    {
     case QAbstractSocket::ConnectionRefusedError:
         Q_EMIT ToConsoleLog(QStringLiteral("Истекло время ожидания"));
         break;
@@ -129,7 +137,7 @@ void TcpHandler::OnErrorOccurred(QAbstractSocket::SocketError socketError)
     }
 }
 
-void TcpHandler::TryToConnectToHost(const QString &adress,const QString &port)
+void TcpHandler::TryToConnectToHost(const QString &adress, const QString &port)
 {
     m_connectionPort->connectToHost(adress, port.toInt(),  QIODevice::ReadWrite);
 }

@@ -199,9 +199,9 @@ void FirmwarePresenter::OnFirmwareFromDeviceLoaded(QByteArray *firmwareFromDevic
     {
         m_settingFileService->SetAttribute(m_lastFirmwareAttribute, "dateAndState",   QDateTime::currentDateTime().toString(QStringLiteral("ddd MMMM d yy hh:mm:ss")) + " успешно");
         Q_EMIT ToResultLabelSetText(QStringLiteral("Верификация файла прошла успешно, прошивки совпадают"));
-
         if (m_isNeedToRestartAfterSuccess)
         {
+            m_dataHandler->SetHandlerState(HandlerState::Normal);
             m_isNeedToRestartAfterSuccess = false;
             SendMessageToQueue(0, 0, 0);
         }
@@ -307,7 +307,7 @@ void FirmwarePresenter::OnErasingTimerTimeOut()
 void FirmwarePresenter::OnTakedHardwareState(quint8 state)
 {
     Q_EMIT ToConsoleLog("Состояние= " + QString::number(state));
-    if (0 ==state)
+    if (0 == state)
     {
         m_isPcbBisy = false;
     }
