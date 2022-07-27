@@ -50,6 +50,9 @@ private Q_SLOTS:
     void OnGetGainButtonClicked();
     void OnSetAttenuatorButtonClicked();
     void OnGetAttenuatorButtonClicked();
+    void OnGetCoordinatsButtonClicked();
+public Q_SLOTS:
+    void OnUpdateLatLong(const QString &message);
 public:
     QString GetSinusValue();
 private:
@@ -103,6 +106,11 @@ private:
     QHBoxLayout *m_sinusValLineLayout;
     QLabel *m_sinusValueLabel;
     QLineEdit *m_sinusLineEdit;
+
+    QHBoxLayout *m_cooridnatesLayout;
+    QLabel *m_coordinatesLabel;
+    QLabel *m_coordinatesValue;
+    QPushButton *m_getCoordinatesButton;
 };
 
 #endif // UI_DATAWIDGET_H

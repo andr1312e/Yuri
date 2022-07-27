@@ -6,14 +6,14 @@
 #include <QDebug>
 #include <QtMath>
 
-StateMessageGetter::StateMessageGetter(const double f, const double fref, const quint32 distanseToAnswerer)
-    : m_indexOfGettingMessageId(1)
+StateMessageGetter::StateMessageGetter(const double f, const double fref, const quint32 distanseToAnswerer, QObject *parent)
+    : QObject(parent)
+    , m_indexOfGettingMessageId(1)
     , m_subMessageIndex(m_indexOfGettingMessageId + 1)
     , m_f(f)
     , m_Fref(fref)
     , m_distanseToAnswerer(distanseToAnswerer)
 {
-
 }
 
 StateMessageGetter::~StateMessageGetter()
@@ -23,7 +23,6 @@ StateMessageGetter::~StateMessageGetter()
 
 QString StateMessageGetter::GetDataFromMessage(const QByteArray &message)
 {
-    qDebug() << "GET" << message.toHex();
     const quint8 sendedMessageId = message.at(m_indexOfGettingMessageId);
     switch (sendedMessageId)
     {
@@ -39,6 +38,8 @@ QString StateMessageGetter::GetDataFromMessage(const QByteArray &message)
         return GetAttenuatorRXFromFiveMessage(message);
     case 6:
         return GetWorkModeFromSixMessage(message);
+    case 7:
+        return GetKoordinatesFromSevenMessage(message);
     case 9:
         return GetDoplerFromNineMessage(message);
     default:
@@ -159,6 +160,127 @@ quint8 StateMessageGetter::GetMask(quint8 pos, quint8 size) const
     return ~( ~0ull << size ) << pos;
 }
 
+QString StateMessageGetter::ParceKoordinatesMessage()
+{
+    qDebug() << m_collectedKoordinatesData;
+    const int commaCount = m_collectedKoordinatesData.count(',');
+    if (13 == commaCount)
+    {
+        double latitude = 0.0, longtutude = 0.0;
+        QVector<int> indexOfCommasArray{m_collectedKoordinatesData.indexOf(',')};
+        for (int i = 1; i < commaCount; ++i)
+        {
+            indexOfCommasArray.append(m_collectedKoordinatesData.indexOf(',', indexOfCommasArray.at(i - 1) + 1));
+        }
+        if (indexOfCommasArray.at(3) == indexOfCommasArray.at(4) - 2)
+        {
+            const QByteArray latitudeByteArray = m_collectedKoordinatesData.mid(indexOfCommasArray.at(2) + 1, indexOfCommasArray.at(3) - indexOfCommasArray.at(2) - 1);
+            const char latitudeDirection = m_collectedKoordinatesData.at(indexOfCommasArray.at(4) - 1);
+            const int directionValue = latitudeDirection == 'N' ? 1 : -1;
+            latitude = ParceLatitdeValue(latitudeByteArray, directionValue);
+        }
+        else
+        {
+            return QString("Сообщение не верно");
+        }
+
+
+        if (indexOfCommasArray.at(5) == indexOfCommasArray.at(6) - 2)
+        {
+            const QByteArray longtutudeByteArray = m_collectedKoordinatesData.mid(indexOfCommasArray.at(4) + 1, indexOfCommasArray.at(5) - indexOfCommasArray.at(4) - 1);
+            const char longtutudeDirection = m_collectedKoordinatesData.at(indexOfCommasArray.at(6) - 1);
+            const int directionValue = longtutudeDirection == 'E' ? 1 : -1;
+            longtutude = ParceLongtitude(longtutudeByteArray, directionValue);
+        }
+        else
+        {
+            return QString("Сообщение не верно");
+        }
+        const QString message = "Широта:↑ " + QString::number(latitude) + " Долгота: " + QString::number(longtutude);
+        Q_EMIT ToUpdateLatLong(message);
+        m_collectedKoordinatesData.clear();
+        return message;
+    }
+    else
+    {
+        return QString("Сообщение не верно");
+    }
+}
+
+double StateMessageGetter::ParceLatitdeValue(const QByteArray &latitudeByteArray, int directionValue) const
+{
+    if (latitudeByteArray.count() == 10)
+    {
+        //"ГГММ.МММММ". Например  "5546.95900" = 55°46.959' = 55.78265°.
+        //ГГ - градусы; ММ.ММММ - минуты и десятитысячные доли минут.
+        //Для ГГММ.ММММ → ГГ.ГГГГГГ перевода необходимо использовать формулу ГГ + (ММ.ММММ ÷ 60):
+        const char gradusesFirst = latitudeByteArray.front();
+        const char gradusesSecond = latitudeByteArray.at(1);
+        const int graduses = (gradusesFirst - 48) * 10.0 + (gradusesSecond - 48);
+        const char minutesDecimalFirst = latitudeByteArray.at(2);
+        const char minutesDecimalSecond = latitudeByteArray.at(3);
+        const char minutesFractFirst = latitudeByteArray.at(5);
+        const char minutesFractSecond = latitudeByteArray.at(6);
+        const char minutesFractThird = latitudeByteArray.at(7);
+        const char minutesFractFourth = latitudeByteArray.at(8);
+        const char minutesFractFive = latitudeByteArray.at(9);
+        const double minutes = (minutesDecimalFirst - 48.0) * 10.0 + (minutesDecimalSecond - 48.0)
+                               + (minutesFractFirst - 48.0) / 10.0 + (minutesFractSecond - 48.0) / 100.0f
+                               + (minutesFractThird - 48.0) / 1000.0 + (minutesFractFourth - 48.0) / 10000.0f +
+                               (minutesFractFive - 48.0) / 100000.0;
+        //    qDebug()<< "ParceLatitde " << graduses << "   " << minutes;
+        const double realCoordinate =  directionValue * (graduses + minutes / 60.0);
+        return realCoordinate;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+double StateMessageGetter::ParceLongtitude(const QByteArray &longtitudeByteArray, int directionValue) const
+{
+    if (longtitudeByteArray.count() == 11)
+    {
+        const char gradusesFirst = longtitudeByteArray.front();
+        const char gradusesSecond = longtitudeByteArray.at(1);
+        const char gradusesThird = longtitudeByteArray.at(2);
+        const int graduses = (gradusesFirst - 48) * 100 + (gradusesSecond - 48) * 10 + (gradusesThird - 48);
+        const char minutesDecimalFirst = longtitudeByteArray.at(3);
+        const char minutesDecimalSecond = longtitudeByteArray.at(4);
+        const char minutesFractFirst = longtitudeByteArray.at(6);
+        const char minutesFractSecond = longtitudeByteArray.at(7);
+        const char minutesFractThird = longtitudeByteArray.at(8);
+        const char minutesFractFourth = longtitudeByteArray.at(9);
+        const char minutesFractFive = longtitudeByteArray.at(10);
+        const float minutes = (minutesDecimalFirst - 48.0) * 10.0 + (minutesDecimalSecond - 48.0)
+                              + (minutesFractFirst - 48.0) / 10.0 + (minutesFractSecond - 48.0) / 100.0
+                              + (minutesFractThird - 48.0) / 1000.0 + (minutesFractFourth - 48.0) / 10000.0 +
+                              (minutesFractFive - 48.0) / 100000.0;
+        const double realCoordinate = directionValue * graduses + minutes / 60.0;
+        return realCoordinate;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+double StateMessageGetter::ParceHeight() const
+{
+    const QByteArray arr = m_collectedKoordinatesData.mid(54, 5);
+    const float height = arr.toDouble();
+    const char typeOfHeight = m_collectedKoordinatesData.at(60);
+    if (typeOfHeight == 'M')
+    {
+        return height;
+    }
+    else
+    {
+        qFatal("Wrong height");
+    }
+}
+
 QString StateMessageGetter::GetDistanceFromThirdMessage(const QByteArray &message) const
 {
     if (message.count() == 4)
@@ -277,5 +399,44 @@ QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message)
         }
     }
     return QLatin1String();
+}
+
+QString StateMessageGetter::GetKoordinatesFromSevenMessage(const QByteArray &message)
+{
+    const int indexOfHeader = message.indexOf("$GNRM");
+    if (-1 == indexOfHeader)
+    {
+        if (m_koordinatesDataNotNull)
+        {
+            int indexOfAsterisk = message.indexOf('*', indexOfHeader);
+            if (indexOfAsterisk != -1)
+            {
+                m_collectedKoordinatesData.append(message.left(indexOfHeader + 1));
+                return ParceKoordinatesMessage();
+            }
+            else
+            {
+                m_collectedKoordinatesData.clear();
+            }
+        }
+
+    }
+    else
+    {
+        const int indexOfAsterisk = message.indexOf('*', indexOfHeader);
+        if (-1 == indexOfAsterisk)
+        {
+            m_collectedKoordinatesData = message.mid(indexOfHeader);
+            m_koordinatesDataNotNull = true;
+
+        }
+        else
+        {
+            m_collectedKoordinatesData = message.mid(indexOfHeader, indexOfAsterisk - indexOfHeader + 1);
+            m_koordinatesDataNotNull = false;
+            return ParceKoordinatesMessage();
+        }
+    }
+    return QString("Координаты");
 }
 

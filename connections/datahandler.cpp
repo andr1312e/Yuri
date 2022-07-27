@@ -75,7 +75,7 @@ void DataHandler::NormalStateMessageAnalyze(const QByteArray &incomingByteArray)
     }
     else
     {
-        Q_EMIT ToStateWidgetConsoleLog("Получили сообщение c состоянием: " + QString::fromLatin1(incomingByteArray.toHex()));
+        Q_EMIT ToStateWidgetConsoleLog("Получили сообщение c состоянием: " + QString::fromLatin1(incomingByteArray));
         Q_EMIT ToStateGettingFromMessage(m_readyReadBuffer);
     }
 }

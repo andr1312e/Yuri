@@ -25,11 +25,12 @@ public:
     ~StatePresenter();
 private:
     void CreateObjects();
-
+    void ConnectObjects();
 Q_SIGNALS:
     void ToSetButtonsEnabled(int state);
     void ToConsoleLog(QString message);
     void ToUpdateHistoryFile();
+    void ToUpdateLatLong(const QString &newLatLong);
 private Q_SLOTS:
     void OnGetMessageWithState(const QByteArray &messageFromDevice);
 public:
@@ -38,7 +39,7 @@ public:
     void SetMessageToQueue(quint8 messageId, double firstParam = 0.0, double SecondParam = 0.0);
     void SendBparMessage(quint8 foButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 currentThreshold, int distance);
     void ToSendMessageToDeivce(const QByteArray &arr);
-    void GetStateFromDevice(quint8 messageIdWantToGet, quint8 secondParam=0.0);
+    void GetStateFromDevice(quint8 messageIdWantToGet, quint8 secondParam = 0.0);
 protected:
     void virtual timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
 private:

@@ -6,6 +6,7 @@ StatePresenter::StatePresenter(SettingFileService *settingFileService, QObject *
     ,  m_dataHandler(Q_NULLPTR)
 {
     CreateObjects();
+    ConnectObjects();
     startTimer(1500, Qt::VeryCoarseTimer);
 }
 
@@ -18,10 +19,10 @@ StatePresenter::~StatePresenter()
 void StatePresenter::CreateObjects()
 {
     bool ok;
-    double f = m_settingFileService->GetAttribute("const", "f", "30250000").toDouble(&ok);
+    double f = m_settingFileService->GetAttribute("const", "f", "30625000").toDouble(&ok);
     if (!ok || f <= 0)
     {
-        f = 30250000;
+        f = 30625000;
     }
     double fref = m_settingFileService->GetAttribute("const", "fref", "40000000").toDouble(&ok);
     if (!ok || fref <= 0)
@@ -34,7 +35,12 @@ void StatePresenter::CreateObjects()
         distanseToAnswerer = 350;
     }
     m_messageSetter = new StateMessageSender(f, fref, distanseToAnswerer);
-    m_messageGetter = new StateMessageGetter(f, fref, distanseToAnswerer);
+    m_messageGetter = new StateMessageGetter(f, fref, distanseToAnswerer, this);
+}
+
+void StatePresenter::ConnectObjects()
+{
+    connect(m_messageGetter, &StateMessageGetter::ToUpdateLatLong, this, &StatePresenter::ToUpdateLatLong);
 }
 
 void StatePresenter::OnGetMessageWithState(const QByteArray &messageFromDevice)

@@ -22,18 +22,27 @@ DataWidget::~DataWidget()
     delete m_workPointLineLayout;
     delete m_gainLineLayout;
     delete m_attenuatorLineLayout;
-
-    delete m_DoplerFreqLabel;
-    delete m_doplerFreqLineEdit;
-
-    delete m_speedLabel;
-    delete m_speedLineEdit;
-
-    delete m_rangeLabel;
-    delete m_rangeLineEdit;
+    delete m_cooridnatesLayout;
 
     delete m_fvcoLabel;
     delete m_fvcoComboBox;
+    delete m_setRxButton;
+    delete m_setTxButton;
+    delete m_setTxAndRxButton;
+    delete m_getRxButton;
+    delete m_getTxButton;
+
+    delete m_DoplerFreqLabel;
+    delete m_doplerFreqLineEdit;
+    delete m_speedLabel;
+    delete m_speedLineEdit;
+    delete m_setDoplerButton;
+    delete m_getDoplerButton;
+
+    delete m_rangeLabel;
+    delete m_rangeLineEdit;
+    delete m_setRangeButton;
+    delete m_getRangeButton;
 
     delete m_gainTXLabel;
     delete m_gainTXSlider;
@@ -41,9 +50,20 @@ DataWidget::~DataWidget()
     delete m_gainRXLabel;
     delete m_gainRXSlider;
     delete m_gainRxValue;
+    delete m_setGainButton;
+    delete m_getGainButton;
 
     delete m_attenuatorLabel;
     delete m_attenuatorComboBox;
+    delete m_setAttenuatorButton;
+    delete m_getAttenuatorButton;
+
+    delete m_sinusValueLabel;
+    delete m_sinusLineEdit;
+
+    delete m_coordinatesLabel;
+    delete m_coordinatesValue;
+    delete m_getCoordinatesButton;
 }
 
 void DataWidget::CreateObjects()
@@ -99,6 +119,11 @@ void DataWidget::CreateUI()
     m_sinusValLineLayout = new QHBoxLayout();
     m_sinusValueLabel = new QLabel();
     m_sinusLineEdit = new QLineEdit();
+
+    m_cooridnatesLayout = new QHBoxLayout();
+    m_coordinatesLabel = new QLabel();
+    m_coordinatesValue = new QLabel();
+    m_getCoordinatesButton = new QPushButton();
 }
 
 
@@ -141,12 +166,17 @@ void DataWidget::InsertWidgetsIntoLayout()
     m_sinusValLineLayout->addWidget(m_sinusValueLabel);
     m_sinusValLineLayout->addWidget(m_sinusLineEdit);
 
+    m_cooridnatesLayout->addWidget(m_coordinatesLabel);
+    m_cooridnatesLayout->addWidget(m_coordinatesValue);
+    m_cooridnatesLayout->addWidget(m_getCoordinatesButton);
+
     m_mainLayout->addLayout(m_workPointLineLayout);
     m_mainLayout->addLayout(m_doplerAndSpeedLayout);
     m_mainLayout->addLayout(m_rangeLineLayout);
     m_mainLayout->addLayout(m_gainLineLayout);
     m_mainLayout->addLayout(m_attenuatorLineLayout);
     m_mainLayout->addLayout(m_sinusValLineLayout);
+    m_mainLayout->addLayout(m_cooridnatesLayout);
     setLayout(m_mainLayout);
 }
 
@@ -205,6 +235,9 @@ void DataWidget::FillUI()
     m_sinusValueLabel->setText(QStringLiteral("Значения для синуса и м сигнала"));
     m_sinusLineEdit->setText(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "sinus", "0"));
     m_sinusLineEdit->setValidator(m_intValidator);
+    m_coordinatesLabel->setText(QStringLiteral("Координаты ЮК"));
+    m_coordinatesValue->setText(QStringLiteral("Координаты не получены"));
+    m_getCoordinatesButton->setText(QStringLiteral("Запросить"));
 }
 
 
@@ -233,6 +266,7 @@ void DataWidget::ConnectObjects()
     connect(m_getGainButton, &QPushButton::clicked, this, &DataWidget::OnGetGainButtonClicked);
     connect(m_setAttenuatorButton, &QPushButton::clicked, this, &DataWidget::OnSetAttenuatorButtonClicked);
     connect(m_getAttenuatorButton, &QPushButton::clicked, this, &DataWidget::OnGetAttenuatorButtonClicked);
+    connect(m_getCoordinatesButton, &QPushButton::clicked, this, &DataWidget::OnGetCoordinatsButtonClicked);
 }
 
 void DataWidget::OnChangeFvcoComboBoxValue(const QString &fvco)
@@ -245,7 +279,7 @@ void DataWidget::OnChangeDoplerLineEdit(const QString &doplerText)
     const double dopler = doplerText.toDouble();
     const double speed = dopler * m_c / (2.0 * m_fvcoComboBox->currentText().toDouble() * 1000000.0);
     m_speedLineEdit->setText(QString::number(speed, 'f'));
-    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), "dopler", doplerText);
+    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), QLatin1Literal("dopler"), doplerText);
 }
 
 void DataWidget::OnChangeSpeedLineEdit(const QString &speedText)
@@ -254,36 +288,36 @@ void DataWidget::OnChangeSpeedLineEdit(const QString &speedText)
     const double dopler1 = speed * m_fvcoComboBox->currentText().toDouble() * 1000000.0 * 2.0;
     const double dopler = dopler1 / m_c;
     m_doplerFreqLineEdit->setText(QString::number(dopler, 'f'));
-    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), "dopler", QString::number(dopler));
+    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), QLatin1Literal("dopler"), QString::number(dopler));
 }
 
 void DataWidget::OnChangeRangeLineEdit(const QString &range)
 {
-    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), "range", range);
+    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), QLatin1Literal("range"), range);
 }
 
 void DataWidget::OnChangeGainTxLineEdit(double gainTx)
 {
     const QString gainTxString = QString::number(gainTx, 'f', 1);
     m_gainTxValue->setText(gainTxString);
-    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), "gainTx", gainTxString);
+    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), QLatin1Literal("gainTx"), gainTxString);
 }
 
 void DataWidget::OnChangeGainRxLineEdit(double gainRx)
 {
     const QString gainRxString = QString::number(gainRx, 'f', 1);
     m_gainRxValue->setText(gainRxString);
-    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), "gainRx", gainRxString);
+    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), QLatin1Literal("gainRx"), gainRxString);
 }
 
 void DataWidget::OnChangeAttenuator(int attenuatorIndex)
 {
-    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), "attenuator", QString::number(attenuatorIndex));
+    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), QLatin1Literal("attenuator"), QString::number(attenuatorIndex));
 }
 
 void DataWidget::OnChangeSinusLineEdit(const QString &sinus)
 {
-    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), "sinus", sinus);
+    m_settingFileService->SetAttribute(m_settingFileService->GetDataArribute(), QLatin1Literal("sinus"), sinus);
 }
 
 void DataWidget::OnSetRxButtonClicked()
@@ -430,8 +464,19 @@ void DataWidget::OnGetAttenuatorButtonClicked()
     Q_EMIT ToGetState(5);
 }
 
+void DataWidget::OnGetCoordinatsButtonClicked()
+{
+    ToConsoleLog(QStringLiteral("Нажали получить координаты ЮК"));
+    Q_EMIT ToGetState(7);
+}
+
 QString DataWidget::GetSinusValue()
 {
     return m_sinusLineEdit->text();
+}
+
+void DataWidget::OnUpdateLatLong(const QString &message)
+{
+    m_coordinatesValue->setText(message);
 }
 

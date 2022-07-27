@@ -1,5 +1,5 @@
-#ifndef DOUBLESLIDER_H
-#define DOUBLESLIDER_H
+#ifndef UI_DOUBLESLIDER_H
+#define UI_DOUBLESLIDER_H
 
 #include <QSlider>
 #include <QMouseEvent>
@@ -18,9 +18,9 @@ Q_SIGNALS:
 private Q_SLOTS:
     void OnValueChanged(int intValue);
 public:
-    void SetDoubleRange(double  min, double max);
+    void SetDoubleRange(double  min, double max) noexcept;
     double GetCurrentDoubleRangeValue() const noexcept;
     QString GetCurrentDoubleRangeText() const noexcept;
 };
 
-#endif // DOUBLESLIDER_H
+#endif // UI_DOUBLESLIDER_H

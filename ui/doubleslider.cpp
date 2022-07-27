@@ -29,7 +29,7 @@ void DoubleSlider::OnValueChanged(int intValue)
 
 }
 
-void DoubleSlider::SetDoubleRange(double min, double max)
+void DoubleSlider::SetDoubleRange(double min, double max) noexcept
 {
     const int minValue = min * 10;
     const int maxValue = max * 10;

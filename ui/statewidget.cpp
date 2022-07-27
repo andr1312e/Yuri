@@ -130,6 +130,7 @@ void StateWidget::ConnectObjects()
 {
     connect(m_statePresenter, &StatePresenter::ToConsoleLog, this, &StateWidget::OnConsoleLog);
     connect(m_statePresenter, &StatePresenter::ToSetButtonsEnabled, this, &StateWidget::OnSetButtonEnabled);
+    connect(m_statePresenter, &StatePresenter::ToUpdateLatLong, m_dataWidget, &DataWidget::OnUpdateLatLong);
 
     connect(m_dataWidget, &DataWidget::ToSetState, this, &StateWidget::OnSetState);
     connect(m_dataWidget, &DataWidget::ToGetState, this, &StateWidget::OnGetState);
@@ -269,6 +270,9 @@ void StateWidget::OnGetState(int id)
         break;
     case 6:
         OnConsoleLog(QStringLiteral("Запрашиваем режим работы"));
+        break;
+    case 7:
+        OnConsoleLog(QStringLiteral("Запрашиваем координаты ЮК"));
         break;
     case 9:
         OnConsoleLog(QStringLiteral("Запрашиваем доплера точку"));
