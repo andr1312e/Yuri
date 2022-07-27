@@ -61,22 +61,77 @@ void DataHandler::ToHostConnected()
 void DataHandler::NormalStateMessageAnalyze(const QByteArray &incomingByteArray)
 {
     m_readyReadBuffer.append(incomingByteArray);
-    if (m_readyReadBuffer.count() < 3)
+    qDebug() << "in buffer" << m_readyReadBuffer.toHex();
+    qDebug() << "count " << m_readyReadBuffer.count();
+    if (m_readyReadBuffer.count() > 1)
     {
-#if QT_VERSION > QT_VERSION_CHECK(5, 10, 0)
-        if (static_cast<char>(0x07) != m_readyReadBuffer.front())
-#else
-        if (static_cast<char>(0x07) != m_readyReadBuffer.at(0))
-#endif
+        if (m_readyReadBuffer.count() == 2  && static_cast<char>(0x4f) == m_readyReadBuffer.front() && static_cast<char>(0x6b) == m_readyReadBuffer.at(1))
         {
-            Q_EMIT ToStateWidgetConsoleLog("Получили сообщение (" + QString::fromLatin1(incomingByteArray.toHex()) + ") - OK");
+            qDebug() << "Ok";
             m_readyReadBuffer.clear();
+            Q_EMIT ToStateWidgetConsoleLog("Получили сообщение - OK");
         }
-    }
-    else
-    {
-        Q_EMIT ToStateWidgetConsoleLog("Получили сообщение c состоянием: " + QString::fromLatin1(incomingByteArray));
-        Q_EMIT ToStateGettingFromMessage(m_readyReadBuffer);
+        else
+        {
+            if (m_readyReadBuffer.front() == 0x07)
+            {
+                qDebug() << "start getting get message";
+                const int messageId = m_readyReadBuffer.at(1);
+                if (0x06 == messageId)
+                {
+                    if (m_readyReadBuffer.count() > 2)
+                    {
+                        const int subMessageId = m_readyReadBuffer.at(2);
+                        switch (subMessageId)
+                        {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            Q_EMIT ToStateGettingFromMessage(m_readyReadBuffer);
+                            break;
+                        case 5:
+                            if (m_readyReadBuffer.count() == 8)
+                            {
+                                Q_EMIT ToStateGettingFromMessage(m_readyReadBuffer);
+                                m_readyReadBuffer.clear();
+                                break;
+                            }
+                        default:
+                            break;
+                        }
+                    }
+                    return;
+                }
+                else
+                {
+                    if ((messageId > 0x00 && messageId < 0x06) || messageId == 0x09)
+                    {
+                        if (m_readyReadBuffer.count() == m_messagesSizes.at(messageId))
+                        {
+                            qDebug() << "parsing";
+//                        Q_EMIT ToStateWidgetConsoleLog("Получили сообщение c состоянием: " + QString::fromLatin1(incomingByteArray));
+                            Q_EMIT ToStateGettingFromMessage(m_readyReadBuffer);
+                            m_readyReadBuffer.clear();
+                            return;
+                        }
+                        else
+                        {
+                            qDebug() << " wrong size";
+                            if (m_readyReadBuffer.count() > m_messagesSizes.at(messageId))
+                            {
+                                qDebug() << "  size bigger";
+                                m_readyReadBuffer.clear();
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+            m_readyReadBuffer.clear();
+            Q_EMIT ToGetKoordinatesMessage(incomingByteArray);
+        }
     }
 }
 

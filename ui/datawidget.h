@@ -54,7 +54,7 @@ private Q_SLOTS:
 public Q_SLOTS:
     void OnUpdateLatLong(const QString &message);
 public:
-    QString GetSinusValue();
+    quint32 GetSinusValue();
 private:
     SettingFileService *const m_settingFileService;
     QStringList m_attenuatorValues;

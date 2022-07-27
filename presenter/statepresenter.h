@@ -33,6 +33,7 @@ Q_SIGNALS:
     void ToUpdateLatLong(const QString &newLatLong);
 private Q_SLOTS:
     void OnGetMessageWithState(const QByteArray &messageFromDevice);
+    void OnGetKoordinatesMessage(const QByteArray &messageWithKoordinates);
 public:
     void DisconnectOldHandler();
     void ConnectHander(DataHandler *dataHandler);

@@ -38,12 +38,10 @@ QString StateMessageGetter::GetDataFromMessage(const QByteArray &message)
         return GetAttenuatorRXFromFiveMessage(message);
     case 6:
         return GetWorkModeFromSixMessage(message);
-    case 7:
-        return GetKoordinatesFromSevenMessage(message);
     case 9:
         return GetDoplerFromNineMessage(message);
     default:
-        return QStringLiteral("OK");
+        qFatal("Wrong Message");
     }
 }
 
@@ -156,13 +154,13 @@ QString StateMessageGetter::GetDoplerFromNineMessage(const QByteArray &message) 
 quint8 StateMessageGetter::GetMask(quint8 pos, quint8 size) const
 {
     //size - размер числа * колво бит нужно
-    //pos - позиция числаы
+    //pos - позиция числа
     return ~( ~0ull << size ) << pos;
 }
 
-QString StateMessageGetter::ParceKoordinatesMessage()
+void StateMessageGetter::ParceKoordinatesMessage()
 {
-    qDebug() << m_collectedKoordinatesData;
+//    qDebug() << m_collectedKoordinatesData;
     const int commaCount = m_collectedKoordinatesData.count(',');
     if (13 == commaCount)
     {
@@ -181,7 +179,7 @@ QString StateMessageGetter::ParceKoordinatesMessage()
         }
         else
         {
-            return QString("Сообщение не верно");
+            Q_EMIT ToConsoleLog("Сообщение не верно");
         }
 
 
@@ -194,16 +192,16 @@ QString StateMessageGetter::ParceKoordinatesMessage()
         }
         else
         {
-            return QString("Сообщение не верно");
+            Q_EMIT ToConsoleLog("Сообщение не верно");
         }
-        const QString message = "Широта:↑ " + QString::number(latitude) + " Долгота: " + QString::number(longtutude);
+        const QString message = "Широта:↑ " + QString::number(latitude) + " Долгота→: " + QString::number(longtutude);
         Q_EMIT ToUpdateLatLong(message);
         m_collectedKoordinatesData.clear();
-        return message;
+        Q_EMIT ToConsoleLog(message);
     }
     else
     {
-        return QString("Сообщение не верно");
+        Q_EMIT ToConsoleLog("Сообщение не верно. Колличество запятых не 13");
     }
 }
 
@@ -281,6 +279,22 @@ double StateMessageGetter::ParceHeight() const
     }
 }
 
+quint32 StateMessageGetter::ParceDelay(bool isLcm, quint16 distance) const
+{
+    const double secondVal = m_c / m_f;
+    double distanceDouble = secondVal * (distance - 1.0) / 2.0;
+    distanceDouble = qAbs(distanceDouble - m_distanseToAnswerer);
+    if (isLcm)
+    {
+        distanceDouble = qAbs(distanceDouble - 117.488879661);
+    }
+    else
+    {
+        distanceDouble = qAbs(distanceDouble - 176.233319492);
+    }
+    return distanceDouble;
+}
+
 QString StateMessageGetter::GetDistanceFromThirdMessage(const QByteArray &message) const
 {
     if (message.count() == 4)
@@ -339,37 +353,23 @@ QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message)
     }
     else
     {
-        if (message.count() == 6)
+        if (message.count() == 8)
         {
-            if (message.at(2) == 3)
-            {
-                QByteArray arraySinusVal;
-                arraySinusVal.append(static_cast<char>(0x00));//иначе будет 0, нужно 4 байта
-                arraySinusVal.append(message.at(3));
-                arraySinusVal.append(message.at(4));
-                arraySinusVal.append(message.at(5));
-
-                QDataStream sinusDataStream(arraySinusVal);
-                quint32 sinus;
-                sinusDataStream >> sinus;
-                const QString result = "Рабочий режим: " + noiseValues.at(2) + " значение синуса равно: " + QString::number(sinus);
-            }
-            else
+            if (message.at(2) == 5)
             {
                 const quint8 bpar_mode = message.at(3);
-
+                //3 бита
                 //было  11000000
                 //стало 00000110
-                //-1 так как смотри таблицу, там первый начинается с 0
-                const quint8 fo = (bpar_mode >> 5) - 1;
+                //прибавляем к результату 1 так как смотри таблицу, там первый начинается с 0
+                const quint8 fo = (bpar_mode & 7) + 1;
 
                 //позиция начинается справа
                 //было  11011000  = 216
                 //маска 00010000  = 16
                 //сдвигаем на 4 разряда и получаем или 0 или 1
-                const quint8 hasLcmPos = 4;
-                const quint8 hasLcmMask = GetMask(hasLcmPos, sizeof(  quint8 ) );
-                const bool hasLcm = ( bpar_mode & hasLcmMask ) >> hasLcmPos;
+                const quint8 hasLcmMask = GetMask(3, sizeof(  quint8 ) );
+                const bool hasLcm = ( bpar_mode & hasLcmMask ) >> 3;
                 const QString modeString = hasLcm ? "ЛЧМ" : "Радиоимпульс";
                 //позиция начинается справа
                 //было  11011000  = 216
@@ -378,11 +378,10 @@ QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message)
                 quint8 tKmode = 0;
                 if (!hasLcm)
                 {
-                    const quint8 tKmodePos = 2;
-                    quint8 tKMask = GetMask(tKmodePos, sizeof(  quint8 ) * 2 );
-                    tKmode = ( bpar_mode & tKMask ) >> tKmodePos;
+                    quint8 tKMask = GetMask(4, sizeof(  quint8 ) * 2 );
+                    tKmode = ( bpar_mode & tKMask ) >> 4;
                 }
-                const QString tkModeString = hasLcm ? "" : " Тк:" + QString::number(tKmode);
+                const QString tkModeString = hasLcm ? "" : " Тк-" + QString::number(tKmode);
                 QByteArray signalDelayArray;
                 signalDelayArray.append(message.at(4));
                 signalDelayArray.append(message.at(5));
@@ -390,53 +389,62 @@ QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message)
                 QDataStream sinusDataStream(signalDelayArray);
                 quint16 signalDelay;
                 sinusDataStream >> signalDelay;
+                const quint32 realDelay = ParceDelay(hasLcm, signalDelay);
 
                 return QString ("Режим БПАР. Параметры работы:"
                                 " F" + QString::number(fo) +
                                 " Режим: " + modeString + tkModeString +
-                                " Задержка сигнала: " + QString::number(signalDelay));
+                                " Задержка сигнала: " + QString::number(realDelay));
             }
         }
     }
     return QLatin1String();
 }
 
-QString StateMessageGetter::GetKoordinatesFromSevenMessage(const QByteArray &message)
+void StateMessageGetter::GetKoordinatesFromSevenMessage(const QByteArray &message)
 {
-    const int indexOfHeader = message.indexOf("$GNRM");
+    ++iter;
+    qInfo() << iter << "KOORD " << message;
+    const int indexOfHeader = message.indexOf("$GNR");
     if (-1 == indexOfHeader)
     {
-        if (m_koordinatesDataNotNull)
+        if (m_hasHeader)
         {
-            int indexOfAsterisk = message.indexOf('*', indexOfHeader);
-            if (indexOfAsterisk != -1)
+            qInfo() << iter << " Header uzhe est";
+            int indexOfAsterisk = message.indexOf('*');
+            if (indexOfAsterisk == -1)
             {
-                m_collectedKoordinatesData.append(message.left(indexOfHeader + 1));
-                return ParceKoordinatesMessage();
+                qInfo() << iter << " * nenashli";
+                m_collectedKoordinatesData.append(message);
+
             }
             else
             {
-                m_collectedKoordinatesData.clear();
+                qInfo() << iter << " * nashli";
+                m_collectedKoordinatesData.append(message.left(indexOfAsterisk));
+                m_hasHeader = false;
+                ParceKoordinatesMessage();
             }
         }
-
     }
     else
     {
+
+        m_hasHeader = true;
+        m_collectedKoordinatesData.append(message.left(indexOfHeader + 1));
         const int indexOfAsterisk = message.indexOf('*', indexOfHeader);
         if (-1 == indexOfAsterisk)
         {
+            qInfo() << iter << " Header tolko est";
             m_collectedKoordinatesData = message.mid(indexOfHeader);
-            m_koordinatesDataNotNull = true;
-
         }
         else
         {
+            qInfo() << iter << " Vse est parsim";
             m_collectedKoordinatesData = message.mid(indexOfHeader, indexOfAsterisk - indexOfHeader + 1);
-            m_koordinatesDataNotNull = false;
-            return ParceKoordinatesMessage();
+            m_hasHeader = false;
+            ParceKoordinatesMessage();
         }
     }
-    return QString("Координаты");
 }
 

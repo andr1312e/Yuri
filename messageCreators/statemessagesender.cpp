@@ -183,7 +183,10 @@ QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool 
     streamMain << (quint8)5;
     streamMain << bpar_mode;
     streamMain << delay;
-    streamMain << threshold;
+    if (0 != threshold)
+    {
+        streamMain << threshold;
+    }
     return bParMessage;
 }
 
@@ -279,11 +282,11 @@ quint16 StateMessageSender::CalculateBparDistance(bool isLcm, double distance) c
     //117,488879661 для лчм   =    12*32.6583932*299792458/1000000000  |
     if (isLcm)
     {
-        distance += 117, 488879661;
+        distance += 117.488879661;
     }
     else
     {
-        distance += 176, 233319492;
+        distance += 176.233319492;
     }
     const double secondVal = m_f / m_c;
     const quint16 distanceDouble = 2.0 * qAbs(distance - m_distanseToAnswerer) * secondVal + 1.0;

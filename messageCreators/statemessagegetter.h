@@ -14,6 +14,7 @@ public:
     ~StateMessageGetter();
 Q_SIGNALS:
     void ToUpdateLatLong(const QString &newLatLong);
+    void ToConsoleLog(const QString &message);
 public:
     QString GetDataFromMessage(const QByteArray &message);
 private:
@@ -23,17 +24,21 @@ private:
     QString GetGainTxGainRXFromFourthMessage(const QByteArray &message) const;
     QString GetAttenuatorRXFromFiveMessage(const QByteArray &message) const;
     QString GetWorkModeFromSixMessage(const QByteArray &message) const;
-    QString GetKoordinatesFromSevenMessage(const QByteArray &message);
+public:
+    void GetKoordinatesFromSevenMessage(const QByteArray &message);
+private:
     QString GetDoplerFromNineMessage(const QByteArray &message) const noexcept;
 private:
     quint8 GetMask(quint8 pos, quint8 size ) const;
-    QString ParceKoordinatesMessage();
+    void ParceKoordinatesMessage();
     double ParceLatitdeValue(const QByteArray &latitudeByteArray, int directionValue) const;
     double ParceLongtitude(const QByteArray &longtitudeByteArray, int directionValue) const;
     double ParceHeight() const;
+    quint32 ParceDelay(bool isLcm, quint16 delay) const;
 private:
+    int iter = -1;
     QByteArray m_collectedKoordinatesData;
-    bool m_koordinatesDataNotNull;
+    bool m_hasHeader;
     const int m_indexOfGettingMessageId;
     const int m_subMessageIndex;
     const double m_f;

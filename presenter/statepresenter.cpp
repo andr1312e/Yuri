@@ -41,6 +41,7 @@ void StatePresenter::CreateObjects()
 void StatePresenter::ConnectObjects()
 {
     connect(m_messageGetter, &StateMessageGetter::ToUpdateLatLong, this, &StatePresenter::ToUpdateLatLong);
+    connect(m_messageGetter, &StateMessageGetter::ToConsoleLog, this, &StatePresenter::ToConsoleLog);
 }
 
 void StatePresenter::OnGetMessageWithState(const QByteArray &messageFromDevice)
@@ -49,12 +50,19 @@ void StatePresenter::OnGetMessageWithState(const QByteArray &messageFromDevice)
     Q_EMIT ToConsoleLog(currentValue);
 }
 
+void StatePresenter::OnGetKoordinatesMessage(const QByteArray &messageWithKoordinates)
+{
+    m_messageGetter->GetKoordinatesFromSevenMessage(messageWithKoordinates);
+}
+
 void StatePresenter::DisconnectOldHandler()
 {
     disconnect(m_dataHandler, &DataHandler::ToConsoleLog, this, &StatePresenter::ToConsoleLog);
     disconnect(m_dataHandler, &DataHandler::ToStateWidgetConsoleLog, this, &StatePresenter::ToConsoleLog);
     disconnect(m_dataHandler, &DataHandler::ToButtonsEnabledChanging, this, &StatePresenter::ToSetButtonsEnabled);
-    disconnect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::OnGetMessageWithState);
+    disconnect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::OnGetMessageWithState); \
+    disconnect(m_dataHandler, &DataHandler::ToGetKoordinatesMessage, this, &StatePresenter::OnGetKoordinatesMessage);
+
 }
 
 void StatePresenter::ConnectHander(DataHandler *dataHandler)
@@ -64,6 +72,7 @@ void StatePresenter::ConnectHander(DataHandler *dataHandler)
     connect(m_dataHandler, &DataHandler::ToStateWidgetConsoleLog, this, &StatePresenter::ToConsoleLog);
     connect(m_dataHandler, &DataHandler::ToButtonsEnabledChanging, this, &StatePresenter::ToSetButtonsEnabled);
     connect(m_dataHandler, &DataHandler::ToStateGettingFromMessage, this, &StatePresenter::OnGetMessageWithState);
+    connect(m_dataHandler, &DataHandler::ToGetKoordinatesMessage, this, &StatePresenter::OnGetKoordinatesMessage);
 }
 
 void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, double SecondParam)

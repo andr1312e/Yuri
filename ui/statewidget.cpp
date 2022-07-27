@@ -217,18 +217,9 @@ void StateWidget::OnSetWorkMode(int index)
         }
         if (index >= 3)
         {
-            bool isSinusValueParced;
-            const double noiseValue = m_dataWidget->GetSinusValue().toDouble(&isSinusValueParced);
-            if (isSinusValueParced)
-            {
-                OnConsoleLog("Высылаем шестое сообщение: установка шума, параметр равен: " + m_dataWidget->GetSinusValue());
-                m_statePresenter->SetMessageToQueue(6, index, noiseValue);
-            }
-            else
-            {
-                OnConsoleLog("Шестое сообщение: не смогли перевесли в число: " + m_dataWidget->GetSinusValue() + ".Берем значение 0");
-                m_statePresenter->SetMessageToQueue(6, index);
-            }
+            const int noiseValue = m_dataWidget->GetSinusValue();
+            OnConsoleLog("Высылаем шестое сообщение: установка шума, параметр равен: " + QString::number(noiseValue));
+            m_statePresenter->SetMessageToQueue(6, index, noiseValue);
         }
         else
         {

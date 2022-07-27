@@ -2,6 +2,7 @@
 #define CONNECTIONS_DATAHANDLER_H
 #include <QObject>
 #include <QByteArray>
+#include <QDebug>
 
 enum class HandlerState {Normal, ReadFirmware, Flash };
 
@@ -21,6 +22,7 @@ Q_SIGNALS:
     void ToStateWidgetConsoleLog(QString message);
     void ToFirmwareWidgetConsoleLog(QString message);
     void ToStateGettingFromMessage(const QByteArray &message);
+    void ToGetKoordinatesMessage(const QByteArray &message);
     void ToRegisterStateChanging(quint8 state);
     void ToReadFirmwareAgain();
     void ToFirmWareFormDeviceLoaded(QByteArray *firmwareFromDevice);
@@ -45,6 +47,7 @@ protected:
     const quint8 pcbStateMessageBytesCount;
     const quint8 m_maxMessageBytesCount;
     const char m_endOfFirmwareSymbol;
+    const QVarLengthArray<quint8, 10> m_messagesSizes{2, 8, 8, 4, 4, 3, 3, 0, 0, 5};
     HandlerState m_gettingMessageType;
     quint8 m_currentStopLineNumber;
     QByteArray m_readyReadBuffer;

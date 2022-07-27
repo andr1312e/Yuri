@@ -232,8 +232,9 @@ void DataWidget::FillUI()
     m_setAttenuatorButton->setText(QStringLiteral("Установить"));
     m_getAttenuatorButton->setText(QStringLiteral("Запросить"));
 
-    m_sinusValueLabel->setText(QStringLiteral("Значения для синуса и м сигнала"));
-    m_sinusLineEdit->setText(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "sinus", "0"));
+    m_sinusValueLabel->setText(QStringLiteral("Значения для синуса МГЦ"));
+    m_sinusValueLabel->setToolTip(QStringLiteral("Отправляются шаги * 10^6 *2 "));
+    m_sinusLineEdit->setText(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "sinus", "1500000"));
     m_sinusLineEdit->setValidator(m_intValidator);
     m_coordinatesLabel->setText(QStringLiteral("Координаты ЮК"));
     m_coordinatesValue->setText(QStringLiteral("Координаты не получены"));
@@ -470,9 +471,9 @@ void DataWidget::OnGetCoordinatsButtonClicked()
     Q_EMIT ToGetState(7);
 }
 
-QString DataWidget::GetSinusValue()
+quint32 DataWidget::GetSinusValue()
 {
-    return m_sinusLineEdit->text();
+    return m_sinusLineEdit->text().toUInt() * 1000000 / 2;
 }
 
 void DataWidget::OnUpdateLatLong(const QString &message)
