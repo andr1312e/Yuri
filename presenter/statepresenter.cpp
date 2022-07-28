@@ -7,7 +7,7 @@ StatePresenter::StatePresenter(SettingFileService *settingFileService, QObject *
 {
     CreateObjects();
     ConnectObjects();
-    startTimer(1500, Qt::VeryCoarseTimer);
+    startTimer(std::chrono::seconds(1), Qt::VeryCoarseTimer);
 }
 
 StatePresenter::~StatePresenter()

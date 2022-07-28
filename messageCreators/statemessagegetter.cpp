@@ -194,7 +194,7 @@ void StateMessageGetter::ParceKoordinatesMessage()
         {
             Q_EMIT ToConsoleLog("Сообщение не верно");
         }
-        const QString message = "Широта:↑ " + QString::number(latitude) + " Долгота→: " + QString::number(longtutude);
+        const QString message = "Широта:↑ " + QString::number(latitude, 'f', 10) + " Долгота→: " + QString::number(longtutude, 'f', 10);
         Q_EMIT ToUpdateLatLong(message);
         m_collectedKoordinatesData.clear();
         Q_EMIT ToConsoleLog(message);

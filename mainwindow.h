@@ -30,14 +30,13 @@ private:
     void FillUI();
     void ConnectObjects();
 private Q_SLOTS:
-    void OnConnectToInternetMoxa(const QString &adress, const QString &port);
-    void OnConnectToUsbMoxa(const QString &comPortName);
+    void OnTryConnectToInternetMoxa(const QString &adress, const QString &port);
+    void OnTryConnectToUsbMoxa(const QString &comPortName);
     void OnDisconnectFromMoxa();
+    void OnGenerateIcon(bool isConnected);
 protected:
     virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
-
-    QStatusBar *m_statusBar;
     ConnectionWidget *m_connectionWidget;
     QTabWidget *m_tabWidget;
     StateWidget *m_stateWidget;
@@ -53,5 +52,6 @@ private:
     void RegisterHadnler(DataHandler *dataHandler);
     void DisconnectOldHander();
     void ConnectHander(DataHandler *dataHandler);
+
 };
 #endif // UI_MAINWINDOW_H

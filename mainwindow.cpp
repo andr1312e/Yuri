@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 
+#include <QPainter>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,7 +18,6 @@ MainWindow::~MainWindow()
     delete m_settingFileService;
     delete m_tcpHandler;
     delete m_serialHandler;
-    delete m_statusBar;
 
     delete m_docWidget;
     delete m_connectionWidget;
@@ -38,7 +39,6 @@ void MainWindow::CreateObjects()
 
 void MainWindow::CreateUI()
 {
-    m_statusBar = new QStatusBar();
     m_connectionWidget = new ConnectionWidget(m_settingFileService, this);
     m_stateWidget = new StateWidget(m_settingFileService, this);
     m_firmwareWidget = new FirmWareWidget(m_settingFileService, this);
@@ -51,7 +51,6 @@ void MainWindow::CreateUI()
 
 void MainWindow::InsertWidgetsIntoMainWindow()
 {
-//    setStatusBar(m_statusBar);
     setMenuWidget(m_connectionWidget);
     setCentralWidget(m_tabWidget);
 }
@@ -60,7 +59,6 @@ void MainWindow::FillUI()
 {
     const QString qtVersion = qVersion();
     setWindowTitle("Настройка Юстировочного оборудования блок М14ХЛ2 Плата СЮИТ.687263.035 Qt " + qtVersion + " Версия " + APP_VERSION + " Cборка: " + BUILD_DATE);
-//    m_statusBar->showMessage(QStringLiteral("Не подключено"));
     for (int i = 0; i < 5; ++i)
     {
         QListWidgetItem *item = new QListWidgetItem(m_docWidget);
@@ -74,19 +72,21 @@ void MainWindow::FillUI()
     m_tabWidget->tabBar()->setExpanding(true);
     m_tabWidget->setElideMode(Qt::ElideRight);
     m_tabWidget->setStyleSheet(QLatin1Literal("QTabBar::tab:selected { font: bold 14px; color: black;}"));
+
+    OnGenerateIcon(false);
 }
 
 void MainWindow::ConnectObjects()
 {
     connect(m_connectionWidget, &ConnectionWidget::ToConsoleLog, m_stateWidget, &StateWidget::OnConsoleLog);
     connect(m_connectionWidget, &ConnectionWidget::ToConsoleLog, m_firmwareWidget, &FirmWareWidget::ToConsoleLog);
-    connect(m_connectionWidget, &ConnectionWidget::ToConnectEthernetMoxa, this, &MainWindow::OnConnectToInternetMoxa );
-    connect(m_connectionWidget, &ConnectionWidget::ToConnectUsbMoxa, this, &MainWindow::OnConnectToUsbMoxa);
+    connect(m_connectionWidget, &ConnectionWidget::ToConnectEthernetMoxa, this, &MainWindow::OnTryConnectToInternetMoxa );
+    connect(m_connectionWidget, &ConnectionWidget::ToConnectUsbMoxa, this, &MainWindow::OnTryConnectToUsbMoxa);
     connect(m_connectionWidget, &ConnectionWidget::ToDisconnectFromMoxa, this, &MainWindow::OnDisconnectFromMoxa);
     connect(m_firmwareWidget, &FirmWareWidget::ToSetButtonsEnabled, m_stateWidget, &StateWidget::OnSetButtonEnabled);
 }
 
-void MainWindow::OnConnectToInternetMoxa(const QString &adress, const QString &port)
+void MainWindow::OnTryConnectToInternetMoxa(const QString &adress, const QString &port)
 {
     m_stateWidget->OnConsoleLog("Попытка подключится по интернет кабелю... Адрес: " + adress  + " Порт: " + port);
     RegisterHadnler(m_tcpHandler);
@@ -94,7 +94,7 @@ void MainWindow::OnConnectToInternetMoxa(const QString &adress, const QString &p
 
 }
 
-void MainWindow::OnConnectToUsbMoxa(const QString &comPortName)
+void MainWindow::OnTryConnectToUsbMoxa(const QString &comPortName)
 {
     m_stateWidget->OnConsoleLog("Попытка подключится по сериал порт кабелю... Имя порта: " + comPortName);
     RegisterHadnler(m_serialHandler);
@@ -105,7 +105,6 @@ void MainWindow::OnDisconnectFromMoxa()
 {
     m_currentConnectionInterface->FromHostDisconnect();
     m_connectionWidget->SetButtonsEnabled(true);
-//    m_statusBar->showMessage(QStringLiteral("Не подключено"));
     DisconnectOldHander();
 }
 
@@ -123,10 +122,12 @@ void MainWindow::RegisterHadnler(DataHandler *dataHandler)
 
 void MainWindow::DisconnectOldHander()
 {
+    OnGenerateIcon(false);
     if (Q_NULLPTR != m_currentConnectionInterface)
     {
         m_currentConnectionInterface->FromHostDisconnected();
         disconnect(m_currentConnectionInterface, &DataHandler::ToButtonsEnabledChanging, m_connectionWidget, &ConnectionWidget::SetButtonsEnabled);
+        disconnect(m_currentConnectionInterface, &DataHandler::ToButtonsEnabledChanging, this, &MainWindow::OnGenerateIcon);
         m_stateWidget->DisconnectOldHander();
         m_firmwareWidget->DisconnectOldHander();
         m_currentConnectionInterface = Q_NULLPTR;
@@ -135,12 +136,40 @@ void MainWindow::DisconnectOldHander()
 
 void MainWindow::ConnectHander(DataHandler *dataHandler)
 {
-//    m_statusBar->showMessage(QStringLiteral("Подключено"));
     dataHandler->ClearBuffer();
     connect(dataHandler, &DataHandler::ToButtonsEnabledChanging, m_connectionWidget, &ConnectionWidget::SetButtonsEnabled);
+    connect(dataHandler, &DataHandler::ToButtonsEnabledChanging, this, &MainWindow::OnGenerateIcon);
     m_stateWidget->ConnectHander(dataHandler);
     m_firmwareWidget->ConnectHander(dataHandler);
     m_currentConnectionInterface = dataHandler;
+}
+
+void MainWindow::OnGenerateIcon(bool isConnected)
+{
+    QPixmap pixmap(50, 50);
+    QPainter painter(&pixmap);
+    QColor rectColor, textColor = Qt::black;
+    if (isConnected)
+    {
+        rectColor = Qt::green;
+    }
+    else
+    {
+        rectColor = Qt::red;
+    }
+    painter.fillRect(0, 0, pixmap.width(), pixmap.height(), rectColor);
+    painter.setPen(textColor);
+    QFont font = painter.font();
+    font.setPixelSize(24);
+    painter.setFont(font);
+    painter.drawText(0, 0, pixmap.width(), pixmap.height() / 2, Qt::AlignTop | Qt::AlignHCenter, "ЮК");
+    QString appVerion = APP_VERSION;
+    appVerion.remove('.');
+    font.setPixelSize(20);
+    painter.setFont(font);
+    painter.drawText(0, pixmap.height() / 2, pixmap.width(), pixmap.height(), Qt::AlignTop | Qt::AlignHCenter, appVerion);
+    QIcon icon(pixmap);
+    qApp->setWindowIcon(icon);
 }
 
 

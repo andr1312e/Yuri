@@ -31,7 +31,7 @@ ConnectionWidget::~ConnectionWidget()
 
 void ConnectionWidget::CreateObjects()
 {
-    m_checkSerialPortsTimer=new QTimer(this);
+    m_checkSerialPortsTimer = new QTimer(this);
 }
 
 void ConnectionWidget::InitObjects()
@@ -44,17 +44,17 @@ void ConnectionWidget::InitObjects()
 
 void ConnectionWidget::CreateUI()
 {
-    m_mainLayout=new QVBoxLayout();
-    m_adressAndPortLayout=new QHBoxLayout();
-    m_connectionTypeComboBox=new QComboBox();
-    m_adressAndPortLabel=new QLabel();
-    m_adressLineEdit=new QLineEdit();
-    m_portLineEdit=new QLineEdit();
-    m_comPortNameComboBox=new QComboBox();
+    m_mainLayout = new QVBoxLayout();
+    m_adressAndPortLayout = new QHBoxLayout();
+    m_connectionTypeComboBox = new QComboBox();
+    m_adressAndPortLabel = new QLabel();
+    m_adressLineEdit = new QLineEdit();
+    m_portLineEdit = new QLineEdit();
+    m_comPortNameComboBox = new QComboBox();
 
-    m_buttonsLayout=new QHBoxLayout();
-    m_connectButton=new QPushButton();
-    m_disconnectButton=new QPushButton();
+    m_buttonsLayout = new QHBoxLayout();
+    m_connectButton = new QPushButton();
+    m_disconnectButton = new QPushButton();
 
 }
 
@@ -109,7 +109,7 @@ void ConnectionWidget::FillUI()
 
 void ConnectionWidget::OnCurrentIndexConnectionTypeComboBoxChanged(int index)
 {
-    if (index==0)
+    if (index == 0)
     {
         m_adressLineEdit->setEnabled(true);
         m_portLineEdit->setEnabled(true);
@@ -135,18 +135,18 @@ void ConnectionWidget::OnPortLineEditChange(const QString &newPort)
 
 void ConnectionWidget::OnConnectButtonClicked()
 {
-    const int index=m_connectionTypeComboBox->currentIndex();
-    if (0==index)
+    const int index = m_connectionTypeComboBox->currentIndex();
+    if (0 == index)
     {
         Q_EMIT ToConnectEthernetMoxa(m_adressLineEdit->text(), m_portLineEdit->text());
     }
     else
     {
-        QString comPortName=m_comPortNameComboBox->currentText();
-        comPortName=comPortName.left(m_comPortNameComboBox->currentText().indexOf(' '));
+        QString comPortName = m_comPortNameComboBox->currentText();
+        comPortName = comPortName.left(m_comPortNameComboBox->currentText().indexOf(' '));
         if (IsCurrentComPortBisy(comPortName))
         {
-            Q_EMIT ToConsoleLog("Com порт " +comPortName+ " не доступен для подключения, выберите другой");
+            Q_EMIT ToConsoleLog("Com порт " + comPortName + " не доступен для подключения, выберите другой");
         }
         else
         {
@@ -158,13 +158,13 @@ void ConnectionWidget::OnConnectButtonClicked()
 void ConnectionWidget::OnNewSerialPortsChecked()
 {
     const QList<QSerialPortInfo> serialPortInfoList(QSerialPortInfo::availablePorts());
-    if (m_comPortNameComboBox->count()!=serialPortInfoList.count())
+    if (m_comPortNameComboBox->count() != serialPortInfoList.count())
     {
         m_comPortNameComboBox->clear();
-        for (const QSerialPortInfo &serialPortInto: serialPortInfoList)
+        for (const QSerialPortInfo &serialPortInto : serialPortInfoList)
         {
-            const QString portState=IsComPortBisy(&(serialPortInto)) ? QStringLiteral(" Занят") : QStringLiteral(" Свободен");
-            m_comPortNameComboBox->addItem(serialPortInto.portName()+ " " + serialPortInto.description()+ " " + serialPortInto.manufacturer() + portState);
+            const QString portState = IsComPortBisy(&(serialPortInto)) ? QStringLiteral(" Занят") : QStringLiteral(" Свободен");
+            m_comPortNameComboBox->addItem(serialPortInto.portName() + " " + serialPortInto.description() + " " + serialPortInto.manufacturer() + portState);
         }
     }
 }
@@ -178,9 +178,9 @@ void ConnectionWidget::SetButtonsEnabled(bool state)
 bool ConnectionWidget::IsCurrentComPortBisy(QString &comPortName)
 {
     const QList<QSerialPortInfo> serialPortInfoList(QSerialPortInfo::availablePorts());
-    for (const QSerialPortInfo &serialPortInfo: serialPortInfoList)
+    for (const QSerialPortInfo &serialPortInfo : serialPortInfoList)
     {
-        if(serialPortInfo.portName()==comPortName)
+        if (serialPortInfo.portName() == comPortName)
         {
             return IsComPortBisy(&(serialPortInfo));
         }

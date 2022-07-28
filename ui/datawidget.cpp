@@ -211,7 +211,7 @@ void DataWidget::FillUI()
 
     m_rangeLabel->setText(QStringLiteral("Дальность ответного сигнала d: метры"));
     m_rangeLineEdit->setValidator(m_intValidator);
-    m_rangeLineEdit->setText(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "range", "0"));
+    m_rangeLineEdit->setText(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "range", "60490"));
     m_setRangeButton->setText(QStringLiteral("Установить"));
     m_getRangeButton->setText(QStringLiteral("Запросить"));
 
@@ -219,8 +219,8 @@ void DataWidget::FillUI()
     m_gainRXLabel->setText(QStringLiteral("Усиление RX GAIN_RX: децибелы"));
     m_gainTXSlider->SetDoubleRange(0, 31.5);
     m_gainRXSlider->SetDoubleRange(0, 31.5);
-    m_gainTxValue->setNum(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "gainTx", "0").toInt());
-    m_gainRxValue->setNum(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "gainRx", "0").toInt());
+    m_gainTxValue->setNum(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "gainTx", "8").toInt());
+    m_gainRxValue->setNum(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "gainRx", "8").toInt());
     m_setGainButton->setText(QStringLiteral("Установить"));
     m_getGainButton->setText(QStringLiteral("Запросить"));
 
@@ -234,7 +234,7 @@ void DataWidget::FillUI()
 
     m_sinusValueLabel->setText(QStringLiteral("Значения для синуса МГЦ"));
     m_sinusValueLabel->setToolTip(QStringLiteral("Отправляются шаги * 10^6 *2 "));
-    m_sinusLineEdit->setText(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "sinus", "1500000"));
+    m_sinusLineEdit->setText(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "sinus", "3"));
     m_sinusLineEdit->setValidator(m_intValidator);
     m_coordinatesLabel->setText(QStringLiteral("Координаты ЮК"));
     m_coordinatesValue->setText(QStringLiteral("Координаты не получены"));
