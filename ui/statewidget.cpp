@@ -118,7 +118,7 @@ void StateWidget::FillUI()
     m_restartDevice->setText(QStringLiteral("Перезагрузить устройство"));
     m_rawHexInputEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("^[0-9a-fA-F]*"), this));
     m_sendRawHexButton->setText(QStringLiteral("Отправить hex сообщение"));
-    m_logClearButton->setText(QStringLiteral("Консоль отчистить"));
+    m_logClearButton->setText(QStringLiteral("Консоль очистить"));
     m_log->setReadOnly(true);
     m_log->appendPlainText(QStringLiteral("Не подключено к ответчику"));
     m_bPraWidget->setDisabled(true);

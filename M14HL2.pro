@@ -1,7 +1,7 @@
 QT       += core network widgets serialport xml
 
 CONFIG += c++latest
-VERSION = 3.4.9.2
+VERSION = 3.4.9.3
 
 BUILD_DATE = $$system( date /t ) $$system( time /t )
 BUILD_DATE = $$member(BUILD_DATE,0)_$$member(BUILD_DATE,1)

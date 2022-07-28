@@ -362,7 +362,7 @@ QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message)
                 //было  11000000
                 //стало 00000110
                 //прибавляем к результату 1 так как смотри таблицу, там первый начинается с 0
-                const quint8 fo = (bpar_mode & 7) + 1;
+                const quint8 foId = (bpar_mode & 7) + 1;
 
                 //позиция начинается справа
                 //было  11011000  = 216
@@ -392,7 +392,7 @@ QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message)
                 const quint32 realDelay = ParceDelay(hasLcm, signalDelay);
 
                 return QString ("Режим БПАР. Параметры работы:"
-                                " F" + QString::number(fo) +
+                                " F" + QString::number(foId) +
                                 " Режим: " + modeString + tkModeString +
                                 " Задержка сигнала: " + QString::number(realDelay));
             }

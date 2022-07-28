@@ -61,8 +61,7 @@ void DataHandler::ToHostConnected()
 void DataHandler::NormalStateMessageAnalyze(const QByteArray &incomingByteArray)
 {
     m_readyReadBuffer.append(incomingByteArray);
-    qDebug() << "in buffer" << m_readyReadBuffer.toHex();
-    qDebug() << "count " << m_readyReadBuffer.count();
+    ToConsoleLog(m_readyReadBuffer.toHex());
     if (m_readyReadBuffer.count() > 1)
     {
         if (m_readyReadBuffer.count() == 2  && static_cast<char>(0x4f) == m_readyReadBuffer.front() && static_cast<char>(0x6b) == m_readyReadBuffer.at(1))

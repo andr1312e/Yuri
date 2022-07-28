@@ -162,7 +162,7 @@ QByteArray StateMessageSender::CreateSevenCommand(quint8 firstParam, quint8 seco
 QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const noexcept
 {
     QByteArray bParMessage;
-    QDataStream streamMain(&bParMessage, QIODevice::WriteOnly);
+    QDataStream stream(&bParMessage, QIODevice::WriteOnly);
     quint8 bpar_mode = checkedFoButtonId;
     if (isLcm)
     {
@@ -179,13 +179,13 @@ QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool 
         bpar_mode += 64;//0100000
     }
     const quint16 delay = CalculateBparDistance(isLcm, distance);
-    streamMain << (quint8)6;
-    streamMain << (quint8)5;
-    streamMain << bpar_mode;
-    streamMain << delay;
+    stream << (quint8)6;
+    stream << (quint8)5;
+    stream << bpar_mode;
+    stream << delay;
     if (0 != threshold)
     {
-        streamMain << threshold;
+        stream << threshold;
     }
     return bParMessage;
 }
