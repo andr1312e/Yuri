@@ -95,10 +95,10 @@ QByteArray StateMessageSender::CreateSecondCommand(double Fvco) const noexcept
 
 QByteArray StateMessageSender::CreateThirdCommand(double distance) const noexcept
 {
-    distance += 26, 9434889941;
+    distance -= 26.9434889941;
     const double secondVal = m_f / m_c;
     const double distanceDouble = 2.0 * qAbs(distance - m_distanseToAnswerer) * secondVal + 1.0;
-    const quint16 DISTANCE = distanceDouble;
+    const quint16 DISTANCE = qCeil(distanceDouble);
 
     QByteArray command;
     QDataStream streamMain(&command, QIODevice::WriteOnly);

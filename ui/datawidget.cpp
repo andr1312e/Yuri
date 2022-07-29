@@ -219,8 +219,13 @@ void DataWidget::FillUI()
     m_gainRXLabel->setText(QStringLiteral("Усиление RX GAIN_RX: децибелы"));
     m_gainTXSlider->SetDoubleRange(0, 31.5);
     m_gainRXSlider->SetDoubleRange(0, 31.5);
-    m_gainTxValue->setNum(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "gainTx", "8").toInt());
-    m_gainRxValue->setNum(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "gainRx", "8").toInt());
+    const int gainTxVal = m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "gainTx", "8").toInt();
+    m_gainTxValue->setNum(gainTxVal);
+    m_gainTXSlider->setValue(gainTxVal * 10);
+    const int gainRxVal = m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "gainRx", "8").toInt();
+    m_gainRxValue->setNum(gainRxVal);
+    m_gainRXSlider->setValue(gainRxVal * 10);
+
     m_setGainButton->setText(QStringLiteral("Установить"));
     m_getGainButton->setText(QStringLiteral("Запросить"));
 
