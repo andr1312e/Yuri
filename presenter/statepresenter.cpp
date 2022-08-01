@@ -29,19 +29,15 @@ void StatePresenter::CreateObjects()
     {
         fref = 40000000;
     }
-    quint32 distanseToAnswerer = m_settingFileService->GetAttribute("const", "distanfeToAnswerer", "350").toUInt(&ok);
-    if (!ok)
-    {
-        distanseToAnswerer = 350;
-    }
-    m_messageSetter = new StateMessageSender(f, fref, distanseToAnswerer);
-    m_messageGetter = new StateMessageGetter(f, fref, distanseToAnswerer, this);
+    m_messageSetter = new StateMessageSender(f, fref);
+    m_messageGetter = new StateMessageGetter(f, fref, this);
 }
 
 void StatePresenter::ConnectObjects()
 {
     connect(m_messageGetter, &StateMessageGetter::ToUpdateLatLong, this, &StatePresenter::ToUpdateLatLong);
     connect(m_messageGetter, &StateMessageGetter::ToConsoleLog, this, &StatePresenter::ToConsoleLog);
+    connect(this, &StatePresenter::ToChangeRangeToUkit, m_messageGetter, &StateMessageGetter::OnChangeRangeToUkit);
 }
 
 void StatePresenter::OnGetMessageWithState(const QByteArray &messageFromDevice)
@@ -92,7 +88,7 @@ void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, doub
     }
     case 3:
     {
-        m_messagesQueue.enqueue(m_messageSetter->CreateThirdCommand(firstParam));
+        m_messagesQueue.enqueue(m_messageSetter->CreateThirdCommand(firstParam, SecondParam));
         break;
     }
     case 4:
@@ -128,9 +124,9 @@ void StatePresenter::SetMessageToQueue(quint8 messageId, double firstParam, doub
     }
 }
 
-void StatePresenter::SendBparMessage(quint8 foButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 currentThreshold, int distance)
+void StatePresenter::SendBparMessage(quint8 foButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 currentThreshold, int distance, double distanceToUkit)
 {
-    const QByteArray messageBpar = m_messageSetter->CreateBparCommand(foButtonId, isLcm, tksIndex, hasThreshold, currentThreshold, distance);
+    const QByteArray messageBpar = m_messageSetter->CreateBparCommand(foButtonId, isLcm, tksIndex, hasThreshold, currentThreshold, distance, distanceToUkit);
     ToSendMessageToDeivce(messageBpar);
 }
 

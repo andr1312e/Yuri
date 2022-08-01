@@ -6,13 +6,12 @@
 #include <QDebug>
 #include <QtMath>
 
-StateMessageGetter::StateMessageGetter(const double f, const double fref, const quint32 distanseToAnswerer, QObject *parent)
+StateMessageGetter::StateMessageGetter(const double f, const double fref, QObject *parent)
     : QObject(parent)
     , m_indexOfGettingMessageId(1)
     , m_subMessageIndex(m_indexOfGettingMessageId + 1)
     , m_f(f)
     , m_Fref(fref)
-    , m_distanseToAnswerer(distanseToAnswerer)
 {
 }
 
@@ -283,7 +282,7 @@ quint32 StateMessageGetter::ParceDelay(bool isLcm, quint16 distance) const
 {
     const double secondVal = m_c / m_f;
     double distanceDouble = secondVal * (distance - 1.0) / 2.0;
-    distanceDouble = qAbs(distanceDouble - m_distanseToAnswerer);
+    distanceDouble = qAbs(distanceDouble - m_rangeToAnswerer);
     if (isLcm)
     {
         distanceDouble = qAbs(distanceDouble - 117.488879661);
@@ -307,7 +306,7 @@ QString StateMessageGetter::GetDistanceFromThirdMessage(const QByteArray &messag
         IntDataStream >> distance_INT;
         double realDistance = distance_INT - 1.0;
         realDistance = realDistance / 2.0 * m_c / m_f;
-        realDistance = realDistance + m_distanseToAnswerer;
+        realDistance = realDistance + m_rangeToAnswerer;
         const QString result = QStringLiteral("Дистанция = %1 метров").arg(realDistance);
         return result;
     }
@@ -446,5 +445,11 @@ void StateMessageGetter::GetKoordinatesFromSevenMessage(const QByteArray &messag
             ParceKoordinatesMessage();
         }
     }
+}
+
+void StateMessageGetter::OnChangeRangeToUkit(const QString &rangeToUkit)
+{
+    const quint32 newRangeToUkit = rangeToUkit.toUInt();
+    m_rangeToAnswerer = newRangeToUkit;
 }
 

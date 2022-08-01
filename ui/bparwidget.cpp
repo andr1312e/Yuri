@@ -121,6 +121,12 @@ void BParWidget::ConnectObjects()
     connect(m_getBparInfoButton, &QPushButton::clicked, this, &BParWidget::OnGetBpar);
 }
 
+void BParWidget::OnChangeRangeToUkit(const QString &range)
+{
+    const quint32 newRangeToUkit = range.toUInt();
+    m_rangeToAnswerer = newRangeToUkit;
+}
+
 void BParWidget::OnSetRadioImpulsEnabled(bool state)
 {
     m_tksComboBox->setEnabled(state);
@@ -151,7 +157,7 @@ void BParWidget::OnCollectParam()
         hasThreshold = true;
         threshold = (quint16)m_thresholdComboBox->currentText().toUInt();
     }
-    m_presenter->SendBparMessage(buttonId, hasLcm, tksIndex, hasThreshold, threshold, m_answerDelayValue->value());
+    m_presenter->SendBparMessage(buttonId, hasLcm, tksIndex, hasThreshold, threshold, m_answerDelayValue->value(), m_rangeToAnswerer);
 }
 
 void BParWidget::OnThresoldComboBoxChecked(int state)

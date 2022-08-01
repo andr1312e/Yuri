@@ -2,10 +2,9 @@
 #include <QtDebug>
 #include <QtMath>
 
-StateMessageSender::StateMessageSender(const double f, const double fref, const quint32 distanseToAnswerer)
+StateMessageSender::StateMessageSender(const double f, const double fref)
     : m_f(f)
     , m_Fref(fref)
-    , m_distanseToAnswerer(distanseToAnswerer)
     , m_messagesIds({0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
 {
 }
@@ -93,11 +92,11 @@ QByteArray StateMessageSender::CreateSecondCommand(double Fvco) const noexcept
     return command;
 }
 
-QByteArray StateMessageSender::CreateThirdCommand(double distance) const noexcept
+QByteArray StateMessageSender::CreateThirdCommand(double distance, double distanceToUkit) const noexcept
 {
     distance -= 26.9434889941;
     const double secondVal = m_f / m_c;
-    const double distanceDouble = 2.0 * qAbs(distance - m_distanseToAnswerer) * secondVal + 1.0;
+    const double distanceDouble = 2.0 * qAbs(distance - distanceToUkit) * secondVal + 1.0;
     const quint16 DISTANCE = qCeil(distanceDouble);
 
     QByteArray command;
@@ -159,7 +158,7 @@ QByteArray StateMessageSender::CreateSevenCommand(quint8 firstParam, quint8 seco
     return command;
 }
 
-QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance) const noexcept
+QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool isLcm, quint8 tksIndex, bool hasThreshold, quint16 threshold, int distance, double distanceToUkit) const noexcept
 {
     QByteArray bParMessage;
     QDataStream stream(&bParMessage, QIODevice::WriteOnly);
@@ -178,7 +177,7 @@ QByteArray StateMessageSender::CreateBparCommand(quint8 checkedFoButtonId, bool 
     {
         bpar_mode += 64;//0100000
     }
-    const quint16 delay = CalculateBparDistance(isLcm, distance);
+    const quint16 delay = CalculateBparDistance(isLcm, distance, distanceToUkit);
     stream << (quint8)6;
     stream << (quint8)5;
     stream << bpar_mode;
@@ -274,7 +273,7 @@ bool StateMessageSender::CalculateDIV_rx(double Fvco) const noexcept
     return Fvco > 2750000000;
 }
 
-quint16 StateMessageSender::CalculateBparDistance(bool isLcm, double distance) const noexcept
+quint16 StateMessageSender::CalculateBparDistance(bool isLcm, double distance, double distanceToUkit) const noexcept
 {
     // 18 тактов /30.62 МГЦ
     //0,0326583932 × 1000 = 32,6583932 = наносекунды (1/f) длительность такта
@@ -289,6 +288,7 @@ quint16 StateMessageSender::CalculateBparDistance(bool isLcm, double distance) c
         distance += 176.233319492;
     }
     const double secondVal = m_f / m_c;
-    const quint16 distanceDouble = 2.0 * qAbs(distance - m_distanseToAnswerer) * secondVal + 1.0;
-    return distanceDouble;
+    const double distanceDouble = 2.0 * qAbs(distance - distanceToUkit) * secondVal + 1.0;
+    const quint16 distanceResult = qCeil(distanceDouble);
+    return distanceResult;
 }

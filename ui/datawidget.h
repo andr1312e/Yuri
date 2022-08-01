@@ -25,6 +25,7 @@ private:
     void InsertWidgetsIntoLayout();
     void ConnectObjects();
 Q_SIGNALS:
+    void ToChangeRangeToUkit(const QString range);
     void ToSetState(int messageId, QList<double> params);
     void ToGetState(int messageId);
     void ToConsoleLog(const QString &message);
@@ -55,6 +56,7 @@ public Q_SLOTS:
     void OnUpdateLatLong(const QString &message);
 public:
     quint32 GetSinusValue();
+    QString GetRangeToUkit();
 private:
     SettingFileService *const m_settingFileService;
     QStringList m_attenuatorValues;
@@ -84,6 +86,8 @@ private:
     QHBoxLayout *m_rangeLineLayout;
     QLabel *m_rangeLabel;
     QLineEdit *m_rangeLineEdit;
+    QLabel *m_rangeToUkitLabel;
+    QLineEdit *m_rangeToUkitLineEdit;
     QPushButton *m_setRangeButton;
     QPushButton *m_getRangeButton;
 

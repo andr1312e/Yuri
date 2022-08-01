@@ -28,6 +28,8 @@ private:
     void InsertWidgetsIntoLayout();
     void FillUI();
     void ConnectObjects();
+public Q_SLOTS:
+    void OnChangeRangeToUkit(const QString &range);
 private Q_SLOTS:
     void OnSetRadioImpulsEnabled(bool state);
     void OnCollectParam();
@@ -56,6 +58,8 @@ private:
     QVBoxLayout *m_foLayouyt;
     QButtonGroup *m_foRadioButtons;
     QPushButton *m_getBparInfoButton;
+private:
+    quint32 m_rangeToAnswerer;
 };
 
 #endif // BPARWIDGET_H

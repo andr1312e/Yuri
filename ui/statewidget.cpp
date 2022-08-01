@@ -13,6 +13,7 @@ StateWidget::StateWidget(SettingFileService *settingFileService, QWidget *parent
     InsertWidgetsIntoLayout();
     FillUI();
     ConnectObjects();
+    Q_EMIT (m_dataWidget->ToChangeRangeToUkit(m_dataWidget->GetRangeToUkit()));
 }
 
 StateWidget::~StateWidget()
@@ -134,6 +135,7 @@ void StateWidget::ConnectObjects()
 
     connect(m_dataWidget, &DataWidget::ToSetState, this, &StateWidget::OnSetState);
     connect(m_dataWidget, &DataWidget::ToGetState, this, &StateWidget::OnGetState);
+    connect(m_dataWidget, &DataWidget::ToChangeRangeToUkit, m_statePresenter, &StatePresenter::ToChangeRangeToUkit);
     connect(m_dataWidget, &DataWidget::ToConsoleLog, this, &StateWidget::OnConsoleLog);
 
     connect(m_workModeComboBox, qOverload<int>(&QComboBox::activated), this, &StateWidget::OnSetWorkMode);
@@ -149,6 +151,8 @@ void StateWidget::ConnectObjects()
     {
         m_statePresenter->ToSendMessageToDeivce(QByteArray(QByteArrayLiteral("\x0d\x5a")));
     });
+    connect(m_dataWidget, &DataWidget::ToChangeRangeToUkit, m_bPraWidget, &BParWidget::OnChangeRangeToUkit);
+
     connect(m_sendRawHexButton, &QPushButton::clicked, this, QOverload<>::of(&StateWidget::OnSendRawHexMessage));
     connect(m_logClearButton, &QPushButton::clicked, m_log, &QPlainTextEdit::clear);
 }

@@ -10,7 +10,7 @@ class StateMessageGetter : public QObject
 {
     Q_OBJECT
 public:
-    explicit StateMessageGetter(const double f, const double fref, const quint32 distanseToAnswerer, QObject *parent);
+    explicit StateMessageGetter(const double f, const double fref, QObject *parent);
     ~StateMessageGetter();
 Q_SIGNALS:
     void ToUpdateLatLong(const QString &newLatLong);
@@ -26,6 +26,8 @@ private:
     QString GetWorkModeFromSixMessage(const QByteArray &message) const;
 public:
     void GetKoordinatesFromSevenMessage(const QByteArray &message);
+public Q_SLOTS:
+    void OnChangeRangeToUkit(const QString &newDistance);
 private:
     QString GetDoplerFromNineMessage(const QByteArray &message) const noexcept;
 private:
@@ -44,7 +46,7 @@ private:
     const double m_f;
     const double m_c = 299792458.0;
     const double m_Fref;
-    const quint32 m_distanseToAnswerer;
+    quint32 m_rangeToAnswerer;
 };
 
 #endif // MESSAGECREATORS_STATEMESSAGEGETTER_H

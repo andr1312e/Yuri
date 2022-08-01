@@ -41,6 +41,8 @@ DataWidget::~DataWidget()
 
     delete m_rangeLabel;
     delete m_rangeLineEdit;
+    delete m_rangeToUkitLabel;
+    delete m_rangeToUkitLineEdit;
     delete m_setRangeButton;
     delete m_getRangeButton;
 
@@ -96,6 +98,8 @@ void DataWidget::CreateUI()
     m_rangeLineLayout = new QHBoxLayout();
     m_rangeLabel = new QLabel();
     m_rangeLineEdit = new QLineEdit();
+    m_rangeToUkitLabel = new QLabel();
+    m_rangeToUkitLineEdit = new QLineEdit();
     m_setRangeButton = new QPushButton();
     m_getRangeButton = new QPushButton();
 
@@ -146,6 +150,8 @@ void DataWidget::InsertWidgetsIntoLayout()
 
     m_rangeLineLayout->addWidget(m_rangeLabel);
     m_rangeLineLayout->addWidget(m_rangeLineEdit);
+    m_rangeLineLayout->addWidget(m_rangeToUkitLabel);
+    m_rangeLineLayout->addWidget(m_rangeToUkitLineEdit);
     m_rangeLineLayout->addWidget(m_setRangeButton);
     m_rangeLineLayout->addWidget(m_getRangeButton);
 
@@ -209,9 +215,12 @@ void DataWidget::FillUI()
     m_getDoplerButton->setText(QStringLiteral("Запросить"));
 
 
-    m_rangeLabel->setText(QStringLiteral("Дальность ответного сигнала d: метры"));
+    m_rangeLabel->setText(QStringLiteral("Дальности(метры) ответного сигнала d:"));
     m_rangeLineEdit->setValidator(m_intValidator);
     m_rangeLineEdit->setText(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "range", "60490"));
+    m_rangeToUkitLabel->setText(QStringLiteral("до ЮК:"));
+    m_rangeToUkitLineEdit->setValidator(m_intValidator);
+    m_rangeToUkitLineEdit->setText(m_settingFileService->GetAttribute(m_settingFileService->GetDataArribute(), "distanfeToAnswerer", "350"));
     m_setRangeButton->setText(QStringLiteral("Установить"));
     m_getRangeButton->setText(QStringLiteral("Запросить"));
 
@@ -266,6 +275,7 @@ void DataWidget::ConnectObjects()
     connect(m_getTxButton, &QPushButton::clicked, this, &DataWidget::OnGetTxButtonClicked);
     connect(m_setDoplerButton, &QPushButton::clicked, this, &DataWidget::OnSetDoplerButtonClicked);
     connect(m_getDoplerButton, &QPushButton::clicked, this, &DataWidget::OnGetDoplerButtonClicked);
+    connect(m_rangeToUkitLineEdit, &QLineEdit::textChanged, this, &DataWidget::ToChangeRangeToUkit);
     connect(m_setRangeButton, &QPushButton::clicked, this, &DataWidget::OnSetRangeButtonClicked);
     connect(m_getRangeButton, &QPushButton::clicked, this, &DataWidget::OnGetRangeButtonClicked);
     connect(m_setGainButton, &QPushButton::clicked, this, &DataWidget::OnSetGainButtonClicked);
@@ -420,7 +430,7 @@ void DataWidget::OnSetRangeButtonClicked()
         if (isParsingOk)
         {
             ToConsoleLog("Высылаем третье сообщение: установка дальности ответного сигнала. Дистанция= " + m_rangeLineEdit->text());
-            Q_EMIT ToSetState(3, QList<double>() << distance);
+            Q_EMIT ToSetState(3, QList<double>() << distance << GetRangeToUkit().toUInt());
         }
         else
         {
@@ -479,6 +489,11 @@ void DataWidget::OnGetCoordinatsButtonClicked()
 quint32 DataWidget::GetSinusValue()
 {
     return m_sinusLineEdit->text().toUInt() * 1000000 / 2;
+}
+
+QString DataWidget::GetRangeToUkit()
+{
+    return m_rangeToUkitLineEdit->text();
 }
 
 void DataWidget::OnUpdateLatLong(const QString &message)
