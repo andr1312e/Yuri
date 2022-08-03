@@ -126,6 +126,19 @@ void DataHandler::NormalStateMessageAnalyze(const QByteArray &incomingByteArray)
                             return;
                         }
                     }
+                    else
+                    {
+                        if (messageId == 0x07 && incomingByteArray.count() == 2)
+                        {
+                            m_readyReadBuffer.clear();
+                            Q_EMIT ToConsoleLog("Нет антенны");
+                        }
+                        else
+                        {
+                            m_readyReadBuffer.clear();
+                            Q_EMIT ToGetKoordinatesMessage(incomingByteArray);
+                        }
+                    }
                 }
             }
             m_readyReadBuffer.clear();

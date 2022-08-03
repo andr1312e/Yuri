@@ -159,48 +159,68 @@ quint8 StateMessageGetter::GetMask(quint8 pos, quint8 size) const
 
 void StateMessageGetter::ParceKoordinatesMessage()
 {
-//    qDebug() << m_collectedKoordinatesData;
-    const int commaCount = m_collectedKoordinatesData.count(',');
-    if (13 == commaCount)
+    qDebug() << "Parsed " << m_messageToParce;
+    const int commaCount = m_messageToParce.count(',');
+    if (14 == commaCount)
     {
-        double latitude = 0.0, longtutude = 0.0;
-        QVector<int> indexOfCommasArray{m_collectedKoordinatesData.indexOf(',')};
+        parceIter++;
+        double latitude = 0.0, longtutude = 0.0, height = 0.0;
+        QVector<int> indexOfCommasArray{m_messageToParce.indexOf(',')};
         for (int i = 1; i < commaCount; ++i)
         {
-            indexOfCommasArray.append(m_collectedKoordinatesData.indexOf(',', indexOfCommasArray.at(i - 1) + 1));
+            indexOfCommasArray.append(m_messageToParce.indexOf(',', indexOfCommasArray.at(i - 1) + 1));
         }
-        if (indexOfCommasArray.at(3) == indexOfCommasArray.at(4) - 2)
+        if (indexOfCommasArray.at(1) == indexOfCommasArray.at(2) - 1 && indexOfCommasArray.at(4) == indexOfCommasArray.at(5) - 1)
         {
-            const QByteArray latitudeByteArray = m_collectedKoordinatesData.mid(indexOfCommasArray.at(2) + 1, indexOfCommasArray.at(3) - indexOfCommasArray.at(2) - 1);
-            const char latitudeDirection = m_collectedKoordinatesData.at(indexOfCommasArray.at(4) - 1);
-            const int directionValue = latitudeDirection == 'N' ? 1 : -1;
-            latitude = ParceLatitdeValue(latitudeByteArray, directionValue);
+            Q_EMIT ToUpdateLatLong(QString::number(parceIter) + " Гео модуль еще не готов выдавать координаты");
+            m_messageToParce.clear();
+            return;
         }
         else
         {
-            Q_EMIT ToConsoleLog("Сообщение не верно");
-        }
+            if (indexOfCommasArray.at(2) == indexOfCommasArray.at(3) - 2)
+            {
+                const QByteArray latitudeByteArray = m_messageToParce.mid(indexOfCommasArray.at(1) + 1, indexOfCommasArray.at(2) - indexOfCommasArray.at(1) - 1);
+                const char latitudeDirection = m_messageToParce.at(indexOfCommasArray.at(3) - 1);
+                const int directionValue = latitudeDirection == 'N' ? 1 : -1;
+                latitude = ParceLatitdeValue(latitudeByteArray, directionValue);
+            }
+            else
+            {
+                Q_EMIT ToConsoleLog("Сообщение не верно");
+            }
 
 
-        if (indexOfCommasArray.at(5) == indexOfCommasArray.at(6) - 2)
-        {
-            const QByteArray longtutudeByteArray = m_collectedKoordinatesData.mid(indexOfCommasArray.at(4) + 1, indexOfCommasArray.at(5) - indexOfCommasArray.at(4) - 1);
-            const char longtutudeDirection = m_collectedKoordinatesData.at(indexOfCommasArray.at(6) - 1);
-            const int directionValue = longtutudeDirection == 'E' ? 1 : -1;
-            longtutude = ParceLongtitude(longtutudeByteArray, directionValue);
+            if (indexOfCommasArray.at(4) == indexOfCommasArray.at(5) - 2)
+            {
+                const QByteArray longtutudeByteArray = m_messageToParce.mid(indexOfCommasArray.at(3) + 1, indexOfCommasArray.at(4) - indexOfCommasArray.at(3) - 1);
+                const char longtutudeDirection = m_messageToParce.at(indexOfCommasArray.at(5) - 1);
+                const int directionValue = longtutudeDirection == 'E' ? 1 : -1;
+                longtutude = ParceLongtitude(longtutudeByteArray, directionValue);
+            }
+            else
+            {
+                Q_EMIT ToConsoleLog("Сообщение не верно");
+            }
+            const QByteArray heightByteArray = m_messageToParce.mid(indexOfCommasArray.at(8) + 1, indexOfCommasArray.at(9) - indexOfCommasArray.at(8) - 1);
+            if (heightByteArray.isEmpty())
+            {
+                height = 0;
+            }
+            else
+            {
+                height = ParceHeight(heightByteArray);
+            }
+
+            const QString message = QString::number(parceIter) +  " Широта:↑ " + QString::number(latitude, 'f', 10) + " Долгота→: " + QString::number(longtutude, 'f', 10) + " Высота: " + QString::number(height, 'f', 4) + " м";
+            Q_EMIT ToUpdateLatLong(message);
+            m_messageToParce.clear();
+            Q_EMIT ToConsoleLog(message);
         }
-        else
-        {
-            Q_EMIT ToConsoleLog("Сообщение не верно");
-        }
-        const QString message = "Широта:↑ " + QString::number(latitude, 'f', 10) + " Долгота→: " + QString::number(longtutude, 'f', 10);
-        Q_EMIT ToUpdateLatLong(message);
-        m_collectedKoordinatesData.clear();
-        Q_EMIT ToConsoleLog(message);
     }
     else
     {
-        Q_EMIT ToConsoleLog("Сообщение не верно. Колличество запятых не 13");
+        Q_EMIT ToConsoleLog("Сообщение не верно. Колличество запятых не 14");
     }
 }
 
@@ -263,18 +283,17 @@ double StateMessageGetter::ParceLongtitude(const QByteArray &longtitudeByteArray
     }
 }
 
-double StateMessageGetter::ParceHeight() const
+double StateMessageGetter::ParceHeight(const QByteArray &heightByteArray) const
 {
-    const QByteArray arr = m_collectedKoordinatesData.mid(54, 5);
-    const float height = arr.toDouble();
-    const char typeOfHeight = m_collectedKoordinatesData.at(60);
-    if (typeOfHeight == 'M')
+    bool parceOk;
+    double val = heightByteArray.toDouble(&parceOk);
+    if (parceOk)
     {
-        return height;
+        return val;
     }
     else
     {
-        qFatal("Wrong height");
+        return 0;
     }
 }
 
@@ -403,47 +422,25 @@ QString StateMessageGetter::GetWorkModeFromSixMessage(const QByteArray &message)
 void StateMessageGetter::GetKoordinatesFromSevenMessage(const QByteArray &message)
 {
     ++iter;
-    qInfo() << iter << "KOORD " << message;
-    const int indexOfHeader = message.indexOf("$GNR");
-    if (-1 == indexOfHeader)
+    m_messageToParce.append(message);
+    qInfo() << iter << "CACHE " << m_messageToParce;
+    const int indexOfHeader = m_messageToParce.indexOf("$GNGG");
+    if (-1 != indexOfHeader)
     {
-        if (m_hasHeader)
-        {
-            qInfo() << iter << " Header uzhe est";
-            int indexOfAsterisk = message.indexOf('*');
-            if (indexOfAsterisk == -1)
-            {
-                qInfo() << iter << " * nenashli";
-                m_collectedKoordinatesData.append(message);
-
-            }
-            else
-            {
-                qInfo() << iter << " * nashli";
-                m_collectedKoordinatesData.append(message.left(indexOfAsterisk));
-                m_hasHeader = false;
-                ParceKoordinatesMessage();
-            }
-        }
-    }
-    else
-    {
-
-        m_hasHeader = true;
-        m_collectedKoordinatesData.append(message.left(indexOfHeader + 1));
-        const int indexOfAsterisk = message.indexOf('*', indexOfHeader);
+        const int indexOfAsterisk = m_messageToParce.indexOf('*', indexOfHeader);
         if (-1 == indexOfAsterisk)
         {
-            qInfo() << iter << " Header tolko est";
-            m_collectedKoordinatesData = message.mid(indexOfHeader);
+            qInfo() << iter << " Header tolko est" << indexOfHeader;
+            m_messageToParce = m_messageToParce.mid(indexOfHeader);
+            qInfo() << "After " << m_messageToParce;
         }
         else
         {
             qInfo() << iter << " Vse est parsim";
-            m_collectedKoordinatesData = message.mid(indexOfHeader, indexOfAsterisk - indexOfHeader + 1);
-            m_hasHeader = false;
+            m_messageToParce = m_messageToParce.mid(indexOfHeader, indexOfAsterisk - indexOfHeader + 1);
             ParceKoordinatesMessage();
         }
+
     }
 }
 

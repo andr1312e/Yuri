@@ -35,12 +35,13 @@ private:
     void ParceKoordinatesMessage();
     double ParceLatitdeValue(const QByteArray &latitudeByteArray, int directionValue) const;
     double ParceLongtitude(const QByteArray &longtitudeByteArray, int directionValue) const;
-    double ParceHeight() const;
+    double ParceHeight(const QByteArray &heightByteArray) const;
     quint32 ParceDelay(bool isLcm, quint16 delay) const;
 private:
     int iter = -1;
-    QByteArray m_collectedKoordinatesData;
-    bool m_hasHeader;
+    int parceIter = -1;
+    QByteArray m_messageToParce;
+//    bool m_hasHeader;
     const int m_indexOfGettingMessageId;
     const int m_subMessageIndex;
     const double m_f;
